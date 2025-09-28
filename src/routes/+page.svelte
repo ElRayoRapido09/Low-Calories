@@ -36,10 +36,10 @@
       <span>👤</span>
       <span>Perfil</span>
     </a>
-    <button class="nav-item" href="/ajustes">
+    <a class="nav-item" href="/ajustes">
       <span>⚙️</span>
       <span>Ajustes</span>
-    </button>
+    </a>
   </nav>
 </main>
 
@@ -101,10 +101,10 @@
     padding: 2rem;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    margin-bottom: 90px;  //esto es para que se haga un espacio entre la section y el button
+    margin-bottom: 90px;  
     cursor: pointer;
     transition: transform 0.2s;
-    margin-top: 2rem; // esta es para separar ambas section
+    margin-top: 2rem; 
   }
 
 .card-bot:hover {
@@ -164,7 +164,7 @@
     background: white;
     box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.08);
     padding: 0.01rem 0;
-    border-radius: 1.5rem 1.5rem 0 0;  //aqui van los bordes de las esquinas.
+    border-radius: 1.5rem 1.5rem 0 0;  
     text-direction: none;
   }
  
