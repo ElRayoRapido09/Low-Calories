@@ -10,7 +10,7 @@
     <h1>Mi Perfil</h1>
   </header>
 
-  <section class="card_p" on:click={handleCameraClick} role="button" tabindex="0"> falta poner la camara
+  <section class="card_p">
     <div class="icons">
       👤
     </div>
@@ -113,10 +113,9 @@
     padding: 2rem;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    margin-bottom: 90px;  //esto es para que se haga un espacio entre la section y el button
-    cursor: pointer;
+    margin-bottom: 24px;  
     transition: transform 0.2s;
-    margin-top: 0.5rem; // esta es para separar ambas section
+    margin-top: 0.5rem; 
   }
 
 .card_p:hover {
@@ -129,10 +128,10 @@
     padding: 2rem;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    margin-bottom: 90px;  //esto es para que se haga un espacio entre la section y el button
+    margin-bottom: 24px;  
     cursor: pointer;
     transition: transform 0.2s;
-    margin-top: 0.5rem; // esta es para separar ambas section
+    margin-top: 0.5rem; 
   }
 
 .card-meta:hover {
@@ -144,10 +143,10 @@
     padding: 2rem;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    margin-bottom: 90px;  //esto es para que se haga un espacio entre la section y el button
+    margin-bottom: 24px;  
     cursor: pointer;
     transition: transform 0.2s;
-    margin-top: 0.5rem; // esta es para separar ambas section
+    margin-top: 0.5rem; 
   }
 
 .card-meta:hover {
@@ -159,10 +158,10 @@
     padding: 2rem;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    margin-bottom: 90px;  //esto es para que se haga un espacio entre la section y el button
+    margin-bottom: 24px;  
     cursor: pointer;
     transition: transform 0.2s;
-    margin-top: 0.5rem; // esta es para separar ambas section
+    margin-top: 0.5rem; 
   }
 
 .card-act:hover {
@@ -175,10 +174,10 @@
     padding: 2rem;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    margin-bottom: 90px;  //esto es para que se haga un espacio entre la section y el button
+    margin-bottom: 24px; 
     cursor: pointer;
     transition: transform 0.2s;
-    margin-top: 0.5rem; // esta es para separar ambas section
+    margin-top: 0.5rem; 
   }
 
 .card-inf_P:hover {
@@ -191,10 +190,10 @@
     padding: 2rem;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    margin-bottom: 90px;  //esto es para que se haga un espacio entre la section y el button
+    margin-bottom: 24px; 
     cursor: pointer;
     transition: transform 0.2s;
-    margin-top: 0.5rem; // esta es para separar ambas section
+    margin-top: 0.5rem; 
   }
 
 .card_Prog:hover {
@@ -259,7 +258,7 @@
     padding: 0 0.5rem 0 0;
     line-height: 1;
   }
-  .header-back h1 {
+  .back h1 {
     font-size: 2rem;
     font-weight: 700;
     margin: 0;
