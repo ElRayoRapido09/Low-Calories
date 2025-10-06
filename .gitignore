@@ -1,24 +1,92 @@
-node_modules
+# ===== PYTHON & DJANGO =====
+# Byte-compiled / optimized / DLL files
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+PIPFILE.lock
 
-# Output
-.output
-.vercel
-.netlify
-.wrangler
-.svelte-kit
+# Django specific
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# ===== NODE.JS & FRONTEND =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Svelte
+.svelte-kit/
 /build
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Env
-.env
-.env.*
-!.env.example
-!.env.test
+.output
 
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+dist/
+
+# ===== DEPLOYMENT =====
+.vercel
+.netlify
+.wrangler
+
+# ===== ENVIRONMENT =====
+.env
+.env.*
+!.env.example
+!.env.test
+.venv/
+venv/
+env/
+ENV/
+
+# ===== OPERATING SYSTEM =====
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+# ===== IDE & EDITORS =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===== DOCKER =====
+.dockerignore
+Dockerfile
+docker-compose.override.yml
+
+# ===== PROJECT SPECIFIC =====
 lowcaloriesapp

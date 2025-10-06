@@ -1,4 +1,17 @@
 services: 
+  backend:
+    image: python:3.9
+    ports:
+      - "8000:8000"
+    working_dir: /app
+    command: bash -c "pip install --upgrade pip && pip install django && pip install django mysqlclient && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    networks:
+      - app-network
   mysql_db:
     image: mysql:8.0
     ports:
@@ -22,7 +35,13 @@ services:
         reservations:
           cpus: '0.5'        # Mínimo 0.5 CPU reservado
           memory: 1G         # Mínimo 1GB reservado
+    networks:
+      - app-network
 
 volumes:
   mysql_data:
     driver: local
+
+networks:
+  app-network:
+    driver: bridge
