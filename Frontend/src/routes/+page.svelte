@@ -2,10 +2,19 @@
   function handleCameraClick() {
     alert('aun no se poner la camara, solo puse la alerta xD');
   }
+
+  function openCamera() {
+    alert('aqui se abre la camara');
+  }
+
   console.log("hola layo");
   let isMenuOpen = false;
-  let bottomNavElement;
   let scrollY = 0;
+  let cardsContainer;
+  let startY = 0;
+  let isDragging = false;
+  let cardsScrollY = 0;
+  let maxScroll = 0;
 
   function toggleMenu() {
     isMenuOpen = !isMenuOpen;
@@ -15,7 +24,61 @@
     isMenuOpen = false;
   }
 
-  $: bottomNavHeight = Math.min(50 + (scrollY * 0.8), 95);
+  function handleTouchStart(e) {
+    if (!cardsContainer) return;
+    startY = e.touches[0].clientY;
+    isDragging = true;
+  }
+
+  function handleTouchMove(e) {
+    if (!isDragging || !cardsContainer) return;
+    
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - startY;
+    
+    if (deltaY > 50 && cardsContainer.scrollTop === 0) {
+      e.preventDefault();
+      cardsContainer.style.transform = `translateY(${Math.min(deltaY - 50, 100)}px)`;
+    }
+  }
+
+  function handleTouchEnd(e) {
+    if (!isDragging || !cardsContainer) return;
+    
+    const currentY = e.changedTouches[0].clientY;
+    const deltaY = currentY - startY;
+
+    cardsContainer.style.transform = 'translateY(0)';
+    
+    if (deltaY > 100 && cardsContainer.scrollTop === 0) {
+      openCamera();
+    }
+    
+    isDragging = false;
+  }
+
+  function handleScroll(e) {
+    if (cardsContainer) {
+      cardsScrollY = cardsContainer.scrollTop;
+      maxScroll = cardsContainer.scrollHeight - cardsContainer.clientHeight;
+      
+      // Si está en la parte superior del scroll (scroll hacia arriba)
+      if (cardsScrollY <= 5) { // Margen pequeño para detectar el tope
+        openCamera();
+        // Resetear ligeramente para evitar que se active constantemente
+        setTimeout(() => {
+          if (cardsContainer) {
+            cardsContainer.scrollTop = 10;
+          }
+        }, 100);
+      }
+    }
+  }
+
+  
+  $: bottomNavHeight = cardsScrollY <= 50 ? Math.max(50 - (cardsScrollY * 2), 0) : Math.min(50 + ((cardsScrollY - 50) * 0.15), 100);
+  $: cardsOpacity = cardsScrollY <= 50 ? Math.max(1 - (cardsScrollY / 50), 0) : 1;
+  $: cardsTransform = cardsScrollY <= 50 ? -(cardsScrollY * 2) : 0;
 </script>
 
 <svelte:window bind:scrollY />
@@ -53,7 +116,18 @@
       </nav>
     {/if}
 
-    <div class="cards-container">
+    <div 
+      class="cards-container"
+      bind:this={cardsContainer}
+      on:touchstart={handleTouchStart}
+      on:touchmove={handleTouchMove}
+      on:touchend={handleTouchEnd}
+      on:scroll={handleScroll}
+      style="opacity: {cardsOpacity}; transform: translateY({cardsTransform}px);"
+    >
+      <!-- Agregar un elemento espaciador al inicio para permitir scroll hacia arriba -->
+      <div class="scroll-spacer"></div>
+    
       <section class="card" on:click={handleCameraClick} role="button" tabindex="0">
         <div class="icons">
           📷
@@ -77,18 +151,60 @@
         <h2>Comidas</h2>
         <p>Guarda tus comidas favoritas</p>
       </section>
+      
+      <section class="card-bot">
+        <div class="icons">
+          📈
+        </div>
+        <h2>Historial</h2>
+        <p>Revisa tu progreso diario</p>
+      </section>
+
+      <section class="card-bot">
+        <div class="icons">
+          🎯
+        </div>
+        <h2>Objetivos</h2>
+        <p>Establece y sigue tus metas</p>
+      </section>
+
+      <section class="card-bot">
+        <div class="icons">
+          💧
+        </div>
+        <h2>Hidratación</h2>
+        <p>Mantén control de tu consumo de agua</p>
+      </section>
+
+      <section class="card-bot">
+        <div class="icons">
+          ⏰
+        </div>
+        <h2>Recordatorios</h2>
+        <p>Programa tus comidas del día</p>
+      </section>
+
+      <section class="card-bot">
+        <div class="icons">
+          🍽️
+        </div>
+        <h2>Recetas</h2>
+        <p>Descubre nuevas recetas saludables</p>
+      </section>
     </div>
   </nav>
 </main>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+
   :global(body) {
     margin: 0;
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(135deg, #000000ff 0%, #000000ff 100%);
+    background: linear-gradient(70deg, blue 0%, pink 100%);
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow: hidden; 
   }
 
   main {
@@ -98,6 +214,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   header {
@@ -109,6 +226,8 @@
   }
 
   header h1 {
+    font-family: 'Dancing Script', cursive;
+    font-style: italic ;
     font-size: 2rem;
     font-weight: 700;
     margin: 0 0 0.5rem 0;
@@ -124,6 +243,7 @@
 
   .spacer {
     height: 50vh;
+  
   }
 
   .bottom-nav {
@@ -131,34 +251,14 @@
     bottom: 0;
     left: 0;
     width: 100vw;
-    background: white;
+    background: rgba(255, 255, 255, 0.1); /* Cambiado de white a semi-transparente para que el blur sea visible */
     box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.08);
     border-radius: 2rem 2rem 0 0;
-    transition: height 0.3s ease;
-    overflow-y: auto;
-    overflow-x: hidden;
+    transition: height 0.1s ease;
+    overflow: hidden;
     z-index: 10;
     padding: 0;
     margin: 0;
-    scrollbar-width: thin;
-    scrollbar-color: #ccc transparent;
-  }
-
-  .bottom-nav::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  .bottom-nav::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .bottom-nav::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 2px;
-  }
-
-  .bottom-nav::-webkit-scrollbar-thumb:hover {
-    background: #999;
   }
 
   .menu-toggle {
@@ -197,13 +297,15 @@
     transform: rotate(-45deg) translate(7px, -6px);
   }
 
-  .menu-overlay {
+.menu-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3); /* Más transparente para que el blur sea visible */
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
     z-index: 999;
   }
 
@@ -213,7 +315,9 @@
     left: 0;
     width: 250px;
     height: 100vh;
-    background: white;
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.2); /* Igual que las card-bot */
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     padding: 4rem 1rem 1rem 1rem;
     display: flex;
@@ -240,11 +344,44 @@
     width: 100%;
     max-width: 100%;
     margin: 0;
-    min-height: 100%;
+    height: calc(100% - 80px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    background: rgba(255, 255, 255, 0.3); /* Más transparente para mejor efecto */
   }
 
-  .card, .card-bot {
-    background: white;
+  .scroll-spacer {
+    height: 100px; /* Espacio para permitir scroll hacia arriba */
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .cards-container::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .cards-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .cards-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 2px;
+  }
+
+  .cards-container::-webkit-scrollbar-thumb:hover {
+    background: #999;
+  }
+
+ .card, .card-bot {
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.2); 
     border-radius: 1rem;
     padding: 2rem;
     text-align: center;
