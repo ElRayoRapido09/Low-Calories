@@ -2,6 +2,10 @@
   // no JavaScript necesario para el estilo
 </script>
 
+<div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
+
 <main class="app">
   <header class="top">
     <a href="/ajustes" class="back-btn" aria-label="Volver">‹</a>
@@ -80,6 +84,10 @@
 </main>
 
 <style>
+  :global(html) {
+    height:100%;
+  }
+
   :global(body) {
     margin: 0;
     padding: 0;
@@ -87,6 +95,27 @@
     background: linear-gradient(70deg, blue 0%, pink 100%);
     color: #f2f2f2;
     min-height: 100vh;
+  }
+
+  .bg {
+    animation:slide 3s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
+    bottom:0;
+    left:-50%;
+    opacity:.5;
+    position:fixed;
+    right:-50%;
+    top:0;
+    z-index:-1;
+  }
+
+  .bg2 {
+    animation-direction:alternate-reverse;
+    animation-duration:4s;
+  }
+
+  .bg3 {
+    animation-duration:5s;
   }
 
   .app {
@@ -253,5 +282,14 @@
     .item, .search { background: #fff; color: #222; box-shadow: 0 8px 26px rgba(10,10,10,0.06); border: 1px solid rgba(10,10,10,0.04); }
     .icon { color: #111; background: linear-gradient(180deg,#0066cc,#2077cd); }
     .value { color: #666; }
+  }
+
+  @keyframes slide {
+    0% {
+      transform:translateX(-25%);
+    }
+    100% {
+      transform:translateX(25%);
+    }
   }
 </style>

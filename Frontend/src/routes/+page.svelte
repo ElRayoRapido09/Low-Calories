@@ -62,10 +62,10 @@
       cardsScrollY = cardsContainer.scrollTop;
       maxScroll = cardsContainer.scrollHeight - cardsContainer.clientHeight;
       
-      // Si está en la parte superior del scroll (scroll hacia arriba)
-      if (cardsScrollY <= 5) { // Margen pequeño para detectar el tope
+      
+      if (cardsScrollY <= 5) { 
         openCamera();
-        // Resetear ligeramente para evitar que se active constantemente
+        
         setTimeout(() => {
           if (cardsContainer) {
             cardsContainer.scrollTop = 10;
@@ -80,6 +80,10 @@
   $: cardsOpacity = cardsScrollY <= 50 ? Math.max(1 - (cardsScrollY / 50), 0) : 1;
   $: cardsTransform = cardsScrollY <= 50 ? -(cardsScrollY * 2) : 0;
 </script>
+
+<div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
 
 <svelte:window bind:scrollY />
 
@@ -198,6 +202,10 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
 
+  :global(html) {
+    height:100%;
+  }
+
   :global(body) {
     margin: 0;
     padding: 0;
@@ -205,6 +213,27 @@
     background: linear-gradient(70deg, blue 0%, pink 100%);
     min-height: 100vh;
     overflow: hidden; 
+  }
+
+  .bg {
+    animation:slide 3s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
+    bottom:0;
+    left:-50%;
+    opacity:.5;
+    position:fixed;
+    right:-50%;
+    top:0;
+    z-index:-1;
+  }
+
+  .bg2 {
+    animation-direction:alternate-reverse;
+    animation-duration:4s;
+  }
+
+  .bg3 {
+    animation-duration:5s;
   }
 
   main {
@@ -449,5 +478,14 @@
   .nav-item span:last-child {
     font-size: 1rem;
     font-weight: 500;
+  }
+
+  @keyframes slide {
+    0% {
+      transform:translateX(-25%);
+    }
+    100% {
+      transform:translateX(25%);
+    }
   }
 </style>
