@@ -2,6 +2,10 @@
   // no JavaScript necesario para el estilo
 </script>
 
+<div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
+
 <main class="app">
   <header class="top">
     <a href="/ajustes" class="back-btn" aria-label="Volver">‹</a>
@@ -326,5 +330,14 @@
     .item, .search { background: #fff; color: #222; box-shadow: 0 8px 26px rgba(10,10,10,0.06); border: 1px solid rgba(10,10,10,0.04); }
     .icon { color: #111; background: linear-gradient(180deg,#0066cc,#2077cd); }
     .value { color: #666; }
+  }
+
+  @keyframes slide {
+    0% {
+      transform: translateX(-100%) translateY(-100%);
+    }
+    100% {
+      transform: translateX(100%) translateY(100%);
+    }
   }
 </style>

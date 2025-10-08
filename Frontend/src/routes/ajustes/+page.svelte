@@ -2,6 +2,10 @@
   // no JavaScript necesario para el estilo
 </script>
 
+<div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
+
 <main class="app">
   <header class="top">
     <a href="/" class="back-btn" aria-label="Volver">‹</a>
@@ -57,7 +61,7 @@
           <span class="chev">›</span>
         </a>
       </li>
-      <li class="item"><span class="icon">👪</span><span class="label">Plan Familiar</span><span class="chev">›</span></li>
+      <a class="item" href="/premium" aria-label="Abrir Plan Familiar"><span class="icon">👪</span><span class="label">Plan Familiar</span><span class="chev">›</span></a>
       <li class="item">
         <a href="/ajustes/cuenta" class="item-link" aria-label="Abrir cuenta">
           <span class="icon">👤</span>
@@ -74,7 +78,12 @@
   </div>
 </main>
 
+
 <style>
+ :global(html) {
+  height:100%;
+}
+
   :global(body) {
     margin: 0;
     padding: 0;
@@ -84,7 +93,26 @@
     min-height: 100vh;
   }
 
-  .app {
+  .bg {
+    animation:slide 3s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
+    bottom:0;
+    left:-50%;
+    opacity:.5;
+    position:fixed;
+    right:-50%;
+    top:0;
+    z-index:-1;
+  }
+
+  .bg2 {
+    animation-direction:alternate-reverse;
+    animation-duration:4s;
+  }
+
+  .bg3 {
+    animation-duration:5s;
+  }  .app {
     max-width: 420px;
     margin: 0 auto;
     padding: 24px;
@@ -255,12 +283,35 @@
     font-size: 18px;
   }
 
-  @media (prefers-color-scheme: light) {
+   @media (prefers-color-scheme: light) {
     :global(body) {
-      background: linear-gradient(180deg,#ffffff,#f7f7fb);
+      background: linear-gradient(-45deg, #FFD700 0%, #FFA500 50%, #FFFFFF 50%, #FFFFFF 100%);
+      background-attachment: fixed; /* Fondo estático */
       color: #111;
     }
-    .card, .search { background: #fff; color: #222; box-shadow: 0 8px 26px rgba(10,10,10,0.06); }
+    .card, .search { background: rgba(255,255,255,0.9); color: #222; box-shadow: 0 8px 26px rgba(10,10,10,0.06); }
     .icon { color: #111; }
+    .label { color: #000; }
+  }
+  
+
+  
+
+  @keyframes slide {
+    0% {
+      transform:translateX(-25%);
+    }
+    100% {
+      transform:translateX(25%);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
   }
 </style>
