@@ -383,9 +383,6 @@
     scrollbar-width: thin;
     scrollbar-color: #ccc transparent;
     transition: opacity 0.2s ease, transform 0.2s ease;
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
-    background: rgba(255, 255, 255, 0.3); /* Más transparente para mejor efecto */
   }
 
   .scroll-spacer {
