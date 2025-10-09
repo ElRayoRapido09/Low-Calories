@@ -1,20 +1,29 @@
 <script>
-  function handleCameraClick() {
-    alert('aun no se poner la camara, solo puse la alerta xD');
-  }
+  import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
+  
 
   function openCamera() {
     alert('aqui se abre la camara');
   }
 
+  function goToObjetivos() {
+    goto('/objetivos');
+  }
+
   console.log("hola layo");
-  let isMenuOpen = false;
-  let scrollY = 0;
-  let cardsContainer;
-  let startY = 0;
-  let isDragging = false;
-  let cardsScrollY = 0;
-  let maxScroll = 0;
+
+  let isMenuOpen = $state(false);
+  let scrollY = $state(0);
+  let cardsContainer = $state(null);
+  let startY = $state(0);
+  let isDragging = $state(false);
+  let cardsScrollY = $state(0);
+  let maxScroll = $state(0);
+
+  let bottomNavHeight = $derived(cardsScrollY <= 50 ? Math.max(50 - (cardsScrollY * 2), 0) : Math.min(50 + ((cardsScrollY - 50) * 0.15), 100));
+  let cardsOpacity = $derived(cardsScrollY <= 50 ? Math.max(1 - (cardsScrollY / 50), 0) : 1);
+  let cardsTransform = $derived(cardsScrollY <= 50 ? -(cardsScrollY * 2) : 0);
 
   function toggleMenu() {
     isMenuOpen = !isMenuOpen;
@@ -74,11 +83,6 @@
       }
     }
   }
-
-  
-  $: bottomNavHeight = cardsScrollY <= 50 ? Math.max(50 - (cardsScrollY * 2), 0) : Math.min(50 + ((cardsScrollY - 50) * 0.15), 100);
-  $: cardsOpacity = cardsScrollY <= 50 ? Math.max(1 - (cardsScrollY / 50), 0) : 1;
-  $: cardsTransform = cardsScrollY <= 50 ? -(cardsScrollY * 2) : 0;
 </script>
 
 <div class="bg"></div>
@@ -131,7 +135,7 @@
     >
       <!-- Agregar un elemento espaciador al inicio para permitir scroll hacia arriba -->
       <div class="scroll-spacer"></div>
-    
+
       <section class="card" on:click={handleCameraClick} role="button" tabindex="0">
         <div class="icons">
           📷
@@ -164,7 +168,7 @@
         <p>Revisa tu progreso diario</p>
       </section>
 
-      <section class="card-bot">
+      <section class="card-bot" on:click={goToObjetivos} role="button" tabindex="0">
         <div class="icons">
           🎯
         </div>
