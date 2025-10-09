@@ -10,8 +10,7 @@
   <header class="top">
     <a href="/" class="back-btn" aria-label="Volver">‹</a>
     <h1>Ajustes</h1>
-    <span class="icon">👤</span>
-    <img class="avatar" alt="Perfil" src="" />
+    <img class="avatar" alt="Perfil" src="src/lib/assets/kk.jpg"/>
   </header>
 
   <h2 class="section-title">Acceso rápido</h2>
@@ -26,10 +25,12 @@
         </label>
       </li>
 
-      <li class="item">
-        <span class="icon">📅</span>
-        <span class="label">Planificador de Comidas</span>
-        <span class="chev">›</span>
+      <li>
+        <a class="item" href="/ajustes/planificador_de_comida" aria-label="Abrir Interfaz">
+          <span class="icon">📅</span>
+          <span class="label">Planificador de Comidas</span>
+          <span class="chev">›</span>
+        </a>
       </li>
 
       <li class="item">
@@ -38,10 +39,12 @@
         <span class="chev">›</span>
       </li>
 
-      <li class="item">
-        <span class="icon">⏱️</span>
-        <span class="label">Ayuno</span>
-        <span class="chev">›</span>
+      <li>
+        <a class="item" href="/ajustes/ayuno" aria-label="Abrir Interfaz">
+          <span class="icon">⏱️</span>
+          <span class="label">Ayuno</span>
+          <span class="chev">›</span>
+        </a>
       </li>
     </ul>
   </section>
@@ -49,21 +52,31 @@
   <h2 class="section-title">Configuración</h2>
   <section class="card">
     <ul class="list">
-      <li class="item"><span class="icon">🔥</span><span class="label">Objetivo, Calorías y Macros</span><span class="chev">›</span></li>
+      <li>
+        <a class="item" href="/ajustes/objetivos, calorias y macros" aria-label="Abrir Interfaz">
+          <span class="icon">🔥</span>
+          <span class="label">Objetivo, Calorías y Macros</span>
+          <span class="chev">›</span>
+        </a>
+      </li>
       <li class="item"><span class="icon">🍎</span><span class="label">Plan de Comidas y Alimentos</span><span class="chev">›</span></li>
       <li class="item"><span class="icon">🔁</span><span class="label">Rehacer Plan</span><span class="chev">›</span></li>
       <li class="item"><span class="icon">🔔</span><span class="label">Recordatorios</span><span class="chev">›</span></li>
       <li class="item"><span class="icon">💛</span><span class="label">Sincronizar Health Connect</span><span class="chev">›</span></li>
-      <li class="item">
-        <a href="/ajustes/interfaz" class="item-link" aria-label="Abrir Interfaz">
+      <li>
+        <a class="item" href="/ajustes/interfaz" aria-label="Abrir Interfaz">
           <span class="icon">🎨</span>
           <span class="label">Interfaz</span>
           <span class="chev">›</span>
         </a>
       </li>
-      <a class="item" href="/premium" aria-label="Abrir Plan Familiar"><span class="icon">👪</span><span class="label">Plan Familiar</span><span class="chev">›</span></a>
-      <li class="item">
-        <a href="/ajustes/cuenta" class="item-link" aria-label="Abrir cuenta">
+      <a class="item" href="/premium" aria-label="Abrir Plan Familiar">
+        <span class="icon">👪</span>
+        <span class="label">Plan Familiar</span>
+        <span class="chev">›</span>
+      </a>
+      <li>
+        <a class="item" href="/ajustes/cuenta" aria-label="Abrir cuenta">
           <span class="icon">👤</span>
           <span class="label">Cuenta</span>
           <span class="chev">›</span>
@@ -80,9 +93,12 @@
 
 
 <style>
- :global(html) {
-  height:100%;
-}
+  :global(html) {
+    height: auto;
+    min-height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
   :global(body) {
     margin: 0;
@@ -91,6 +107,8 @@
     background: linear-gradient(70deg, blue 0%, pink 100%);
     color: #f2f2f2;
     min-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .bg {
@@ -112,10 +130,13 @@
 
   .bg3 {
     animation-duration:5s;
-  }  .app {
+  }  
+  
+  .app {
     max-width: 420px;
     margin: 0 auto;
     padding: 24px;
+    min-height: 100vh;
   }
 
   .top {
@@ -140,8 +161,8 @@
   }
 
   .avatar {
-    width: 36px;
-    height: 36px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     object-fit: cover;
     border: 1px solid rgba(255,255,255,0.06);
@@ -250,11 +271,11 @@
 
   .search {
     position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 24px;
+    right: 24px;
     bottom: 18px;
-    width: calc(100% - 48px);
     max-width: 420px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     gap: 10px;

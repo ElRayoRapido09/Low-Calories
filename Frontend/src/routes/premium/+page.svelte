@@ -66,7 +66,10 @@
     @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
 
     :global(html) {
-      height:100%;
+      height: auto;
+      min-height: 100%;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
   :global(body) {
@@ -76,6 +79,8 @@
     background: linear-gradient(70deg, blue 0%, pink 100%);
     color: #f2f2f2;
     min-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .bg {
@@ -103,6 +108,7 @@
     max-width: 420px;
     margin: 0 auto;
     padding: 24px;
+    min-height: 100vh;
   }
 
   .top {

@@ -141,6 +141,13 @@
 </main>
 
 <style>
+  :global(html) {
+    height: auto;
+    min-height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   :global(body) {
     margin: 0;
     padding: 0;
@@ -148,7 +155,38 @@
     background: linear-gradient(70deg, blue 0%, pink 100%);
     color: #f2f2f2;
     min-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
+
+  .bg {
+    animation:slide 3s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
+    bottom:0;
+    left:-50%;
+    opacity:.5;
+    position:fixed;
+    right:-50%;
+    top:0;
+    z-index:-1;
+  }
+
+  .bg2 {
+    animation-direction:alternate-reverse;
+    animation-duration:4s;
+  }
+
+  .bg3 {
+    animation-duration:5s;
+  }  
+  
+  .app {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 24px;
+    min-height: 100vh;
+  }
+
 
   .card--isolated {
     margin-top: 28px;   /* separación arriba */
@@ -288,11 +326,11 @@
   /* Switch estilo móvil (amarillo cuando está activo) */
   .search {
     position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 24px;
+    right: 24px;
     bottom: 18px;
-    width: calc(100% - 48px);
     max-width: 420px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     gap: 10px;

@@ -11,7 +11,7 @@
     <a href="/" class="back-btn" aria-label="Volver">‹</a>
     <h1>Mi Perfil</h1>
     <span class="icon">👤</span>
-    <img class="avatar" alt="Perfil" src="" />
+    <img class="avatar" alt="Perfil" src="src/lib/assets/kk.jpg" />
      <!-- Botón de notificaciones -->
     <button class="notification-button">
         <i class="fas fa-bell notification-icon"></i>
@@ -33,7 +33,7 @@
   <div class="card-user-container">
     <section class="card-user"> 
         <div class="icons">
-          👤
+          <img class="avatar" alt="Perfil" src="src/lib/assets/kk.jpg" />
         </div> 
       </section>
       <h2>Jorge Mendoza Ordoñez</h2>
@@ -121,6 +121,8 @@
     background: linear-gradient(70deg, blue 0%, pink 100%);
     color: #ffffff;
     min-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   :global(html) {
@@ -157,6 +159,14 @@
   }
 }
 
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  
   .main {
     max-width: 400px;
     margin: 0 auto;
