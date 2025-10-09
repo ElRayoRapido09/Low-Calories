@@ -9,78 +9,43 @@
 <main class="app">
   <header class="top">
     <a href="/ajustes" class="back-btn" aria-label="Volver">‹</a>
-    <h1>Interfaz</h1>
+    <h1>Cuenta</h1>
   </header>
 
-  <h2 class="section-title">Idioma</h2>
+  <h2 class="section-title">Edad, Altura y Sexo</h2>
   <section class="card">
     <ul class="list">
       <li class="item">
         <div class="left">
-          <span class="icon">🌐</span>
-          <span class="label">Lenguaje de interfaz</span>
+          <span class="icon">🔥</span>
+          <span class="label">Objetivos y Calorias</span>
         </div>
         <div class="right">
-          <span class="value">Español</span>
           <span class="chev">›</span>
         </div>
       </li>
 
       <li class="item">
         <div class="left">
-          <span class="icon">📚</span>
-          <span class="label">Lenguaje de base de datos</span>
+          <span class="icon">🍎</span>
+          <span class="label">Macros y Tipos de dietas</span>
         </div>
         <div class="right">
-          <span class="value">Español</span>
+          <span class="chev">›</span>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="left">
+          <span class="icon">✨</span>
+          <span class="label">Funciones Inteligentes</span>
+        </div>
+        <div class="right">
           <span class="chev">›</span>
         </div>
       </li>
     </ul>
   </section>
-
-  <h2 class="section-title">Unidades</h2>
-  <section class="card">
-    <ul class="list">
-      <li class="item">
-        <div class="left">
-          <span class="icon">⚖️</span>
-          <span class="label">Unidad de masa/volumen</span>
-        </div>
-        <div class="right">
-          <span class="value">g / kg / ml</span>
-          <span class="chev">›</span>
-        </div>
-      </li>
-
-      <li class="item">
-        <div class="left">
-          <span class="icon">📏</span>
-          <span class="label">Unidad de longitud</span>
-        </div>
-        <div class="right">
-          <span class="value">cm</span>
-          <span class="chev">›</span>
-        </div>
-      </li>
-
-      <li class="item">
-        <div class="left">
-          <span class="icon">⚡</span>
-          <span class="label">Unidad de energía</span>
-        </div>
-        <div class="right">
-          <span class="value">kcal</span>
-          <span class="chev">›</span>
-        </div>
-      </li>
-    </ul>
-  </section>
-
-  <div class="search">
-    <span class="search-icon">🔍</span>
-    <input type="search" placeholder="Busca ajustes, funciones, artículos..." aria-label="buscar ajustes">
-  </div>
 </main>
 
 <style>
@@ -121,13 +86,26 @@
 
   .bg3 {
     animation-duration:5s;
+  }  .app {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 24px;
+    min-height: 100vh;
+  }
+
+
+  .card--isolated {
+    margin-top: 28px;   /* separación arriba */
+    margin-bottom: 36px; /* separación abajo si quieres más espacio */
+    background: rgb(255, 255, 255); /* ajuste: más opaco en modo claro si quieres */
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
   }
 
   .app {
     max-width: 420px;
     margin: 0 auto;
     padding: 24px;
-    min-height: 100vh;
   }
 
   .top {
@@ -153,7 +131,7 @@
   }
 
   .section-title {
-    color: #ffffff;
+    color: #cfcfcf;
     margin: 18px 0 8px;
     font-size: 14px;
     font-weight: 600;
@@ -161,16 +139,16 @@
 
   .card {
     /* fondo semi-transparente para que el blur sea visible */
-    background: none;  /* ajustar opacidad según prefieras */
+    background: rgba(245, 243, 243, 0.2);  /* ajustar opacidad según prefieras */
     border-radius: 12px;
     padding: 8px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.6);
     margin-bottom: 18px;
 
-    background: rgba(255,255,255,0.2); /* ajuste: más opaco en modo claro si quieres */
-    -webkit-backdrop-filter: blur(15px);
-    backdrop-filter: blur(15px);
-
+    /* fondo semi-transparente para que el blur sea visible */
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(233, 225, 225, 0.2);
   }
 
 
@@ -189,7 +167,6 @@
     padding: 12px;
     border-radius: 12px;
     margin-bottom: 10px;
-    background: none; /* ajuste: más opaco en modo claro si quieres */
   }
 
   .item:last-child {
@@ -227,6 +204,15 @@
     flex: 1;
     font-size: 15px;
     color: #000000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .label-red {
+    flex: 1;
+    font-size: 15px;
+    color: #db0404;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -271,7 +257,7 @@
     background: transparent;
     border: none;
     outline: none;
-    color: #ffffff;
+    color: #ddd;
     font-size: 14px;
   }
 
@@ -292,10 +278,10 @@
 
   @keyframes slide {
     0% {
-      transform:translateX(-25%);
+      transform: translateX(-100%) translateY(-100%);
     }
     100% {
-      transform:translateX(25%);
+      transform: translateX(100%) translateY(100%);
     }
   }
 </style>
