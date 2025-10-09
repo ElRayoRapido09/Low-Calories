@@ -84,7 +84,10 @@
 
 <style>
    :global(html) {
-     height:100%;
+     height: auto;
+     min-height: 100%;
+     overflow-y: auto;
+     -webkit-overflow-scrolling: touch;
    }
 
    :global(body) {
@@ -93,6 +96,8 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
     background: linear-gradient(135deg, #ffffffff 0%, #f9f8feff 100%);
     min-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .bg {
@@ -123,6 +128,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
   }
 
   header {
