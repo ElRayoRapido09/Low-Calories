@@ -33,10 +33,12 @@
         </a>
       </li>
 
-      <li class="item">
-        <span class="icon">🛒</span>
-        <span class="label">Lista de Compras</span>
-        <span class="chev">›</span>
+      <li>
+        <a class="item" href="/ajustes/lista de compras" aria-label="Abrir Interfaz">
+          <span class="icon">🛒</span>
+          <span class="label">Lista de Compras</span>
+          <span class="chev">›</span>
+        </a>
       </li>
 
       <li>
@@ -60,7 +62,13 @@
         </a>
       </li>
       <li class="item"><span class="icon">🍎</span><span class="label">Plan de Comidas y Alimentos</span><span class="chev">›</span></li>
-      <li class="item"><span class="icon">🔁</span><span class="label">Rehacer Plan</span><span class="chev">›</span></li>
+      <li>
+        <a class="item" href="/objetivos" aria-label="Abrir Interfaz">
+          <span class="icon">🔁</span>
+          <span class="label">Rehacer Plan</span>
+          <span class="chev">›</span>
+        </a>
+      </li>
       <li class="item"><span class="icon">🔔</span><span class="label">Recordatorios</span><span class="chev">›</span></li>
       <li class="item"><span class="icon">💛</span><span class="label">Sincronizar Health Connect</span><span class="chev">›</span></li>
       <li>
