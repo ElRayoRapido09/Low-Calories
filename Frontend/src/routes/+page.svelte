@@ -87,8 +87,8 @@
 
 <svelte:window bind:scrollY />
 
-<main>
-  <header>
+<main class="main">
+  <header class="header">
     <h1>Low Calories</h1>
     <p>Tu asistente personal de nutrición</p>
   </header>
@@ -209,10 +209,10 @@
   :global(body) {
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     background: linear-gradient(70deg, blue 0%, pink 100%);
+    color: #f2f2f2;
     min-height: 100vh;
-    overflow: hidden; 
   }
 
   .bg {
@@ -236,7 +236,7 @@
     animation-duration:5s;
   }
 
-  main {
+  .main {
     max-width: 100%;
     margin: 0;
     padding: 2rem 1rem 0 1rem;
@@ -246,7 +246,7 @@
     overflow: hidden;
   }
 
-  header {
+  .header {
     text-align: center;
     margin-bottom: 2rem;
     max-width: 400px;
@@ -254,7 +254,7 @@
     margin-right: auto;
   }
 
-  header h1 {
+  .header h1 {
     font-family: 'Dancing Script', cursive;
     font-style: italic ;
     font-size: 2rem;
@@ -263,7 +263,7 @@
     color: #ffffffff;
   }
 
-  header p {
+  .header p {
     font-size: 1rem;
     opacity: 0.9;
     margin: 0;
