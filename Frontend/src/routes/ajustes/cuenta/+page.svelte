@@ -94,8 +94,10 @@
       </li>
 
       <li class="item">
-        <div class="left">
-          <span class="label">Cerrar sesión</span>
+        <div>
+          <a class="left" href="/login/" aria-label="Abrir Interfaz">
+            <span class="label">Cerrar sesión</span>
+          </a>
         </div>
       </li>
     </ul>
