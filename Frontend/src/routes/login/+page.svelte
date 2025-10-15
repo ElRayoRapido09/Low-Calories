@@ -95,7 +95,7 @@
 <main class="main">
  
   <header class="header" class:hidden={headerHidden}>
-    <h1>Low Calories</h1>
+    <h1>xLow Calories</h1>
     <p>Tu asistente personal de nutrición</p>
   </header>
 
