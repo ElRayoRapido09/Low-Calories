@@ -9,7 +9,7 @@
   }
 
   function nextView() {
-    if (currentView < 10) {
+    if (currentView < 11) {
       currentView++;
     }
   }
@@ -36,6 +36,34 @@
   let heightUnit = 'cm';
   let showSpeedModal = false;
   let selectedSpeed = 'recomendada';
+  
+  // Variables para las vistas de comidas
+  let selectedMeals = {
+    desayuno: true,
+    almuerzo: true,
+    cena: true,
+    snacks: false,
+    snacks2: false
+  };
+
+  // Variables para preferencias de sugerencias
+  let suggestionType = 'recipes'; // 'recipes' o 'ingredients'
+
+  function toggleMeal(mealType) {
+    // Las comidas principales no se pueden desmarcar si hay menos de 2 seleccionadas
+    const principalMeals = ['desayuno', 'almuerzo', 'cena'];
+    const selectedPrincipalCount = principalMeals.filter(meal => selectedMeals[meal]).length;
+    
+    if (principalMeals.includes(mealType) && selectedMeals[mealType] && selectedPrincipalCount <= 2) {
+      return; // No permitir desmarcar si solo quedan 2 comidas principales
+    }
+    
+    selectedMeals[mealType] = !selectedMeals[mealType];
+  }
+
+  function setSuggestionType(type) {
+    suggestionType = type;
+  }
 </script>
 
 <div class="bg"></div>
@@ -51,6 +79,12 @@
   
   {#if currentView === 1}
     <section class="card">
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 10%"></div>
+        </div>
+      </div>
+      
       <h2>¿Cuál es tu objetivo?</h2>
       <p>Calcularemos tus calorías necesarias para lograrlo.</p>
       <div class="lista">
@@ -79,6 +113,12 @@
   
   {#if currentView === 2}
     <section class="card">
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 20%"></div>
+        </div>
+      </div>
+      
       <h2>Excelente
       </h2>
       <p>Ahora el primer paso es descubrir cuantas calorías necesitas diariamente.</p>
@@ -93,8 +133,14 @@
   
   {#if currentView === 3}
     <section class="card">
-    <h2>Cuéntanos sobre ti</h2>
-    <p>Esta información nos ayudará a calcular tus calorías objetivo.</p>
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 30%"></div>
+        </div>
+      </div>
+      
+      <h2>Cuéntanos sobre ti</h2>
+      <p>Esta información nos ayudará a calcular tus calorías objetivo.</p>
     <div class="info-list">
       <div class="info-item">
         <span class="info-icon">👤</span>
@@ -204,6 +250,12 @@
 
   {#if currentView === 4}
     <section class="card">
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 40%"></div>
+        </div>
+      </div>
+      
       <h2>¿Cuanta actividad tienes?</h2>
       <li class="item">
         <span class="icon">🛌</span>
@@ -239,6 +291,12 @@
 
   {#if currentView === 5}
     <section class="card">
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 50%"></div>
+        </div>
+      </div>
+      
       <h2>Que tipo de dieta prefieres?</h2>
 
       <li class="item">
@@ -275,6 +333,12 @@
   {#if currentView === 6}
     
 <section class="card">
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 60%"></div>
+        </div>
+      </div>
+      
       <h2>Personalicemos tu Objetivo</h2>
       <p>Este es el último paso para personalizar tu experiencia.</p>
 
@@ -402,7 +466,13 @@
 
   {#if currentView === 7}
     <section class="card">
-    <h2>¡Tu progreso y tus calorías!</h2>
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 70%"></div>
+        </div>
+      </div>
+      
+      <h2>¡Tu progreso y tus calorías!</h2>
     <div class="carousel">
       <div class="carousel-track" style="transform: translateX(-{carouselIndex * 100}%);">
         <!-- Slide 1: Progreso de peso -->
@@ -482,37 +552,187 @@
   {/if}
 
   {#if currentView === 8}
-    <section class="card">
-      <h2>Vista 8</h2>
-      <p>Configura esta vista</p>
+    <section class="card meal-planning-intro">
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 80%"></div>
+        </div>
+      </div>
+      
+      <div class="intro-content">
+        <div class="meal-icon-container">
+          <div class="meal-icon-outer">
+            <div class="meal-icon-middle">
+              <div class="meal-icon-inner">
+                <span class="meal-icon">📝</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <h2 class="intro-title">Ahora, personalicemos tu plan de comidas para alcanzar tus calorías diarias</h2>
+      </div>
       
       <div class="nav-buttons">
-        <button on:click={prevView}>Regresar</button>
-        <button on:click={nextView}>Continuar</button>
+        <button on:click={nextView} class="continue-btn">Continuar</button>
       </div>
     </section>
   {/if}
 
   {#if currentView === 9}
-    <section class="card">
-      <h2>Vista 9</h2>
-      <p>Configura esta vista </p>
+    <section class="card meal-selection">
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 80%"></div>
+        </div>
+      </div>
+      
+      <div class="meal-header">
+        <div class="meal-plate-icon">🍽️</div>
+        <h2>¿Cuántas comidas al día deseas?</h2>
+        <p class="meal-subtitle">Elige al menos 2 comidas principales</p>
+      </div>
+
+      <div class="meal-options">
+        <button type="button" class="meal-option" class:selected={selectedMeals.desayuno} on:click={() => toggleMeal('desayuno')}>
+          <div class="meal-check" class:visible={selectedMeals.desayuno}>✓</div>
+          <span class="meal-name">Desayuno</span>
+          <span class="meal-type">Principal</span>
+        </button>
+        
+        <button type="button" class="meal-option" class:selected={selectedMeals.almuerzo} on:click={() => toggleMeal('almuerzo')}>
+          <div class="meal-check" class:visible={selectedMeals.almuerzo}>✓</div>
+          <span class="meal-name">Almuerzo</span>
+          <span class="meal-type">Principal</span>
+        </button>
+        
+        <button type="button" class="meal-option" class:selected={selectedMeals.cena} on:click={() => toggleMeal('cena')}>
+          <div class="meal-check" class:visible={selectedMeals.cena}>✓</div>
+          <span class="meal-name">Cena</span>
+          <span class="meal-type">Principal</span>
+        </button>
+        
+        <button type="button" class="meal-option add-option" class:selected={selectedMeals.snacks} on:click={() => toggleMeal('snacks')}>
+          <div class="meal-add" class:meal-check={selectedMeals.snacks} class:visible={selectedMeals.snacks}>
+            {selectedMeals.snacks ? '✓' : '+'}
+          </div>
+          <span class="meal-name">Snacks</span>
+        </button>
+        
+        <button type="button" class="meal-option add-option" class:selected={selectedMeals.snacks2} on:click={() => toggleMeal('snacks2')}>
+          <div class="meal-add" class:meal-check={selectedMeals.snacks2} class:visible={selectedMeals.snacks2}>
+            {selectedMeals.snacks2 ? '✓' : '+'}
+          </div>
+          <span class="meal-name">Snacks 2</span>
+        </button>
+      </div>
+
+      <p class="meal-note">No te preocupes, luego lo puedes cambiar</p>
       
       <div class="nav-buttons">
-        <button on:click={prevView}>Regresar</button>
-        <button on:click={nextView}>Continuar</button>
+        <button on:click={nextView} class="continue-btn">Continuar</button>
       </div>
     </section>
   {/if}
 
   {#if currentView === 10}
-    <section class="card">
-      <h2>Vista 10</h2>
-      <p>Configura esta vista </p>
-     
+    <section class="card food-preferences">
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 90%"></div>
+        </div>
+      </div>
+      
+      <div class="preferences-header">
+        <div class="preferences-icon">✨</div>
+        <h2>¿Cómo prefieres tus sugerencias de comidas?</h2>
+      </div>
+
+      <!-- Opciones de tipo de sugerencia -->
+      <div class="suggestion-types">
+        <button type="button" class="suggestion-option" class:selected={suggestionType === 'recipes'} on:click={() => setSuggestionType('recipes')}>
+          <div class="suggestion-content">
+            <h3>Recetas</h3>
+            <p>Instrucciones paso a paso</p>
+            <div class="recipe-example">
+              <div class="recipe-image">🥪</div>
+              <span class="recipe-name">Sándwich de Pollo con Aguacate</span>
+            </div>
+          </div>
+        </button>
+        
+        <button type="button" class="suggestion-option" class:selected={suggestionType === 'ingredients'} on:click={() => setSuggestionType('ingredients')}>
+          <div class="suggestion-content">
+            <h3>Solo ingredientes</h3>
+            <p>Puedes prepararlo como quieras</p>
+            <div class="ingredients-list">
+              <div class="ingredient-item">
+                <span class="ingredient-icon">🍗</span>
+                <span class="ingredient-name">Pollo</span>
+                <span class="ingredient-amount">1 filete mediano</span>
+              </div>
+              <div class="ingredient-item">
+                <span class="ingredient-icon">🍚</span>
+                <span class="ingredient-name">Arroz</span>
+                <span class="ingredient-amount">1 taza</span>
+              </div>
+              <div class="ingredient-item">
+                <span class="ingredient-icon">🥑</span>
+                <span class="ingredient-name">Aguacate</span>
+                <span class="ingredient-amount">1/2 unidad</span>
+              </div>
+            </div>
+          </div>
+        </button>
+      </div>
+      
       <div class="nav-buttons">
         <button on:click={prevView}>Regresar</button>
-        <button on:click={nextView}>Continuar</button>
+        <button on:click={nextView} class="continue-btn">Continuar</button>
+      </div>
+    </section>
+  {/if}
+
+  {#if currentView === 11}
+    <section class="card completion-screen">
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 100%"></div>
+        </div>
+      </div>
+      
+      <div class="completion-content">
+        <div class="completion-icon-container">
+          <div class="completion-icon-outer">
+            <div class="completion-icon-middle">
+              <div class="completion-icon-inner">
+                <span class="completion-icon">🎉</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <h2 class="completion-title">¡Configuración Completada!</h2>
+        <p class="completion-subtitle">Tu plan personalizado está listo</p>
+        
+        <div class="completion-summary">
+          <div class="summary-item">
+            <span class="summary-icon">🎯</span>
+            <span class="summary-text">Objetivo configurado</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-icon">🍽️</span>
+            <span class="summary-text">Plan de comidas personalizado</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-icon">📊</span>
+            <span class="summary-text">Calorías y macros calculados</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="nav-buttons">
+        <button on:click={goToHome} class="completion-btn">Comenzar mi plan</button>
       </div>
     </section>
   {/if}
@@ -1232,5 +1452,513 @@
   background: #005bb5 !important;
   color: #ffffff !important;
   font-weight: 600;
+}
+
+/* Estilos para Vista 8 - Introducción al plan de comidas */
+.meal-planning-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 60vh;
+  padding: 2rem 1.5rem;
+}
+
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.meal-icon-container {
+  margin-bottom: 2rem;
+}
+
+.meal-icon-outer {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 91, 181, 0.3) 0%, rgba(0, 91, 181, 0.1) 50%, transparent 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.meal-icon-middle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 91, 181, 0.5) 0%, rgba(0, 91, 181, 0.2) 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.meal-icon-inner {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #005bb5 0%, #004499 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 91, 181, 0.3);
+}
+
+.meal-icon {
+  font-size: 2.5rem;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.intro-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #cfcfcf;
+  margin: 0;
+  max-width: 350px;
+}
+
+/* Estilos para Vista 9 - Selección de comidas */
+.meal-selection {
+  padding: 1.5rem;
+}
+
+.progress-indicator {
+  margin-bottom: 1.5rem;
+}
+
+.progress-bar-small {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill-small {
+  height: 100%;
+  background: linear-gradient(90deg, #005bb5, #004499);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.meal-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.meal-plate-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, rgba(0, 91, 181, 0.2) 0%, rgba(0, 68, 153, 0.2) 100%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+}
+
+.meal-header h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #cfcfcf;
+  margin: 0 0 0.5rem 0;
+}
+
+.meal-subtitle {
+  font-size: 0.9rem;
+  color: #9b9b9b;
+  margin: 0;
+}
+
+.meal-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.meal-option {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid rgba(0, 91, 181, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.meal-option.selected {
+  border-color: #005bb5;
+  background: rgba(0, 91, 181, 0.1);
+}
+
+.meal-option.add-option {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.meal-option:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.meal-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #005bb5;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-right: 12px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.meal-check.visible {
+  opacity: 1;
+}
+
+.meal-add {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: #9b9b9b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-right: 12px;
+  transition: all 0.2s ease;
+}
+
+.meal-add.meal-check {
+  background: #005bb5;
+  color: #fff;
+  font-size: 0.8rem;
+}
+
+.meal-name {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.meal-type {
+  font-size: 0.8rem;
+  color: #005bb5;
+  font-weight: 500;
+  background: rgba(0, 91, 181, 0.2);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.meal-note {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #9b9b9b;
+  margin: 1rem 0 2rem 0;
+}
+
+.continue-btn {
+  width: 100%;
+  background: #005bb5;
+  color: #fff;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.continue-btn:hover {
+  background: #004499;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 91, 181, 0.3);
+}
+
+.continue-btn:active {
+  transform: translateY(0);
+}
+
+/* Estilos para Vista 10 - Preferencias de comidas */
+.food-preferences {
+  padding: 1.5rem;
+}
+
+.preferences-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.preferences-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, rgba(0, 91, 181, 0.2) 0%, rgba(0, 68, 153, 0.2) 100%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+}
+
+.preferences-header h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #cfcfcf;
+  margin: 0;
+}
+
+.suggestion-types {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 2rem;
+}
+
+.suggestion-option {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(0, 91, 181, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-family: inherit;
+}
+
+.suggestion-option.selected {
+  border-color: #005bb5;
+  background: rgba(0, 91, 181, 0.1);
+}
+
+.suggestion-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 91, 181, 0.2);
+}
+
+.suggestion-content h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+}
+
+.suggestion-content p {
+  font-size: 0.9rem;
+  color: #9b9b9b;
+  margin: 0 0 1rem 0;
+}
+
+.recipe-example {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 91, 181, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.recipe-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  background: #005bb5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.recipe-name {
+  font-size: 0.9rem;
+  color: #fff;
+  font-weight: 500;
+}
+
+.ingredients-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ingredient-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 91, 181, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.ingredient-icon {
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
+}
+
+.ingredient-name {
+  flex: 1;
+  font-size: 0.9rem;
+  color: #fff;
+  font-weight: 500;
+}
+
+.ingredient-amount {
+  font-size: 0.8rem;
+  color: #9b9b9b;
+}
+
+/* Estilos para Vista 11 - Pantalla de finalización */
+.completion-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 60vh;
+  padding: 2rem 1.5rem;
+}
+
+.completion-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.completion-icon-container {
+  margin-bottom: 2rem;
+}
+
+.completion-icon-outer {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 91, 181, 0.3) 0%, rgba(0, 91, 181, 0.1) 50%, transparent 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.completion-icon-middle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 91, 181, 0.5) 0%, rgba(0, 91, 181, 0.2) 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.completion-icon-inner {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #005bb5 0%, #004499 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 91, 181, 0.3);
+}
+
+.completion-icon {
+  font-size: 2.5rem;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.completion-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #cfcfcf;
+  margin: 0 0 0.5rem 0;
+}
+
+.completion-subtitle {
+  font-size: 1rem;
+  color: #9b9b9b;
+  margin: 0 0 2rem 0;
+}
+
+.completion-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 91, 181, 0.1);
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 91, 181, 0.2);
+}
+
+.summary-icon {
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
+}
+
+.summary-text {
+  font-size: 0.9rem;
+  color: #fff;
+  font-weight: 500;
+}
+
+.completion-btn {
+  width: 100%;
+  background: #005bb5;
+  color: #fff;
+  border: none;
+  padding: 18px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 91, 181, 0.2);
+}
+
+.completion-btn:hover {
+  background: #004499;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 91, 181, 0.3);
+}
+
+.completion-btn:active {
+  transform: translateY(0);
 }
 </style>
