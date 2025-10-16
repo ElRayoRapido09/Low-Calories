@@ -4,7 +4,7 @@ services:
     ports:
       - "8000:8000"
     working_dir: /app
-    command: bash -c "pip install --upgrade pip && pip install django && pip install django mysqlclient && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "pip install --upgrade pip && pip install -r requirements.txt && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend:/app
     depends_on:
