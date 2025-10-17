@@ -6,23 +6,24 @@
  <svelte:window bind:scrollY />
 
 <main class="main">
-  <header class = "back"> 
-    
-    <a href="/" class="back-btn" aria-label="Volver">‹</a>
-    <h1>Mi Perfil</h1>
-    <span class="icon">👤</span>
-    <img class="avatar" alt="Perfil" src="src/lib/assets/kk.jpg" />
-     <!-- Botón de notificaciones -->
-    <button class="notification-button">
-        <i class="fas fa-bell notification-icon"></i>
-        <span class="badge">3</span> <!-- Insignia de notificaciones -->
-    </button>
-
-    <div class="dropdown-content">
-        <!-- Contenido de la notificación -->
-        <p>Tienes 3 nuevas notificaciones</p>
-    </div>
-  </header>
+  <div class="container-back">
+    <header class = "back"> 
+        <a href="/" class="back-btn" aria-label="Volver">‹</a>
+        <h1>Mi Perfil</h1>
+        <span class="icon">👤</span>
+        <img class="avatar" alt="Perfil" src="src/lib/assets/kk.jpg" />
+        <!-- Botón de notificaciones -->
+        <button class="notification-button">
+            <i class="fas fa-bell notification-icon"></i>
+            <span class="badge">3</span> <!-- Insignia de notificaciones -->
+        </button>
+        <div class="dropdown-content">
+            <!-- Contenido de la notificación -->
+            <p>Tienes 3 nuevas notificaciones</p>
+        </div>
+      </header>
+  </div>
+  
 
 <div class="bg"></div>
 <div class="bg bg2"></div>
@@ -110,6 +111,28 @@
         </div>
     </div>
 
+    <div class="spacer-container"></div>
+
+    <div class="card-tendencias-container">
+        <section class="card-tendencias">
+    <div class="icons">
+      📊
+    </div> 
+    <h2>Tendencias</h2>
+    <div class="columns">
+        <div>
+              <p>Promedio Semanal</p>
+              <p>Mejor Día</p>
+              <p>Racha Actual</p>
+          </div>
+          <div>
+              <p>1650 kcal</p>
+              <p>1800 kcal</p>
+              <p>5 días</p>
+          </div>
+      </div>    
+      </section>
+    </div>
       
 </main>
 
@@ -159,11 +182,23 @@
   }
 }
 
-  .avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
+.container-back {
+  align-items: flex-start;
+  position: sticky;
+padding: 4px;
+margin-bottom: 18px;
+  background: rgba(245, 243, 243, 0.2);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+ box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+ border-radius: 12px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
     border: 1px solid rgba(255,255,255,0.06);
   }
   
@@ -232,7 +267,6 @@
     padding: 8px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.6);
     margin-bottom: 18px;
-
     background: rgba(255,255,255,0.2); /* ajuste: más opaco en modo claro si quieres */
     -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
@@ -268,7 +302,7 @@
   }
 
   .card-meta {
-  background: rgb(255, 255, 255);
+  background: rgb(38, 92, 172);
     border-radius: 1rem;
     padding: 2rem;
     text-align: center;
@@ -288,7 +322,7 @@
   }
 
   .card-active {
-    background: white;
+    background: rgb(38, 92, 172);;
     border-radius: 1rem;
     padding: 2rem;
     text-align: center;
@@ -307,7 +341,7 @@
     transform: translateY(-2px);
   }
   .card-info {
-    background: white;
+    background: rgb(38, 92, 172);;
     border-radius: 1rem;
     padding: 2rem;
     text-align: center;
@@ -333,7 +367,7 @@
   }
 
   .card-progress {
-    background: white;
+    background: rgb(38, 92, 172);;
     border-radius: 1rem;
     padding: 2rem;
     text-align: center;
@@ -377,6 +411,19 @@
   margin: 0 auto;
 }
 
+.card-tendencias-container {
+  text-align: center;
+  align-items: flex-start;
+  background: none;  /* ajustar opacidad según prefieras */
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    margin-bottom: 18px;
+    background: rgba(255,255,255,0.2); /* ajuste: más opaco en modo claro si quieres */
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+  }
+
 
 .card-container {
   align-items: start;
@@ -385,12 +432,11 @@
     padding: 8px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.6);
     margin-bottom: 18px;
-
     background: rgba(255,255,255,0.2); /* ajuste: más opaco en modo claro si quieres */
     -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
     overflow-x: auto; /* Permite el desplazamiento horizontal */
-    scrollbar-width: thin; /* Estilo del scrollbar para Firefox */
+    scrollbar-width: thin ; /* Estilo del scrollbar para Firefox */
 
 }
   .card-container::-webkit-scrollbar {
@@ -408,8 +454,8 @@
   }
 
   .scroll-spacer {
-    height: 100px; /* Espacio para permitir scroll hacia arriba */
-    width: 100%;
+    height: 60px; /* Espacio para permitir scroll hacia arriba */
+    width: 60%;
     flex-shrink: 0;
   }
 
