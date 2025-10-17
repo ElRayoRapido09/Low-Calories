@@ -10,6 +10,9 @@
   function goToObjetivos() {
     goto('/objetivos');
   }
+  function goToComidas() {
+    goto('/comidas');
+  }
 
   console.log("hola layo");
 
@@ -152,7 +155,7 @@
         <p>Pregunta a nuestro asistente y él te ayudará</p>
       </section>
 
-      <section class="card-bot">
+      <section class="card-bot" on:click={goToComidas} role="button" tabindex="0">
         <div class="icons">
           🥑
         </div>
