@@ -2,10 +2,6 @@
   // no JavaScript necesario para el estilo
 </script>
 
-<div class="bg"></div>
-<div class="bg bg2"></div>
-<div class="bg bg3"></div>
-
 <main class="app">
   <header class="top">
     <a href="/ajustes" class="back-btn" aria-label="Volver">‹</a>
@@ -60,32 +56,11 @@
     margin: 0;
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background: linear-gradient(70deg, blue 0%, pink 100%);
-    color: #f2f2f2;
+    background: #ffffff;
+    color: #333;
     min-height: 100vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-  }
-
-  .bg {
-    animation:slide 3s ease-in-out infinite alternate;
-    background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
-    bottom:0;
-    left:-50%;
-    opacity:.5;
-    position:fixed;
-    right:-50%;
-    top:0;
-    z-index:-1;
-  }
-
-  .bg2 {
-    animation-direction:alternate-reverse;
-    animation-duration:4s;
-  }
-
-  .bg3 {
-    animation-duration:5s;
   }  .app {
     max-width: 420px;
     margin: 0 auto;
@@ -116,7 +91,7 @@
   }
 
   .back-btn {
-    color: #fff;
+    color: #000;
     text-decoration: none;
     font-size: 22px;
     padding: 6px;
@@ -128,27 +103,23 @@
     margin: 0;
     font-weight: 600;
     text-align: center;
+    color: #000;
   }
 
   .section-title {
-    color: #cfcfcf;
+    color: #666;
     margin: 18px 0 8px;
     font-size: 14px;
     font-weight: 600;
   }
 
   .card {
-    /* fondo semi-transparente para que el blur sea visible */
-    background: rgba(245, 243, 243, 0.2);  /* ajustar opacidad según prefieras */
+    background: #ffffff;
     border-radius: 12px;
     padding: 8px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     margin-bottom: 18px;
-
-    /* fondo semi-transparente para que el blur sea visible */
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(233, 225, 225, 0.2);
+    border: 1px solid #e0e0e0;
   }
 
 
@@ -268,20 +239,11 @@
 
   @media (prefers-color-scheme: light) {
     :global(body) {
-      background: linear-gradient(180deg,#ffffff,#f7f7fb);
+      background: #ffffff;
       color: #111;
     }
-    .item, .search { background: #fff; color: #222; box-shadow: 0 8px 26px rgba(10,10,10,0.06); border: 1px solid rgba(10,10,10,0.04); }
+    .item { background: #fff; color: #222; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; }
     .icon { color: #111; background: linear-gradient(180deg,#0066cc,#2077cd); }
     .value { color: #666; }
-  }
-
-  @keyframes slide {
-    0% {
-      transform: translateX(-100%) translateY(-100%);
-    }
-    100% {
-      transform: translateX(100%) translateY(100%);
-    }
   }
 </style>

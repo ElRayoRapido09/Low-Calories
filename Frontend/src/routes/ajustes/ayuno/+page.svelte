@@ -2,10 +2,6 @@
   // sin JS adicional por ahora
 </script>
 
-<div class="bg"></div>
-<div class="bg bg2"></div>
-<div class="bg bg3"></div>
-
 <main class="app">
   <header class="top">
     <a href="/ajustes" class="back-btn" aria-label="Volver">‹</a>
@@ -49,25 +45,12 @@
     margin: 0;
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background: linear-gradient(70deg, blue 0%, pink 100%);
-    color: #f2f2f2;
+    background: #ffffff;
+    color: #333;
     min-height: 100vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
-
-  .bg { /* degradado sutil animado como en tu tema */
-    animation: slide 6s ease-in-out infinite alternate;
-    background-image: linear-gradient(-60deg, rgba(25,25,40,0.5) 0%, rgba(10,10,20,0.2) 100%);
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    opacity: 0.6;
-  }
-
-  .bg2 { animation-duration: 8s; }
-
-  .bg3 { animation-duration: 10s; }
 
   .app {
     max-width: 420px;
@@ -84,7 +67,7 @@
   }
 
   .back-btn {
-    color: #fff;
+    color: #000;
     text-decoration: none;
     font-size: 26px;
     padding: 6px;
@@ -97,15 +80,16 @@
     margin: 0;
     font-weight: 800;
     letter-spacing: -0.5px;
+    color: #000;
   }
 
   .card-plan {
-    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    background: #ffffff;
     border-radius: 12px;
     padding: 18px;
     margin-bottom: 14px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
-    border: 1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -119,13 +103,13 @@
   .card-plan .title {
     font-size: 20px;
     font-weight: 800;
-    color: #fff;
+    color: #000;
     margin-bottom: 6px;
   }
 
   .card-plan .desc {
     font-size: 14px;
-    color: rgba(255,255,255,0.85);
+    color: #666;
     line-height: 1.45;
     margin: 0;
   }

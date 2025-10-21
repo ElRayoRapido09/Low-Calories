@@ -1,492 +1,376 @@
 <script>
-  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
-  
-
   function openCamera() {
     alert('aqui se abre la camara');
   }
-
-  function goToObjetivos() {
-    goto('/objetivos');
-  }
-
-  console.log("hola layo");
-
-  let isMenuOpen = $state(false);
-  let scrollY = $state(0);
-  let cardsContainer = $state(null);
-  let startY = $state(0);
-  let isDragging = $state(false);
-  let cardsScrollY = $state(0);
-  let maxScroll = $state(0);
-
-  let bottomNavHeight = $derived(cardsScrollY <= 50 ? Math.max(50 - (cardsScrollY * 2), 0) : Math.min(50 + ((cardsScrollY - 50) * 0.15), 100));
-  let cardsOpacity = $derived(cardsScrollY <= 50 ? Math.max(1 - (cardsScrollY / 50), 0) : 1);
-  let cardsTransform = $derived(cardsScrollY <= 50 ? -(cardsScrollY * 2) : 0);
-
-  function toggleMenu() {
-    isMenuOpen = !isMenuOpen;
-  }
-
-  function closeMenu() {
-    isMenuOpen = false;
-  }
-
-  function handleTouchStart(e) {
-    if (!cardsContainer) return;
-    startY = e.touches[0].clientY;
-    isDragging = true;
-  }
-
-  function handleTouchMove(e) {
-    if (!isDragging || !cardsContainer) return;
-    
-    const currentY = e.touches[0].clientY;
-    const deltaY = currentY - startY;
-    
-    if (deltaY > 50 && cardsContainer.scrollTop === 0) {
-      e.preventDefault();
-      cardsContainer.style.transform = `translateY(${Math.min(deltaY - 50, 100)}px)`;
-    }
-  }
-
-  function handleTouchEnd(e) {
-    if (!isDragging || !cardsContainer) return;
-    
-    const currentY = e.changedTouches[0].clientY;
-    const deltaY = currentY - startY;
-
-    cardsContainer.style.transform = 'translateY(0)';
-    
-    if (deltaY > 100 && cardsContainer.scrollTop === 0) {
-      openCamera();
-    }
-    
-    isDragging = false;
-  }
-
-  function handleScroll(e) {
-    if (cardsContainer) {
-      cardsScrollY = cardsContainer.scrollTop;
-      maxScroll = cardsContainer.scrollHeight - cardsContainer.clientHeight;
-      
-      
-      if (cardsScrollY <= 5) { 
-        openCamera();
-        
-        setTimeout(() => {
-          if (cardsContainer) {
-            cardsContainer.scrollTop = 10;
-          }
-        }, 100);
-      }
-    }
-  }
 </script>
-
-<div class="bg"></div>
-<div class="bg bg2"></div>
-<div class="bg bg3"></div>
-
-<svelte:window bind:scrollY />
 
 <main class="main">
   <header class="header">
     <h1>Low Calories</h1>
-    <p>Tu asistente personal de nutrición</p>
   </header>
 
-  <div class="spacer"></div>
+ 
+  <div class="content">
+    <section class="ingredients-section">
+      <div class="section-header">
+        <h2>¿Qué tienes en tu cocina?</h2>
+        <button class="edit-btn">Editar</button>
+      </div>
+      <div class="ingredients-list">
+        <div class="ingredient-icon">🍗</div>
+        <div class="ingredient-icon">🥩</div>
+        <div class="ingredient-icon">🍞</div>
+        <div class="ingredient-icon">🥚</div>
+        <div class="ingredient-icon">🥚</div>
+        <div class="ingredient-icon">🥓</div>
+        <div class="ingredient-icon">🥓</div>
+        <div class="ingredient-icon">🍖</div>
+        <div class="ingredient-more">+99</div>
+      </div>
+    </section>
 
-  <nav class="bottom-nav" style="height: {bottomNavHeight}vh;">
-    <button class="menu-toggle" on:click={toggleMenu} class:active={isMenuOpen}>
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
 
-    {#if isMenuOpen}
-      <div class="menu-overlay" on:click={closeMenu}></div>
-      <nav class="slide-menu">
-        <a class="nav-item" href="/estadisticas" on:click={closeMenu}>
-          <span>📊</span>
-          <span>Estadísticas</span>
-        </a>
-        <a class="nav-item" href="/perfil" on:click={closeMenu}>
-          <span>👤</span>
-          <span>Perfil</span>
-        </a>
-        <a class="nav-item" href="/ajustes" on:click={closeMenu}>
-          <span>⚙️</span>
-          <span>Ajustes</span>
-        </a>
-      </nav>
-    {/if}
-
-    <div 
-      class="cards-container"
-      bind:this={cardsContainer}
-      on:touchstart={handleTouchStart}
-      on:touchmove={handleTouchMove}
-      on:touchend={handleTouchEnd}
-      on:scroll={handleScroll}
-      style="opacity: {cardsOpacity}; transform: translateY({cardsTransform}px);"
-    >
-      <!-- Agregar un elemento espaciador al inicio para permitir scroll hacia arriba -->
-      <div class="scroll-spacer"></div>
-
-      <section class="card" on:click={handleCameraClick} role="button" tabindex="0">
-        <div class="icons">
-          📷
-        </div>
-        <h2>¿Qué vamos a comer hoy?</h2>
-        <p>Escanea tu comida y conoce sus calorías al instante</p>
-      </section>
-
-      <section class="card-bot">
-        <div class="icons">
-          🤖
-        </div>
-        <h2>¿No sabes que comer?</h2>
-        <p>Pregunta a nuestro asistente y él te ayudará</p>
-      </section>
-
-      <section class="card-bot">
-        <div class="icons">
-          🥑
-        </div>
-        <h2>Comidas</h2>
-        <p>Guarda tus comidas favoritas</p>
-      </section>
+    <section class="recommendations-section">
+      <h2>Recomendaciones del día</h2>
+      <p class="subtitle">Estas recetas han sido elegidas exclusivamente para cumplir tu plan</p>
       
-      <section class="card-bot">
-        <div class="icons">
-          📈
+      <div class="recipe-card">
+        <img src="https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=500&h=400&fit=crop" alt="Comida" />
+        <div class="recipe-info">
+          <h3>Pollo con arroz y puré</h3>
+          <p>450 kcal • 30 min</p>
         </div>
-        <h2>Historial</h2>
-        <p>Revisa tu progreso diario</p>
-      </section>
+      </div>
 
-      <section class="card-bot" on:click={goToObjetivos} role="button" tabindex="0">
-        <div class="icons">
-          🎯
-        </div>
-        <h2>Objetivos</h2>
-        <p>Establece y sigue tus metas</p>
-      </section>
-
-      <section class="card-bot">
-        <div class="icons">
-          💧
-        </div>
-        <h2>Hidratación</h2>
-        <p>Mantén control de tu consumo de agua</p>
-      </section>
-
-      <section class="card-bot">
-        <div class="icons">
-          ⏰
-        </div>
-        <h2>Recordatorios</h2>
-        <p>Programa tus comidas del día</p>
-      </section>
-
-      <section class="card-bot">
-        <div class="icons">
-          🍽️
-        </div>
-        <h2>Recetas</h2>
-        <p>Descubre nuevas recetas saludables</p>
-      </section>
+      <!-- aqui deben jalar el calendario de planificador_de_comida -->
+      <h2>Calendario</h2>
+      <div class="calendar-card">
+  <div class="mini-calendar">
+    <div class="calendar-header">
+      <span class="calendar-month">Octubre 2025</span>
+      <span class="calendar-arrows">‹ ›</span>
     </div>
+    <div class="calendar-days">
+      <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+    </div>
+    <div class="calendar-dates">
+      <span class="calendar-empty"></span>
+      <span class="calendar-empty"></span>
+      <span class="calendar-empty"></span>
+      <span>1</span><span>2</span><span>3</span><span>4</span>
+      <span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span>
+      <span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span>
+      <span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span>
+      <span>26</span><span>27</span><span>28</span><span>29</span><span>30</span><span>31</span>
+    </div>
+  </div>
+</div>
+    </section>
+  </div>
+
+  
+  <nav class="bottom-nav">
+    <a href="/ajustes" class="nav-item">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">Ajustes</span>
+    </a>
+    
+    <a href="/estadisticas" class="nav-item">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">Estadísticas</span>
+    </a>
+    
+    <button class="nav-item camera-btn" on:click={openCamera}>
+      <span class="camera-icon">📷</span>
+    </button>
+    
+    <a href="/perfil" class="nav-item">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">Perfil</span>
+    </a>
+    
+    <a href="/objetivos" class="nav-item">
+      <span class="nav-icon">🎯</span>
+      <span class="nav-label">Objetivo</span>
+    </a>
   </nav>
 </main>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
 
-  :global(html) {
-    height:100%;
-  }
-
   :global(body) {
     margin: 0;
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background: linear-gradient(70deg, blue 0%, pink 100%);
-    color: #f2f2f2;
-    min-height: 100vh;
-  }
-
-  .bg {
-    animation:slide 3s ease-in-out infinite alternate;
-    background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
-    bottom:0;
-    left:-50%;
-    opacity:.5;
-    position:fixed;
-    right:-50%;
-    top:0;
-    z-index:-1;
-  }
-
-  .bg2 {
-    animation-direction:alternate-reverse;
-    animation-duration:4s;
-  }
-
-  .bg3 {
-    animation-duration:5s;
+    background: #ffffff;
+    color: #333;
   }
 
   .main {
-    max-width: 100%;
-    margin: 0;
-    padding: 2rem 1rem 0 1rem;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    min-height: 100vh;
+    background: #ffffff;
+    padding-bottom: 70px;
   }
 
+
   .header {
+    padding: 1rem;
     text-align: center;
-    margin-bottom: 2rem;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
+    background: #ffffff;
   }
 
   .header h1 {
     font-family: 'Dancing Script', cursive;
-    font-style: italic ;
     font-size: 2rem;
     font-weight: 700;
-    margin: 0 0 0.5rem 0;
-    color: #ffffffff;
-  }
-
-  .header p {
-    font-size: 1rem;
-    opacity: 0.9;
     margin: 0;
-    color: #ffffffff;
+    color: #000;
   }
 
-  .spacer {
-    height: 50vh;
-  
+
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
   }
 
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: #000;
+  }
+
+  .edit-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+ 
+  .ingredients-section {
+    margin-bottom: 2rem;
+  }
+
+  .ingredients-list {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .ingredient-icon, .ingredient-more {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #005bb5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .ingredient-more {
+    background: #005bb5;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+
+  .recommendations-section h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #000;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+
+  .recipe-card {
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .recipe-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .recipe-info {
+    padding: 1rem;
+    background: #fff;
+  }
+
+  .recipe-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #000;
+  }
+
+  .recipe-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+ 
   .bottom-nav {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100vw;
-    background: rgba(255, 255, 255, 0.1); /* Cambiado de white a semi-transparente para que el blur sea visible */
-    box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.08);
-    border-radius: 2rem 2rem 0 0;
-    transition: height 0.1s ease;
-    overflow: hidden;
-    z-index: 10;
-    padding: 0;
-    margin: 0;
-  }
-
-  .menu-toggle {
-    position: sticky;
-    top: 1rem;
-    left: 1rem;
-    width: 30px;
-    height: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
+    right: 0;
+    height: 70px;
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
     display: flex;
-    flex-direction: column;
     justify-content: space-around;
-    z-index: 1001;
-    margin-bottom: 1rem;
-  }
-
-  .menu-toggle span {
-    width: 100%;
-    height: 3px;
-    background: #333;
-    transition: all 0.3s ease;
-    transform-origin: center;
-  }
-
-  .menu-toggle.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-  }
-
-  .menu-toggle.active span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .menu-toggle.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-  }
-
-.menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.3); /* Más transparente para que el blur sea visible */
-    -webkit-backdrop-filter: blur(15px);
-    backdrop-filter: blur(15px);
-    z-index: 999;
-  }
-
-  .slide-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100vh;
-    -webkit-backdrop-filter: blur(15px);
-    backdrop-filter: blur(15px);
-    background: rgba(255, 255, 255, 0.2); /* Igual que las card-bot */
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    padding: 4rem 1rem 1rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    z-index: 1000;
-    animation: slideIn 0.3s ease;
-  }
-
-  @keyframes slideIn {
-    from {
-      transform: translateX(-100%);
-    }
-    to {
-      transform: translateX(0);
-    }
-  }
-
-  .cards-container {
-    padding: 1rem 1rem 3rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    height: calc(100% - 80px);
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: #ccc transparent;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-  }
-
-  .scroll-spacer {
-    height: 100px; /* Espacio para permitir scroll hacia arriba */
-    width: 100%;
-    flex-shrink: 0;
-  }
-
-  .cards-container::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  .cards-container::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .cards-container::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 2px;
-  }
-
-  .cards-container::-webkit-scrollbar-thumb:hover {
-    background: #999;
-  }
-
- .card, .card-bot {
-    -webkit-backdrop-filter: blur(15px);
-    backdrop-filter: blur(15px);
-    background: rgba(255, 255, 255, 0.2); 
-    border-radius: 1rem;
-    padding: 2rem;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.2s;
-    margin: 0 auto;
-    max-width: 400px;
-    width: calc(100% - 2rem);
-    flex-shrink: 0;
-  }
-
-  .card:hover, .card-bot:hover {
-    transform: translateY(-2px);
-  }
-
-  .icons {
-    width: 80px;
-    height: 80px;
-    background: #0066cc;
-    border-radius: 50%;
-    display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    color: white;
-    margin: 0 auto 1.5rem auto;
-  }
-
-  .card h2, .card-bot h2 {
-    color: #333;
-    font-size: 1.5rem;
-    margin: 0 0 1rem 0;
-  }
-
-  .card p, .card-bot p {
-    color: #666;
-    line-height: 1.5;
-    margin: 0;
+    padding: 0 1rem;
+    z-index: 100;
   }
 
   .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #666;
     background: none;
     border: none;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    color: #666;
     cursor: pointer;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    transition: all 0.2s;
-    text-decoration: none;
+    padding: 0.5rem;
+    transition: color 0.2s;
   }
 
   .nav-item:hover {
-    background: #f0f0f0;
-    color: #0066cc;
+    color: #000;
   }
 
-  .nav-item span:first-child {
+  .nav-icon {
     font-size: 1.5rem;
+    margin-bottom: 0.25rem;
   }
 
-  .nav-item span:last-child {
-    font-size: 1rem;
+  .nav-label {
+    font-size: 0.7rem;
     font-weight: 500;
   }
 
-  @keyframes slide {
-    0% {
-      transform:translateX(-25%);
-    }
-    100% {
-      transform:translateX(25%);
-    }
+
+  .camera-btn {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #005bb5;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+    margin: 0 0.5rem;
+  }
+
+  .camera-icon {
+    font-size: 2rem;
+  }
+
+  .camera-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(255, 215, 0, 0.5);
+  }
+
+  .camera-btn:active {
+    transform: scale(0.95);
+  }
+
+  .calendar-card {
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+  .mini-calendar {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    font-family: inherit;
+  }
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #005bb5;
+    font-size: 1rem;
+  }
+  .calendar-month {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .calendar-arrows {
+    font-size: 1.2rem;
+    color: #666;
+    cursor: pointer;
+  }
+  .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+  }
+  .calendar-dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    gap: 0.2rem;
+  }
+  .calendar-dates span {
+    padding: 0.4rem 0;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #333;
+    background: #f5f5f5;
+    transition: background 0.2s;
+  }
+  .calendar-dates span:hover {
+    background: #005bb5;
+    color: #fff;
+    cursor: pointer;
+  }
+  .calendar-empty {
+    background: transparent !important;
+    cursor: default !important;
   }
 </style>

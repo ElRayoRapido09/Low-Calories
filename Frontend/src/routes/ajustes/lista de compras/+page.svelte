@@ -77,11 +77,6 @@
     ];
 </script>
 
-
-<div class="bg"></div>
-<div class="bg bg2"></div>
-<div class="bg bg3"></div>
-
 <div class="page">
     <header class="header">
         <a class="back" href="/ajustes" aria-label="Volver">‹</a>
@@ -186,32 +181,11 @@
         margin: 0;
         padding: 0;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-        background: linear-gradient(70deg, rgb(123, 0, 255) 0%, rgb(155, 44, 120) 100%);
-        color: #f2f2f2;
+        background: #ffffff;
+        color: #333;
         min-height: 100vh;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-    }
-
-    .bg {
-        animation:slide 3s ease-in-out infinite alternate;
-        background-image: linear-gradient(-60deg, rgb(204, 51, 161) 50%, rgba(83, 8, 176, 0.845) 50%);
-        bottom:0;   
-        left:-50%;
-        opacity:.5;
-        position:fixed;
-        right:-50%;
-        top:0;
-        z-index:-1;
-    }
-
-    .bg2 {
-        animation-direction:alternate-reverse;
-        animation-duration:4s;
-    }
-
-    .bg3 {
-        animation-duration:5s;
     }  
 
     .page {
@@ -228,7 +202,7 @@
         margin-bottom: 10px;
     }
     .back {
-        color: #fff;
+        color: #000;
         font-size: 28px;
         text-decoration: none;
         padding: 6px;
@@ -238,6 +212,7 @@
         font-size: 20px;
         margin: 0;
         font-weight: 600;
+        color: #000;
     }
     .actions {
         display: flex;
@@ -246,9 +221,9 @@
     }
 
     .export-btn {
-        background: rgba(255, 255, 255, 0.06);
-        border: none;
-        color: #fff;
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        color: #000;
         padding: 8px 10px;
         border-radius: 12px;
         cursor: pointer;
@@ -260,19 +235,16 @@
         margin: 12px 0 18px;
     }
     .chip {
-        background: linear-gradient(
-            180deg,
-            rgba(126, 126, 126, 0.3),
-            rgba(126, 126, 126, 0.3)
-        );
+        background: #ffffff;
         padding: 12px;
         border-radius: 12px;
         flex: 1;
-        border: 1px solid rgba(255, 255, 255, 0.03);
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     .chip-label {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.6);
+        color: #666;
         margin-bottom: 6px;
     }
     .chip-value {
@@ -296,6 +268,7 @@
         margin: 0 0 8px;
         font-weight: 800;
         font-size: 16px;
+        color: #000;
     }
 
     .section {
@@ -303,6 +276,9 @@
         margin: 0;
         padding: 0;
         border-radius: 12px;
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         overflow: hidden;
         background: transparent;
     }
@@ -331,7 +307,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(255, 255, 255, 0.03);
+        background: #f5f5f5;
         font-size: 18px;
     }
     .meta .name {
@@ -340,10 +316,11 @@
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 220px;
+        color: #000;
     }
     .meta .qty {
         font-size: 13px;
-        color: rgba(255, 255, 255, 0.6);
+        color: #666;
         margin-top: 4px;
     }
 
@@ -382,21 +359,5 @@
         }
     }
 
-    @keyframes slide {
-        0% {
-        transform:translateX(-25%);
-        }
-        100% {
-        transform:translateX(25%);
-        }
-    }
 
-    @keyframes shimmer {
-        0% {
-        transform: translateX(100%);
-        }
-        100% {
-        transform: translateX(-100%);
-        }
-    }
 </style>
