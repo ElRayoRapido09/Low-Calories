@@ -68,11 +68,38 @@
           <div class="letra">{d.dia}</div>
           <div class="valor">{d.kcal ?? '-'}</div>
         </div>
-      {/each}
-    </div>
-  </section>
+    </div>    
+ 
+</section>
+</main>
 
-  </main>
+<style>
+  :global(html) {
+    height: auto;
+    min-height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  :global(body) {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    background: #ffffff;
+    min-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  main {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
 
   <style>
     :global(html) {
@@ -307,13 +334,36 @@
     color: #38ada9;
     font-weight: 500;
   }
-
-    @keyframes slide {
-      0% {
-        transform:translateX(-25%);
-      }
-      100% {
-        transform:translateX(25%);
-      }
-    }
-  </style>
+  .semana-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 1.5rem 0 0.5rem 0;
+  gap: 0.5rem;
+}
+.dia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40px;
+}
+.barra {
+  width: 100%;
+  height: 48px;
+  border-radius: 16px;
+  background: #e0ecf7;
+  margin-bottom: 0.3rem;
+  transition: opacity 0.3s;
+}
+.letra {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.2rem;
+}
+.valor {
+  font-size: 0.95rem;
+  color: #38ada9;
+  font-weight: 500;
+}
+</style>

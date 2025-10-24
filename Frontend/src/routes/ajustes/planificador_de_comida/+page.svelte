@@ -99,10 +99,6 @@
   }
 </script>
 
-<div class="bg"></div>
-<div class="bg bg2"></div>
-<div class="bg bg3"></div>
-
 <main class="app">
   <header class="top">
     <a href="/ajustes" class="back-btn" aria-label="Volver">‹</a>
@@ -167,89 +163,47 @@
     margin: 0;
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background: linear-gradient(70deg, blue 0%, pink 100%);
-    color: #f2f2f2;
+    background: #ffffff;
+    color: #333;
     min-height: 100vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  .bg{
-    position:fixed;
-    background:linear-gradient(120deg, rgba(34, 34, 108, 0.6), rgba(19, 19, 58, 0.9));
-    z-index:-1;
-    animation:slide 3s ease-in-out infinite alternate;
-    background-image: linear-gradient(-60deg, rgb(38, 40, 128) 50%, #09f 50%);
-    bottom:0;
-    left:-50%;
-    opacity:.5;
-    right:-50%;
-    top:0;
-  }
-
-  .bg2{
-    opacity:0.6;
-    animation-direction: alternate-reverse;
-    animation-duration: 4s;
-  }
-
-  .bg3{
-    opacity:0.5;
-    animation-duration: 5s;
-  }
-
   .app{ max-width:420px; margin:0 auto; padding:20px; min-height:100vh; display:flex; flex-direction:column; }
   .top{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
-  .back-btn{ color:#fff; font-size:28px; text-decoration:none; padding:6px; }
+  .back-btn{ color:#000; font-size:28px; text-decoration:none; padding:6px; }
   .header-center{ flex:1; text-align:center; }
-  .icon{ width:64px; height:64px; border-radius:999px; background:rgba(242,201,76,0.12); display:inline-flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:8px; color:#f2c94c; }
-  .top h1{ margin:0; font-size:20px; font-weight:800; }
+  .icon{ width:64px; height:64px; border-radius:999px; background:#f5f5f5; display:inline-flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:8px; color:#005bb5; }
+  .top h1{ margin:0; font-size:20px; font-weight:800; color:#000; }
 
-  .tabs{ display:flex; gap:8px; justify-content:space-between; margin:12px 0; padding:10px; background:rgba(255,255,255,0.02); border-radius:10px; }
-  .tab{ flex:1; text-align:center; color:rgba(255,255,255,0.75); font-size:13px; padding:6px 0; }
+  .tabs{ display:flex; gap:8px; justify-content:space-between; margin:12px 0; padding:10px; background:#f5f5f5; border-radius:10px; }
+  .tab{ flex:1; text-align:center; color:#666; font-size:13px; padding:6px 0; }
 
   .months{ margin-top:6px; display:flex; flex-direction:column; gap:18px; }
 
-  .month-title{ font-weight:700; color:rgba(255,255,255,0.9); margin:6px 10px; }
+  .month-title{ font-weight:700; color:#000; margin:6px 10px; }
 
   .grid{ display:grid; grid-template-columns: repeat(7, 1fr); gap:6px; padding:8px 10px; }
-  .cell{ background:transparent; border:none; color:#fff; padding:12px 6px; border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; position:relative; min-height:54px; }
+  .cell{ background:transparent; border:none; color:#000; padding:12px 6px; border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; position:relative; min-height:54px; }
   .cell:disabled{ opacity:0.3; pointer-events:none; } /* deshabilitado no responde a eventos */
 
   .cell span{ display:block; font-weight:600; font-size:16px; }
   .cell span.inactive{ opacity:0; }
-  .cell span.today{ color:#fff; }
+  .cell span.today{ color:#005bb5; }
 
-  .cell[aria-pressed="true"]{ background: linear-gradient(180deg, rgba(242,201,76,0.12), rgba(242,201,76,0.06)); border-radius:8px; }
+  .cell[aria-pressed="true"]{ background: #e3f2fd; border-radius:8px; }
 
-  .dot{ width:8px; height:8px; background:#f2c94c; border-radius:999px; position:absolute; bottom:10px; }
+  .dot{ width:8px; height:8px; background:#005bb5; border-radius:999px; position:absolute; bottom:10px; }
 
   .bottom{ position:sticky; bottom:12px; display:flex; gap:10px; padding:12px; background:transparent; margin-top:auto; justify-content:space-between; }
   .btn{ flex:1; padding:14px 12px; border-radius:12px; font-weight:700; border:none; cursor:pointer; }
-  .btn.secondary{ background: rgba(255,255,255,0.03); color:rgba(255,255,255,0.9); }
-  .btn.primary{ background:#111; color:#fff; box-shadow: 0 6px 18px rgba(0,0,0,0.6); border:1px solid rgba(242,201,76,0.18); }
+  .btn.secondary{ background: #f5f5f5; color:#000; }
+  .btn.primary{ background:#005bb5; color:#fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
   .btn.primary:disabled{ opacity:0.45; cursor:not-allowed; pointer-events:none; }
 
   @media (max-width:420px){
     .cell{ min-height:52px; padding:10px 4px; }
     .header-center .icon{ width:56px; height:56px; font-size:22px; }
-  }
-
-  @keyframes slide {
-    0% {
-      transform:translateX(-25%);
-    }
-    100% {
-      transform:translateX(25%);
-    }
-  }
-
-  @keyframes shimmer {
-    0% {
-      transform: translateX(100%);
-    }
-    100% {
-      transform: translateX(-100%);
-    }
   }
 </style>

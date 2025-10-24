@@ -66,10 +66,6 @@
   }
 </script>
 
-<div class="bg"></div>
-<div class="bg bg2"></div>
-<div class="bg bg3"></div>
-
 <main class="app">
   <header class="top">
     <a href="/" class="back-btn" aria-label="Volver">‹</a>
@@ -747,30 +743,9 @@
     margin: 0;
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background: linear-gradient(70deg, blue 0%, pink 100%);
-    color: #f2f2f2;
+    background: #ffffff;
+    color: #333;
     min-height: 100vh;
-  }
-
-  .bg {
-    animation: slide 3s ease-in-out infinite alternate;
-    background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
-    bottom: 0;
-    left: -50%;
-    opacity: 0.5;
-    position: fixed;
-    right: -50%;
-    top: 0;
-    z-index: -1;
-  }
-
-  .bg2 {
-    animation-direction: alternate-reverse;
-    animation-duration: 4s;
-  }
-
-  .bg3 {
-    animation-duration: 5s;
   }
 
   .app {
@@ -801,25 +776,23 @@
   }
 
   .card {
-    background: rgba(245, 243, 243, 0.2);
+    background: #ffffff;
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 18px;
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(233, 225, 225, 0.2);
+    border: 1px solid #e0e0e0;
   }
 
   h2 {
-    color: #cfcfcf;
+    color: #000;
     font-size: 20px;
     margin-bottom: 10px;
     font-weight: 600;
   }
 
   p {
-    color: #ffffff;
+    color: #666;
     margin-bottom: 20px;
   }
 
@@ -955,15 +928,6 @@
     }
   }
 
-  @keyframes slide {
-    0% {
-      transform: translateX(-25%);
-    }
-    100% {
-      transform: translateX(25%);
-    }
-  }
-
   .info-list {
     display: flex;
     flex-direction: column;
@@ -999,7 +963,7 @@
   .info-select {
     background: none;
     border: none;
-    color: #ffffff;
+    color: #666;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
@@ -1009,7 +973,7 @@
     padding: 0;
   }
   .chev {
-    color: #ffffff;
+    color: #666;
     font-size: 18px;
   }
 
@@ -1022,28 +986,25 @@
   align-items: flex-end;
   justify-content: center;
   z-index: 1000;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .modal {
-  background: rgba(40, 44, 52, 0.35); /* Más oscuro y difuminado */
+  background: #ffffff;
   border-radius: 18px 18px 0 0;
   width: 100%;
   max-width: 420px;
   padding: 32px 24px 24px 24px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   position: relative;
   animation: modalUp 0.2s;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(233, 225, 225, 0.2);
+  border: 1px solid #e0e0e0;
 }
 
 .modal-bar {
   width: 48px;
   height: 5px;
-  background: #b3e5fc;
+  background: #005bb5;
   border-radius: 3px;
   position: absolute;
   top: 12px;
@@ -1054,7 +1015,7 @@
 
 .modal h3 {
   text-align: center;
-  color: #cfcfcf;
+  color: #000;
   font-size: 22px;
   margin-bottom: 24px;
   font-weight: 600;
@@ -1064,7 +1025,7 @@
 .modal-option {
   width: 100%;
   background: rgba(255,255,255,0.1);
-  color: #ffffff;
+  color: #666;
   border: none;
   border-radius: 10px;
   padding: 16px;
@@ -1097,7 +1058,7 @@
   border-radius: 8px;
   border: none;
   background: rgba(255,255,255,0.1);
-  color: #ffffff;
+  color: #666;
   text-align: center;
   outline: none;
   font-weight: 600;
@@ -1105,7 +1066,7 @@
 }
 
 .modal-unit {
-  color: #ffffff;
+  color: #666;
   font-size: 18px;
   margin-left: 8px;
   font-weight: 500;
@@ -1121,7 +1082,7 @@
 .modal-toggle button {
   flex: 1;
   background: rgba(255,255,255,0.1);
-  color: #ffffff;
+  color: #666;
   border: none;
   border-radius: 8px;
   padding: 10px 0;
@@ -1296,12 +1257,11 @@
   background: rgba(245,243,243,0.18);
   border-radius: 18px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.18);
-  border: 1px solid rgba(233,225,225,0.18);
+  border: 1px solid #e0e0e0;
   padding: 24px 18px;
   width: 340px; /* Fijo y centrado */
   margin-bottom: 18px;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1416,7 +1376,7 @@
   margin-bottom: 2px;
 }
 .macro-value {
-  color: #ffffff;
+  color: #666;
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 2px;
@@ -1518,7 +1478,7 @@
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 1.4;
-  color: #cfcfcf;
+  color: #000;
   margin: 0;
   max-width: 350px;
 }
@@ -1568,7 +1528,7 @@
 .meal-header h2 {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #cfcfcf;
+  color: #000;
   margin: 0 0 0.5rem 0;
 }
 
@@ -1729,7 +1689,7 @@
 .preferences-header h2 {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #cfcfcf;
+  color: #000;
   margin: 0;
 }
 
@@ -1898,7 +1858,7 @@
 .completion-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #cfcfcf;
+  color: #000;
   margin: 0 0 0.5rem 0;
 }
 

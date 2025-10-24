@@ -85,10 +85,6 @@
   }
 </script>
 
-<div class="bg"></div>
-<div class="bg bg2"></div>
-<div class="bg bg3"></div>
-
 <div class="day-view">
   <header class="header">
     <a class="back" href="/ajustes/planificador_de_comida">‹</a>
@@ -210,39 +206,11 @@
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial,
       sans-serif;
-    background: linear-gradient(70deg, blue 0%, pink 100%);
-    color: #f2f2f2;
+    background: #ffffff;
+    color: #333;
     min-height: 100vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-  }
-
-  .bg {
-    position: fixed;
-    background: linear-gradient(
-      120deg,
-      rgba(34, 34, 108, 0.6),
-      rgba(19, 19, 58, 0.9)
-    );
-    z-index: -1;
-    animation: slide 3s ease-in-out infinite alternate;
-    background-image: linear-gradient(-60deg, rgb(38, 40, 128) 50%, #09f 50%);
-    bottom: 0;
-    left: -50%;
-    opacity: 0.5;
-    right: -50%;
-    top: 0;
-  }
-
-  .bg2 {
-    opacity: 0.6;
-    animation-direction: alternate-reverse;
-    animation-duration: 4s;
-  }
-
-  .bg3 {
-    opacity: 0.5;
-    animation-duration: 5s;
   }
 
   .day-view {
@@ -261,7 +229,7 @@
   }
 
   .back {
-    color: #fff;
+    color: #000;
     font-size: 28px;
     text-decoration: none;
     padding: 6px;
@@ -276,16 +244,17 @@
   .date {
     font-size: 18px;
     font-weight: 800;
+    color: #000;
   }
   .sub {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
+    color: #666;
     margin-top: 4px;
   }
 
   .mini-calendar {
     margin: 12px 0 6px;
-    background: transparent;
+    background: #f5f5f5;
     border-radius: 10px;
     padding: 6px 0;
   }
@@ -295,7 +264,7 @@
     width: calc(100% / 7 - 4px);
     text-align: center;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.5);
+    color: #666;
   }
   .days {
     display: flex;
@@ -306,17 +275,17 @@
     flex: 1;
     border: none;
     background: transparent;
-    color: rgba(255, 255, 255, 0.8);
+    color: #000;
     padding: 8px 6px;
     border-radius: 999px;
     font-weight: 700;
     cursor: pointer;
   }
   .day.active {
-    background: rgba(242, 201, 76, 0.08);
-    border: 1px solid rgba(242, 201, 76, 0.18);
-    color: #fff;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+    background: #e3f2fd;
+    border: 1px solid #005bb5;
+    color: #005bb5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     position: relative;
   }
   .day.active::after {
@@ -336,25 +305,25 @@
   }
   .progress .label {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
+    color: #666;
     margin-bottom: 6px;
   }
   .progress .value {
     font-weight: 700;
     text-align: right;
     margin-bottom: 8px;
-    color: rgba(255, 255, 255, 0.9);
+    color: #000;
   }
   .bar {
     height: 8px;
-    background: rgba(255, 255, 255, 0.03);
+    background: #f5f5f5;
     border-radius: 8px;
     overflow: hidden;
   }
   .bar-fill {
     height: 100%;
     background: linear-gradient(90deg, #3ad85a, #8af27a);
-    box-shadow: 0 4px 10px rgba(58, 216, 90, 0.12);
+    box-shadow: 0 2px 4px rgba(58, 216, 90, 0.2);
   }
 
   .meals {
@@ -365,14 +334,11 @@
   }
 
   .meal {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.02),
-      rgba(255, 255, 255, 0.01)
-    );
+    background: #ffffff;
     border-radius: 12px;
     padding: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
   .meal-header {
     display: flex;
@@ -383,14 +349,15 @@
   .meal-title {
     font-size: 20px;
     font-weight: 800;
+    color: #000;
   }
   .meal-meta {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
+    color: #666;
     margin-top: 4px;
   }
   .meal-actions {
-    color: rgba(255, 255, 255, 0.5);
+    color: #666;
     font-size: 20px;
   }
 
@@ -409,7 +376,7 @@
     padding: 10px 6px;
     border-radius: 8px;
     background: transparent;
-    border-top: 1px solid rgba(255, 255, 255, 0.02);
+    border-top: 1px solid #f0f0f0;
   }
   .left {
     display: flex;
@@ -420,7 +387,7 @@
     width: 40px;
     height: 40px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.03);
+    background: #f5f5f5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -428,10 +395,11 @@
   }
   .info .name {
     font-weight: 700;
+    color: #000;
   }
   .info .qty {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
+    color: #666;
     margin-top: 4px;
   }
 
@@ -443,12 +411,12 @@
   }
   .kcal {
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.85);
+    color: #000;
   }
   .repeat {
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.6);
+    color: #666;
     font-size: 18px;
     cursor: pointer;
     padding: 6px;
@@ -460,9 +428,9 @@
   }
   .add {
     flex: 1;
-    background: rgba(255, 255, 255, 0.03);
-    border: none;
-    color: #fff;
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    color: #000;
     padding: 12px;
     border-radius: 10px;
     font-weight: 800;
@@ -478,9 +446,9 @@
   }
   .phantom {
     flex: 1;
-    background: rgba(255, 255, 255, 0.03);
-    border: none;
-    color: rgba(255, 255, 255, 0.9);
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    color: #000;
     padding: 12px;
     border-radius: 10px;
     font-weight: 700;
@@ -489,36 +457,34 @@
   .danger {
     flex: 0 0 64px;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid #ff6b6b;
     color: #ff6b6b;
     border-radius: 10px;
     padding: 10px;
   }
   .confirm {
     flex: 0 0 64px;
-    background: #0099ff;
+    background: #005bb5;
     border: none;
-    color: #000;
+    color: #fff;
     border-radius: 10px;
     font-weight: 800;
     padding: 10px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     cursor: pointer;
   }
 
   .arrows {
-    background: rgba(255, 255, 255, 0.03);
-    border: none;
-    color: rgba(255, 255, 255, 0.9);
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    color: #000;
     padding: 12px;
     border-radius: 10px;
     cursor: pointer;
-
     flex: 0 0 64px;
     font-weight: 800;
     padding: 10px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
-    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
 
   /* modal */
@@ -538,20 +504,21 @@
   .modal {
     width: 100%;
     max-width: 360px;
-    background: #0099ff34;
-    color: #fff;
+    background: #ffffff;
+    color: #000;
     border-radius: 14px;
     padding: 20px;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     text-align: center;
   }
   .modal-title {
     font-size: 18px;
     font-weight: 800;
     margin: 6px 0 10px;
+    color: #000;
   }
   .modal-body {
-    color: rgba(255, 255, 255, 0.8);
+    color: #666;
     font-size: 14px;
     line-height: 1.4;
     margin-bottom: 18px;
@@ -562,18 +529,18 @@
     gap: 12px;
   }
   .btn-accept {
-    background: #0099ff;
-    color: #000;
+    background: #005bb5;
+    color: #fff;
     border: none;
     padding: 12px 16px;
     font-weight: 800;
     border-radius: 10px;
     cursor: pointer;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
   .btn-cancel {
     background: transparent;
-    color: rgba(255, 255, 255, 0.9);
+    color: #666;
     border: none;
     padding: 10px 8px;
     font-size: 15px;
@@ -601,24 +568,6 @@
     }
     .date {
       font-size: 16px;
-    }
-  }
-
-  @keyframes slide {
-    0% {
-      transform: translateX(-25%);
-    }
-    100% {
-      transform: translateX(25%);
-    }
-  }
-
-  @keyframes shimmer {
-    0% {
-      transform: translateX(100%);
-    }
-    100% {
-      transform: translateX(-100%);
     }
   }
 </style>
