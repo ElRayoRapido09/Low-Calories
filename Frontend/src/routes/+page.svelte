@@ -3,6 +3,86 @@
   function openCamera() {
     alert('aqui se abre la camara');
   }
+
+  function goToObjetivos() {
+    goto('/objetivos');
+  }
+  function goToComidas() {
+    goto('/comidas');
+  }
+
+  console.log("hola layo");
+
+  let isMenuOpen = $state(false);
+  let scrollY = $state(0);
+  let cardsContainer = $state(null);
+  let startY = $state(0);
+  let isDragging = $state(false);
+  let cardsScrollY = $state(0);
+  let maxScroll = $state(0);
+
+  let bottomNavHeight = $derived(cardsScrollY <= 50 ? Math.max(50 - (cardsScrollY * 2), 0) : Math.min(50 + ((cardsScrollY - 50) * 0.15), 100));
+  let cardsOpacity = $derived(cardsScrollY <= 50 ? Math.max(1 - (cardsScrollY / 50), 0) : 1);
+  let cardsTransform = $derived(cardsScrollY <= 50 ? -(cardsScrollY * 2) : 0);
+
+  function toggleMenu() {
+    isMenuOpen = !isMenuOpen;
+  }
+
+  function closeMenu() {
+    isMenuOpen = false;
+  }
+
+  function handleTouchStart(e) {
+    if (!cardsContainer) return;
+    startY = e.touches[0].clientY;
+    isDragging = true;
+  }
+
+  function handleTouchMove(e) {
+    if (!isDragging || !cardsContainer) return;
+    
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - startY;
+    
+    if (deltaY > 50 && cardsContainer.scrollTop === 0) {
+      e.preventDefault();
+      cardsContainer.style.transform = `translateY(${Math.min(deltaY - 50, 100)}px)`;
+    }
+  }
+
+  function handleTouchEnd(e) {
+    if (!isDragging || !cardsContainer) return;
+    
+    const currentY = e.changedTouches[0].clientY;
+    const deltaY = currentY - startY;
+
+    cardsContainer.style.transform = 'translateY(0)';
+    
+    if (deltaY > 100 && cardsContainer.scrollTop === 0) {
+      openCamera();
+    }
+    
+    isDragging = false;
+  }
+
+  function handleScroll(e) {
+    if (cardsContainer) {
+      cardsScrollY = cardsContainer.scrollTop;
+      maxScroll = cardsContainer.scrollHeight - cardsContainer.clientHeight;
+      
+      
+      if (cardsScrollY <= 5) { 
+        openCamera();
+        
+        setTimeout(() => {
+          if (cardsContainer) {
+            cardsContainer.scrollTop = 10;
+          }
+        }, 100);
+      }
+    }
+  }
 </script>
 
 <main class="main">
