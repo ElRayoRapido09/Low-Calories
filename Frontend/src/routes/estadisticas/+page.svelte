@@ -68,8 +68,8 @@
           <div class="letra">{d.dia}</div>
           <div class="valor">{d.kcal ?? '-'}</div>
         </div>
-    </div>    
- 
+      {/each}
+    </div>
 </section>
 </main>
 
@@ -101,45 +101,16 @@
     overflow-y: auto;
   }
 
-  <style>
-    :global(html) {
-      height: auto;
-      min-height: 100%;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+    @keyframes slide {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(50%);
+      }
     }
 
-    :global(body) {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #ffffffff 0%, #f9f8feff 100%);
-      min-height: 100vh;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .bg {
-      animation:slide 3s ease-in-out infinite alternate;
-      background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
-      bottom:0;
-      left:-50%;
-      opacity:.5;
-      position:fixed;
-      right:-50%;
-      top:0;
-      z-index:-1;
-    }
-
-    .bg2 {
-      animation-direction:alternate-reverse;
-      animation-duration:4s;
-    }
-
-    .bg3 {
-      animation-duration:5s;
-    }
-
+   
     main {
       max-width: 400px;
       margin: 0 auto;
@@ -277,7 +248,7 @@
       font-size: 2rem;
       font-weight: 700;
       margin: 0;
-      color: #ffffff;
+      color: #000000;
     }
     .progress-container {
       margin-top: 1rem;

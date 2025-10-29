@@ -83,6 +83,10 @@
       }
     }
   }
+
+  function goToBot() {
+    goto('/Bot');
+  }
 </script>
 
 <main class="main">
@@ -175,6 +179,11 @@
       <span class="nav-label">Objetivo</span>
     </a>
   </nav>
+
+   <button class="floating-btn" on:click={goToBot}>
+    🤖
+  </button>
+
 </main>
 
 <style>
@@ -452,5 +461,34 @@
   .calendar-empty {
     background: transparent !important;
     cursor: default !important;
+  }
+
+  .floating-btn {
+    position: fixed;
+    bottom: 90px; /* Arriba del bottom-nav */
+    right: 10px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #005bb5;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 200; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .floating-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  .floating-btn:active {
+    transform: scale(0.95);
   }
 </style>
