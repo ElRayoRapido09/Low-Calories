@@ -1,9 +1,25 @@
 <script>
   $: bottomNavHeight = Math.min(50 + (scrollY * 0.8), 95);
   let scrollY = 0;
+  let notificationOpen = false;
+
+  function toggleNotifications() {
+    notificationOpen = !notificationOpen;
+  }
+
+  function closeNotifications() {
+    notificationOpen = false;
+  }
+
+  function handleClickOutside(e) {
+    // Si el click es fuera del dropdown y del botón, cierra el dropdown
+    if (e.target && !e.target.closest('.notification-button') && !e.target.closest('.dropdown-content')) {
+      closeNotifications();
+    }
+  }
 </script>
 
- <svelte:window bind:scrollY />
+ <svelte:window bind:scrollY on:click={handleClickOutside} />
 
 <main class="main">
   <div class="container-back">
@@ -13,14 +29,28 @@
         <span class="icon">👤</span>
         <img class="avatar" alt="Perfil" src="src/lib/assets/kk.jpg" />
         <!-- Botón de notificaciones -->
-        <button class="notification-button">
+        <button class="notification-button" on:click={toggleNotifications}>
             <i class="fas fa-bell notification-icon"></i>
             <span class="badge">3</span> <!-- Insignia de notificaciones -->
         </button>
-        <div class="dropdown-content">
-            <!-- Contenido de la notificación -->
-            <p>Tienes 3 nuevas notificaciones</p>
-        </div>
+        {#if notificationOpen}
+          <div class="dropdown-content" on:click|stopPropagation>
+              <!-- Contenido de la notificación -->
+              <h3>Notificaciones</h3>
+              <div class="notification-item">
+                <p>📢 Has alcanzado tu meta de calorías</p>
+                <span class="notification-time">Hace 2 horas</span>
+              </div>
+              <div class="notification-item">
+                <p>✅ Registro completado</p>
+                <span class="notification-time">Hace 4 horas</span>
+              </div>
+              <div class="notification-item">
+                <p>🎯 Nueva semana, nuevas metas</p>
+                <span class="notification-time">Hace 1 día</span>
+              </div>
+          </div>
+        {/if}
       </header>
   </div>
   
@@ -210,11 +240,49 @@
     }
 .dropdown-content{
   right: 10px;
-  top: 50px;
-  padding: 10px;
-  border-radius: 5px;
+  top: 70px;
+  padding: 15px;
+  border-radius: 8px;
   background: white;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  min-width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  display: block;
+}
+
+.dropdown-content h3 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.notification-item {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.notification-item:hover {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item p {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: #999;
 }
  
 .card-user-container {
@@ -464,7 +532,7 @@
   }
   .back-btn {
     font-size: 1.5rem;
-    color: #ffffff;
+    color: #000000;
     text-decoration: none;
     background: none;
     border: none;
