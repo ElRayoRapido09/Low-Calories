@@ -762,7 +762,7 @@
   }
 
   .back-btn {
-    color: #fff;
+    color: #000000;
     text-decoration: none;
     font-size: 22px;
     padding: 6px;
