@@ -29,11 +29,11 @@
     const userMessage = newMessage;
     newMessage = '';
 
-    // Simular respuesta del bot (puedes reemplazar con API real)
+    // Simular respuesta xd, pero creo que lo puse mal, solo jala ricardo jejeje
     setTimeout(() => {
       let botResponse = "¡Gracias por tu mensaje! Estoy procesando tu consulta sobre nutrición.";
 
-      // Respuestas simuladas basadas en palabras clave
+      // palabras clave amores
       if (userMessage.toLowerCase().includes('Jorge')) {
         botResponse = "Jorge es mi puta";
       } else if (userMessage.toLowerCase().includes('Antuane')) {
