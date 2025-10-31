@@ -95,7 +95,7 @@
 <main class="main">
  
   <header class="header" class:hidden={headerHidden}>
-    <h1>xLow Calories</h1>
+    <h1>Low Calories</h1>
     <p>Tu asistente personal de nutrición</p>
   </header>
 
@@ -156,256 +156,158 @@
 </main>
 
 <style>
+  /* Keep same font stack as app; use the project's white + blue aesthetic */
   @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
 
-  :global(html) {
-    height:100%;
-  }
-
-  :global(body) {
+  :global(html), :global(body) {
+    height: 100%;
     margin: 0;
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background: linear-gradient(70deg, blue 0%, pink 100%);
-    color: #f2f2f2;
-    min-height: 100vh;
+    background: #ffffff; /* consistent app background */
+    color: #222;
   }
 
-  .bg {
-    animation:slide 3s ease-in-out infinite alternate;
-    background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
-    bottom:0;
-    left:-50%;
-    opacity:.5;
-    position:fixed;
-    right:-50%;
-    top:0;
-    z-index:-1;
-  }
-
-  .bg2 {
-    animation-direction:alternate-reverse;
-    animation-duration:4s;
-  }
-
-  .bg3 {
-    animation-duration:5s;
-  }
-
-  /* .spacer eliminado (ya no se usa) */
+  /* Remove animated blobs visually but keep bg layers for potential decorative use */
+  .bg, .bg2, .bg3 { display: none; }
 
   .main {
     max-width: 100%;
     margin: 0;
-    padding: 2rem 1rem 0 1rem;
+    padding: 1.5rem 1rem 0 1rem;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
     overflow: hidden;
   }
 
   .header {
     text-align: center;
-    margin-bottom: 2rem;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 420px;
     transition: opacity 200ms ease, transform 200ms ease;
   }
 
-  .header.hidden {
-    opacity: 0;
-    transform: translateY(-12px);
-    pointer-events: none;
-  }
+  .header.hidden { opacity: 0; transform: translateY(-8px); pointer-events: none; }
 
   .header h1 {
     font-family: 'Dancing Script', cursive;
-    font-style: italic ;
-    font-size: 5rem;
-    font-weight: 700;
-    margin: 0 0 0.5rem 0;
-    color: #ffffffff;
-  }
-
-  .header p {
-    font-size: 1rem;
-    opacity: 0.9;
+    font-size: 2.2rem;
     margin: 0;
-    color: #ffffffff;
+    color: #000;
+    line-height: 1;
   }
 
-  /* .spacer removed (unused) */
+  .header p { margin: 0.25rem 0 0; color: #666; font-size: 0.95rem; }
 
+  /* Container that previously acted as bottom-nav -> keep simple centered column */
   .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
-    background: rgba(255, 255, 255, 0.1); /* Cambiado de white a semi-transparente para que el blur sea visible */
-    box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.08);
-    border-radius: 2rem 2rem 0 0;
-    transition: height 0.1s ease;
-    overflow: hidden;
-    z-index: 10;
-    padding: 0;
+    position: relative;
+    width: 100%;
+    max-width: 480px;
     margin: 0;
-  }
-
-  @keyframes slideIn {
-    from {
-      transform: translateX(-100%);
-    }
-    to {
-      transform: translateX(0);
-    }
+    padding: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
   }
 
   .cards-container {
-    padding: 1rem 1rem 3rem 1rem;
+    padding: 0 0 2.5rem 0;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.25rem;
     width: 100%;
-    max-width: 200%;
-    margin: 0;
-    height: calc(150% - 100px);
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: #ccc transparent;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-  }
-
-  /* centrar vertical y horizontalmente el contenido dentro de cards-container */
-  .cards-container.center-vertical-horizontal {
-    align-items: center;
-    justify-content: center;
-  }
-
-  .scroll-spacer {
-    height: 100px; /* Espacio para permitir scroll hacia arriba */
-    width: 100%;
-    flex-shrink: 0;
-  }
-
-  .cards-container::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  .cards-container::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .cards-container::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 2px;
-  }
-
-  .cards-container::-webkit-scrollbar-thumb:hover {
-    background: #999;
-  }
-
- .card {
-    -webkit-backdrop-filter: blur(15px);
-    backdrop-filter: blur(15px);
-    background: rgba(255, 255, 255, 0.2); 
-    border-radius: 1rem;
-    padding: 3.2rem; /* aumentado para mayor altura interna */
-    min-height: 420px; /* altura mínima mayor para que el card se vea más alto */
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.2s;
     margin: 0 auto;
-    max-width: 400px;
-    width: calc(100% - 2rem);
-    flex-shrink: 0;
+    overflow-y: visible;
   }
 
-  .card:hover{
-    transform: translateY(-2px);
+  .cards-container.center-vertical-horizontal { align-items: center; }
+
+  .scroll-spacer { height: 20px; }
+
+  /* Clean white card with subtle shadow - mobile first */
+  .card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 1.3rem;
+    box-shadow: 0 6px 20px rgba(33,33,33,0.08);
+    border: 1px solid #eef1f4;
+    width: 100%;
+    max-width: 420px;
+    box-sizing: border-box;
+    transition: transform 0.15s ease;
   }
 
-  /* .icons removed (unused) */
+  .card:hover { transform: translateY(-3px); }
 
-  .card h2 {
-    color: #333;
-    font-size: 1.5rem;
-    margin: 0 0 1rem 0;
-  }
+  .card h2 { color: #0b2b40; font-size: 1.25rem; margin: 0 0 0.5rem 0; }
+  .card p { color: #666; margin: 0 0 0.5rem 0; }
 
-  .card p {
-    color: #666;
-    line-height: 1.6;
-    margin: 0 0 0.5rem 0;
-  }
+  .card-form { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.25rem; }
 
-  /* Mayor separación entre input/label dentro del card */
-  .card label {
-    display: block;
-    text-align: left;
-    margin-top: 1.25rem; /* aumentado */
-    margin-bottom: 0.45rem; /* separación entre label e input */
-  }
+  .card label { display:block; font-size: 0.85rem; color: #333; margin-top: 0.6rem; margin-bottom: 0.25rem; }
 
   .card input {
     width: 100%;
-    padding: 0.75rem; /* un poco más de padding */
-    border-radius: 0.6rem;
-    border: 1px solid #ddd;
-    margin-bottom: 0.6rem; /* espacio debajo del input */
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: 1px solid #e6e9ee;
+    background: #fff;
     box-sizing: border-box;
-  }
-
-  /* Form dentro del card con gap uniforme */
-  .card-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem; /* gap entre label/input y siguientes elementos */
-    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: #1f2933;
   }
 
   .primary-btn {
-    margin-top: 0.4rem;
+    margin-top: 0.6rem;
     width: 100%;
-    justify-content: center;
-    background: #0066cc;
-    color: white;
+    background: #005bb5; /* project blue */
+    color: #fff;
     border: none;
-    padding: 0.9rem;
-    border-radius: 0.6rem;
+    padding: 0.95rem;
+    border-radius: 10px;
+    font-weight: 600;
     cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,91,181,0.12);
   }
 
+  .primary-btn:active { transform: scale(0.995); }
+
   .card-actions {
-    margin-top: 1rem;
+    margin-top: 0.75rem;
     display: flex;
-    gap: 0.75rem;
+    gap: 0.5rem;
     justify-content: center;
     flex-wrap: wrap;
   }
 
   .ghost-btn {
-    background: none;
-    border: 1px solid rgba(255,255,255,0.4);
-    color: #fff;
-    padding: 0.6rem 1rem;
-    border-radius: 0.6rem;
+    background: transparent;
+    border: 1px solid #d7dbe0;
+    color: #005bb5;
+    padding: 0.55rem 0.9rem;
+    border-radius: 10px;
     cursor: pointer;
-    backdrop-filter: none;
+    font-weight: 600;
   }
 
-  /* .nav-item styles removed because component uses .primary-btn and .ghost-btn now */
+  /* Error / success messages inside card */
+  .card p[style*="color: #b00020"] { color: #b00020; background: #fff5f6; padding: 0.45rem; border-radius: 8px; }
+  .card p[style*="color: #007a00"] { color: #0a7a07; background: #f3fff3; padding: 0.45rem; border-radius: 8px; }
 
-  /* unused .nav-item span selectors removed */
-
-  @keyframes slide {
-    0% {
-      transform:translateX(-25%);
-    }
-    100% {
-      transform:translateX(25%);
-    }
+  /* Small helper adjustments */
+  @media (min-width: 520px) {
+    .card { padding: 1.6rem; }
+    .header h1 { font-size: 2.6rem; }
   }
+
+  @media (max-width: 380px) {
+    .card { padding: 1rem; border-radius: 12px; }
+    .header h1 { font-size: 1.9rem; }
+    .primary-btn { padding: 0.85rem; }
+  }
+
 </style>

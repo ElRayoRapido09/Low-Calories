@@ -87,6 +87,23 @@
   function goToBot() {
     goto('/Bot');
   }
+  // son los datos estaticos de los objetivos
+  let objetivos = $state([
+    { id: 1, titulo: 'Perder 5kg', progreso: 60, descripcion: 'Objetivo de pérdida de peso saludable', icono: '⚖️' },
+    { id: 2, titulo: 'Ganar músculo', progreso: 30, descripcion: 'Aumentar masa muscular con ejercicios', icono: '💪' },
+    { id: 3, titulo: 'Mantener peso', progreso: 80, descripcion: 'Mantener el peso actual', icono: '🎯' }
+  ]);
+
+  // datos estaticos de la racha jejeje
+  let diasRacha = $state([
+    { dia: 'L', enRacha: false },
+    { dia: 'M', enRacha: false },
+    { dia: 'M', enRacha: false },
+    { dia: 'J', enRacha: false },
+    { dia: 'V', enRacha: true },
+    { dia: 'S', enRacha: true },
+    { dia: 'D', enRacha: true }
+  ]);
 </script>
 
 <main class="main">
@@ -94,7 +111,21 @@
     <h1>Low Calories</h1>
   </header>
 
- 
+ <section class="streak-section">
+      <div class="section-header">
+        <h2>Mi Racha</h2>
+        <button class="edit-btn">Ver más</button>
+      </div>
+      <div class="streak-list">
+        {#each diasRacha as dia}
+          <div class="streak-icon {dia.enRacha ? 'streak-active' : 'streak-inactive'}">
+            {dia.enRacha ? '🔥' : '🗿'}
+            <span class="streak-day">{dia.dia}</span>
+          </div>
+        {/each}
+      </div>
+    </section>
+
   <div class="content">
     <section class="ingredients-section">
       <div class="section-header">
@@ -114,6 +145,7 @@
       </div>
     </section>
 
+    
 
     <section class="recommendations-section">
       <h2>Recomendaciones del día</h2>
@@ -126,6 +158,25 @@
           <p>450 kcal • 30 min</p>
         </div>
       </div>
+
+       <section class="objetivos-section">
+      <h2>Mis Objetivos</h2>
+      <p class="subtitle">Sigue el progreso de tus metas nutricionales</p>
+      
+      {#each objetivos as objetivo}
+        <div class="objetivo-card">
+          <div class="objetivo-icon">{objetivo.icono}</div>
+          <div class="objetivo-info">
+            <h3>{objetivo.titulo}</h3>
+            <p>{objetivo.descripcion}</p>
+            <div class="progreso-bar">
+              <div class="progreso-fill" style="width: {objetivo.progreso}%"></div>
+            </div>
+            <span class="progreso-text">{objetivo.progreso}% completado</span>
+          </div>
+        </div>
+      {/each}
+    </section>
 
       <!-- aqui deben jalar el calendario de planificador_de_comida -->
       <h2>Calendario</h2>
@@ -490,5 +541,118 @@
 
   .floating-btn:active {
     transform: scale(0.95);
+  }
+
+  .objetivos-section {
+    margin-bottom: 2rem;
+  }
+
+  .objetivos-section h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #000;
+  }
+
+  .objetivo-card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+  }
+
+  .objetivo-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #005bb5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+
+  .objetivo-info {
+    flex: 1;
+  }
+
+  .objetivo-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #000;
+  }
+
+  .objetivo-info p {
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .progreso-bar {
+    width: 100%;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .progreso-fill {
+    height: 100%;
+    background: #005bb5;
+    transition: width 0.3s;
+  }
+
+  .progreso-text {
+    font-size: 0.8rem;
+    color: #666;
+  }
+
+  .streak-section {
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .streak-list {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 0.5rem;
+  }
+
+  .streak-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .streak-active {
+    background: #ff6b35; /* Naranja rojizo para fuego */
+    color: #fff;
+  }
+
+  .streak-inactive {
+    background: #f5f5f5;
+    color: #666;
+  }
+
+  .streak-day {
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-top: 2px;
   }
 </style>
