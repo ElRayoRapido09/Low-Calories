@@ -4,12 +4,27 @@
 
   let currentView = 1; 
 
+  // Campos para registro
+  let email = '';
+  let password = '';
+  let passwordConfirm = '';
+
+  // Estado UI
+  let loading = false;
+  let error = '';
+  let success = '';
+
+  function clearMessages() {
+    error = '';
+    success = '';
+  }
+
   function goToHome() {
     goto('/');
   }
 
   function nextView() {
-    if (currentView < 11) {
+    if (currentView < 13) {
       currentView++;
     }
   }
@@ -64,16 +79,56 @@
   function setSuggestionType(type) {
     suggestionType = type;
   }
+
+  /**
+   * @param {string} value
+   */
+  function validateEmail(value) {
+    return /\S+@\S+\.\S+/.test(value);
+  }
+
+  async function submitRegister() {
+    clearMessages();
+    if (!validateEmail(email)) {
+      error = 'Introduce un correo válido';
+      return;
+    }
+    if (password.length < 6) {
+      error = 'La contraseña debe tener al menos 6 caracteres';
+      return;
+    }
+    if (password !== passwordConfirm) {
+      error = 'Las contraseñas no coinciden';
+      return;
+    }
+    loading = true;
+    // Simular registro
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    success = 'Registro simulado exitoso. Conecta con tu API para registrar.';
+    loading = false;
+    nextView(); // Ir a vista 13
+  }
 </script>
 
 <main class="app">
-  <header class="top">
-    <a href="/" class="back-btn" aria-label="Volver">‹</a>
-    <h1>Objetivos</h1>
-  </header>
-
   
   {#if currentView === 1}
+    <section class="card">
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 0%"></div>
+        </div>
+      </div>
+      
+      <h2>¡Empecemos tu viaje hacia una vida más saludable!</h2>
+      <p>Ahora vamos a configurar tu plan personalizado para alcanzar tus objetivos de nutrición y bienestar.</p>
+      <div class="nav-buttons">
+        <button on:click={nextView}>Continuar</button>
+      </div>
+    </section>
+  {/if}
+
+  {#if currentView === 2}
     <section class="card">
       <div class="progress-indicator">
         <div class="progress-bar-small">
@@ -107,7 +162,7 @@
   {/if}
 
   
-  {#if currentView === 2}
+  {#if currentView === 3}
     <section class="card">
       <div class="progress-indicator">
         <div class="progress-bar-small">
@@ -127,7 +182,7 @@
   {/if}
 
   
-  {#if currentView === 3}
+  {#if currentView === 4}
     <section class="card">
       <div class="progress-indicator">
         <div class="progress-bar-small">
@@ -175,7 +230,7 @@
     <!-- Modal Sexo -->
     {#if showGenderModal}
       <div class="modal-overlay" on:click={() => showGenderModal = false}>
-        <div class="modal" on:click|stopPropagation>
+        <div class="modal" role="dialog" tabindex="-1" on:click|stopPropagation>
           <div class="modal-bar"></div>
           <h3>Sexo</h3>
           <button class="modal-option" on:click={() => { gender = 'male'; showGenderModal = false; }}>Hombre</button>
@@ -187,7 +242,7 @@
     <!-- Modal Edad -->
     {#if showAgeModal}
       <div class="modal-overlay" on:click={() => showAgeModal = false}>
-        <div class="modal" on:click|stopPropagation>
+        <div class="modal" role="dialog" tabindex="-1" on:click|stopPropagation>
           <div class="modal-bar"></div>
           <h3>Edad</h3>
           <div class="modal-picker">
@@ -202,7 +257,7 @@
     <!-- Modal Peso -->
     {#if showWeightModal}
       <div class="modal-overlay" on:click={() => showWeightModal = false}>
-        <div class="modal" on:click|stopPropagation>
+        <div class="modal" role="dialog" tabindex="-1" on:click|stopPropagation>
           <div class="modal-bar"></div>
           <h3>Peso</h3>
           <div class="modal-toggle">
@@ -221,7 +276,7 @@
     <!-- Modal Altura -->
     {#if showHeightModal}
       <div class="modal-overlay" on:click={() => showHeightModal = false}>
-        <div class="modal" on:click|stopPropagation>
+        <div class="modal" role="dialog" tabindex="-1" on:click|stopPropagation>
           <div class="modal-bar"></div>
           <h3>Altura</h3>
           <div class="modal-toggle">
@@ -244,7 +299,7 @@
   </section>
 {/if}
 
-  {#if currentView === 4}
+  {#if currentView === 5}
     <section class="card">
       <div class="progress-indicator">
         <div class="progress-bar-small">
@@ -285,7 +340,7 @@
     </section>
   {/if}
 
-  {#if currentView === 5}
+  {#if currentView === 6}
     <section class="card">
       <div class="progress-indicator">
         <div class="progress-bar-small">
@@ -326,7 +381,7 @@
     </section>
   {/if}
 
-  {#if currentView === 6}
+  {#if currentView === 7}
     
 <section class="card">
       <div class="progress-indicator">
@@ -368,7 +423,7 @@
       <!-- Modal Peso Actual -->
       {#if showWeightModal}
         <div class="modal-overlay" on:click={() => showWeightModal = false}>
-          <div class="modal" on:click|stopPropagation>
+          <div class="modal" role="dialog" tabindex="-1" on:click|stopPropagation>
             <div class="modal-bar"></div>
             <h3>Peso actual</h3>
             <div class="modal-toggle">
@@ -387,7 +442,7 @@
       <!-- Modal Peso Objetivo -->
       {#if showTargetWeightModal}
         <div class="modal-overlay" on:click={() => showTargetWeightModal = false}>
-          <div class="modal" on:click|stopPropagation>
+          <div class="modal" role="dialog" tabindex="-1" on:click|stopPropagation>
             <div class="modal-bar"></div>
             <h3>Peso Objetivo</h3>
             <div class="modal-toggle">
@@ -406,7 +461,7 @@
       <!-- Modal Velocidad -->
       {#if showSpeedModal}
   <div class="modal-overlay" on:click={() => showSpeedModal = false}>
-    <div class="modal" on:click|stopPropagation>
+    <div class="modal" role="dialog" tabindex="-1" on:click|stopPropagation>
       <div class="modal-bar"></div>
       <h3>Velocidad de Ganancia de Peso</h3>
       <button
@@ -460,7 +515,7 @@
     </section>
   {/if}
 
-  {#if currentView === 7}
+  {#if currentView === 8}
     <section class="card">
       <div class="progress-indicator">
         <div class="progress-bar-small">
@@ -531,8 +586,8 @@
       </div>
       <!-- Carousel dots -->
       <div class="carousel-dots">
-        <span class="carousel-dot" class:active={carouselIndex === 0} on:click={() => carouselIndex = 0}></span>
-        <span class="carousel-dot" class:active={carouselIndex === 1} on:click={() => carouselIndex = 1}></span>
+        <button class="carousel-dot" class:active={carouselIndex === 0} on:click={() => carouselIndex = 0} aria-label="Slide 1"></button>
+        <button class="carousel-dot" class:active={carouselIndex === 1} on:click={() => carouselIndex = 1} aria-label="Slide 2"></button>
       </div>
     </div>
     <div class="nav-buttons">
@@ -547,7 +602,7 @@
   </section>  
   {/if}
 
-  {#if currentView === 8}
+  {#if currentView === 9}
     <section class="card meal-planning-intro">
       <div class="progress-indicator">
         <div class="progress-bar-small">
@@ -575,7 +630,7 @@
     </section>
   {/if}
 
-  {#if currentView === 9}
+  {#if currentView === 10}
     <section class="card meal-selection">
       <div class="progress-indicator">
         <div class="progress-bar-small">
@@ -631,7 +686,7 @@
     </section>
   {/if}
 
-  {#if currentView === 10}
+  {#if currentView === 11}
     <section class="card food-preferences">
       <div class="progress-indicator">
         <div class="progress-bar-small">
@@ -689,7 +744,45 @@
     </section>
   {/if}
 
-  {#if currentView === 11}
+  {#if currentView === 12}
+    <section class="card">
+      <div class="progress-indicator">
+        <div class="progress-bar-small">
+          <div class="progress-fill-small" style="width: 95%"></div>
+        </div>
+      </div>
+      
+      <h2>Regístrate</h2>
+
+      {#if error}
+        <p style="color: #b00020; margin: 0.5rem 0">{error}</p>
+      {/if}
+      {#if success}
+        <p style="color: #007a00; margin: 0.5rem 0">{success}</p>
+      {/if}
+      
+      <form class="card-form" on:submit|preventDefault={submitRegister}>
+        <label for="email">Correo</label>
+        <input id="email" name="email" type="email" bind:value={email} placeholder="tucorreo@ejemplo.com" />
+
+        <label for="password">Contraseña</label>
+        <input id="password" name="password" type="password" bind:value={password} placeholder="Contraseña" />
+
+        <label for="passwordConfirm">Confirmar contraseña</label>
+        <input id="passwordConfirm" name="passwordConfirm" type="password" bind:value={passwordConfirm} placeholder="Repite la contraseña" />
+
+        <button class="primary-btn">
+          {#if loading}
+            Procesando...
+          {:else}
+            Crear cuenta
+          {/if}
+        </button>
+      </form>
+    </section>
+  {/if}
+
+  {#if currentView === 13}
     <section class="card completion-screen">
       <div class="progress-indicator">
         <div class="progress-bar-small">
@@ -708,8 +801,8 @@
           </div>
         </div>
         
-        <h2 class="completion-title">¡Configuración Completada!</h2>
-        <p class="completion-subtitle">Tu plan personalizado está listo</p>
+        <h2 class="completion-title">¡Registro completado!</h2>
+        <p class="completion-subtitle">Bienvenido a Low Calories. Tu plan personalizado está listo.</p>
         
         <div class="completion-summary">
           <div class="summary-item">
@@ -724,11 +817,15 @@
             <span class="summary-icon">📊</span>
             <span class="summary-text">Calorías y macros calculados</span>
           </div>
+          <div class="summary-item">
+            <span class="summary-icon">✅</span>
+            <span class="summary-text">Cuenta registrada</span>
+          </div>
         </div>
       </div>
       
       <div class="nav-buttons">
-        <button on:click={goToHome} class="completion-btn">Comenzar mi plan</button>
+        <button on:click={() => goto('/')} class="completion-btn">Comenzar mi plan</button>
       </div>
     </section>
   {/if}
@@ -777,12 +874,17 @@
 
   .card {
     background: #ffffff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 18px;
-    border: 1px solid #e0e0e0;
+    border-radius: 14px;
+    padding: 1.3rem;
+    box-shadow: 0 6px 20px rgba(33,33,33,0.08);
+    border: 1px solid #eef1f4;
+    width: 100%;
+    max-width: 420px;
+    box-sizing: border-box;
+    transition: transform 0.15s ease;
   }
+
+  .card:hover { transform: translateY(-3px); }
 
   h2 {
     color: #000;
@@ -825,12 +927,17 @@
   }
 
   .checkmark {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #ffffff;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #333;
     border-radius: 50%;
     position: relative;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    transition: border-color 0.2s, background 0.2s;
   }
 
   .opcion input[type="radio"]:checked ~ .checkmark {
@@ -842,12 +949,12 @@
     content: "";
     position: absolute;
     display: none;
-    left: 6px;
-    top: 2px;
+    left: 8px;
+    top: 5px;
     width: 6px;
     height: 10px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
+    border: solid #fff;
+    border-width: 0 3px 3px 0;
     transform: rotate(45deg);
   }
 
@@ -1921,4 +2028,58 @@
 .completion-btn:active {
   transform: translateY(0);
 }
+
+/* Styles from login page for registration form */
+.card-form { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.25rem; }
+
+.card label { display:block; font-size: 0.85rem; color: #333; margin-top: 0.6rem; margin-bottom: 0.25rem; }
+
+.card input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid #e6e9ee;
+  background: #fff;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  color: #1f2933;
+}
+
+.primary-btn {
+  margin-top: 0.6rem;
+  width: 100%;
+  background: #005bb5;
+  color: #fff;
+  border: none;
+  padding: 0.95rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,91,181,0.12);
+}
+
+.primary-btn:active { transform: scale(0.995); }
+
+.card-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ghost-btn {
+  background: transparent;
+  border: 1px solid #d7dbe0;
+  color: #005bb5;
+  padding: 0.55rem 0.9rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Error / success messages inside card */
+.card p[style*="color: #b00020"] { color: #b00020; background: #fff5f6; padding: 0.45rem; border-radius: 8px; }
+.card p[style*="color: #007a00"] { color: #0a7a07; background: #f3fff3; padding: 0.45rem; border-radius: 8px; }
+
 </style>

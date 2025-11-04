@@ -1,8 +1,9 @@
 <script>
   // Login / Registro / Recuperación de contraseña
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
 
-  let mode = 'login'; // 'login' | 'register' | 'recover'
+  let mode = 'bienvenido'; // 'bienvenido' | 'login' | 'register' | 'recover'
 
   // Campos comunes
   let email = '';
@@ -104,50 +105,61 @@
     <div class="cards-container center-vertical-horizontal">
       <div class="scroll-spacer"></div>
 
-      <div class="card">
-        <h2 style="margin-bottom:0.5rem">{mode === 'login' ? 'Inicia sesión' : mode === 'register' ? 'Regístrate' : 'Recuperar contraseña'}</h2>
-
-        {#if error}
-          <p style="color: #b00020; margin: 0.5rem 0">{error}</p>
-        {/if}
-        {#if success}
-          <p style="color: #007a00; margin: 0.5rem 0">{success}</p>
-        {/if}
-
-        <form class="card-form" on:submit|preventDefault={mode === 'login' ? submitLogin : mode === 'register' ? submitRegister : submitRecover}>
-          <label for="email">Correo</label>
-          <input id="email" name="email" type="email" bind:value={email} placeholder="tucorreo@ejemplo.com" />
-
-          {#if mode !== 'recover'}
-            <label for="password">Contraseña</label>
-            <input id="password" name="password" type="password" bind:value={password} placeholder="Contraseña" />
-          {/if}
-
-          {#if mode === 'register'}
-            <label for="passwordConfirm">Confirmar contraseña</label>
-            <input id="passwordConfirm" name="passwordConfirm" type="password" bind:value={passwordConfirm} placeholder="Repite la contraseña" />
-          {/if}
-
-          <button class="primary-btn">
-            {#if loading}
-              Procesando...
-            {:else}
-              {mode === 'login' ? 'Entrar' : mode === 'register' ? 'Crear cuenta' : 'Enviar enlace'}
-            {/if}
-          </button>
-        </form>
-        <div class="card-actions">
-          {#if mode !== 'login'}
-            <button class="ghost-btn" on:click={() => { mode = 'login'; clearMessages(); }}>¿Ya tienes cuenta? Entrar</button>
-          {/if}
-          {#if mode !== 'register'}
-            <button class="ghost-btn" on:click={() => { mode = 'register'; clearMessages(); }}>Crear cuenta</button>
-          {/if}
-          {#if mode !== 'recover'}
-            <button class="ghost-btn" on:click={() => { mode = 'recover'; clearMessages(); }}>Recuperar contraseña</button>
-          {/if}
+      {#if mode === 'bienvenido'}
+        <div class="card">
+          <h2 style="margin-bottom:0.5rem">¡Bienvenido a Low Calories!</h2>
+          <p>Tu asistente personal para una nutrición saludable y baja en calorías.</p>
+          <div class="card-actions">
+            <button class="primary-btn" on:click={() => { mode = 'login'; clearMessages(); }}>Iniciar sesión</button>
+            <button class="ghost-btn" on:click={() => goto('/login/registro')}>Crear cuenta</button>
+          </div>
         </div>
-      </div>
+      {:else}
+        <div class="card">
+          <h2 style="margin-bottom:0.5rem">{mode === 'login' ? 'Inicia sesión' : mode === 'register' ? 'Regístrate' : 'Recuperar contraseña'}</h2>
+
+          {#if error}
+            <p style="color: #b00020; margin: 0.5rem 0">{error}</p>
+          {/if}
+          {#if success}
+            <p style="color: #007a00; margin: 0.5rem 0">{success}</p>
+          {/if}
+
+          <form class="card-form" on:submit|preventDefault={mode === 'login' ? submitLogin : mode === 'register' ? submitRegister : submitRecover}>
+            <label for="email">Correo</label>
+            <input id="email" name="email" type="email" bind:value={email} placeholder="tucorreo@ejemplo.com" />
+
+            {#if mode !== 'recover'}
+              <label for="password">Contraseña</label>
+              <input id="password" name="password" type="password" bind:value={password} placeholder="Contraseña" />
+            {/if}
+
+            {#if mode === 'register'}
+              <label for="passwordConfirm">Confirmar contraseña</label>
+              <input id="passwordConfirm" name="passwordConfirm" type="password" bind:value={passwordConfirm} placeholder="Repite la contraseña" />
+            {/if}
+
+            <button class="primary-btn">
+              {#if loading}
+                Procesando...
+              {:else}
+                {mode === 'login' ? 'Entrar' : mode === 'register' ? 'Crear cuenta' : 'Enviar enlace'}
+              {/if}
+            </button>
+          </form>
+          <div class="card-actions">
+            {#if mode !== 'login'}
+              <button class="ghost-btn" on:click={() => { mode = 'login'; clearMessages(); }}>¿Ya tienes cuenta? Entrar</button>
+            {/if}
+            {#if mode !== 'register'}
+              <button class="ghost-btn" on:click={() => { mode = 'register'; clearMessages(); }}>Crear cuenta</button>
+            {/if}
+            {#if mode !== 'recover'}
+              <button class="ghost-btn" on:click={() => { mode = 'recover'; clearMessages(); }}>Recuperar contraseña</button>
+            {/if}
+          </div>
+        </div>
+      {/if}
 
 
 
