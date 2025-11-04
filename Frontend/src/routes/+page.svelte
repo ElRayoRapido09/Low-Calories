@@ -335,10 +335,10 @@
     <canvas id="camera-canvas" style="display: none;"></canvas>
 
     <div class="camera-controls">
-      <button id="take-photo-btn" class="camera-btn"> 📷 Tomar Foto </button>
-      <button id="close-camera-btn" class="camera-btn exit-btn">
-        ❌ Salir
-      </button>
+      <header class="header-back">
+        <button id="close-camera-btn" class="back-btn" on:click={closeCamera}>‹</button>
+      </header>
+      <button id="take-photo-btn" class="camera-btn" on:click={takePhoto}> 📷 </button>
     </div>
   </div>
 </main>
@@ -571,18 +571,55 @@
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
   }
 
-  .exit-btn {
-    background-color: #f44336;
+  .header-back {
+      position: fixed;
+      left: -140px;
+      top: -700px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 3rem;
+      transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+    }
+
+  .back-btn {
+      font-size: 1.5rem;
+      color: #000000;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      padding: 0 0.5rem 0 0;
+      line-height: 1;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(252, 252, 252);
+      align-items: center;
   }
 
+  .back-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    }
+
+  .back-btn:active {
+      transform: scale(0.95);
+    }
+
   .camera-btn {
-    position: relative;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: #005bb5;
-    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
-    margin: 0 0.5rem;
+      font-size: 1.5rem;
+      color: #ffffff;
+      text-decoration: none;
+      cursor: pointer;
+      padding: 0 0.5rem 0 0;
+      line-height: 1;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgb(255, 255, 255);
+      align-items: center;
   }
 
   .camera-icon {
@@ -591,7 +628,7 @@
 
   .camera-btn:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
   }
 
   .camera-btn:active {
