@@ -874,17 +874,12 @@
 
   .card {
     background: #ffffff;
-    border-radius: 14px;
-    padding: 1.3rem;
-    box-shadow: 0 6px 20px rgba(33,33,33,0.08);
-    border: 1px solid #eef1f4;
-    width: 100%;
-    max-width: 420px;
-    box-sizing: border-box;
-    transition: transform 0.15s ease;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 18px;
+    border: 1px solid #e0e0e0;
   }
-
-  .card:hover { transform: translateY(-3px); }
 
   h2 {
     color: #000;
@@ -927,17 +922,12 @@
   }
 
   .checkmark {
-    width: 24px;
-    height: 24px;
-    border: 2px solid #333;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ffffff;
     border-radius: 50%;
     position: relative;
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    transition: border-color 0.2s, background 0.2s;
   }
 
   .opcion input[type="radio"]:checked ~ .checkmark {
@@ -949,12 +939,12 @@
     content: "";
     position: absolute;
     display: none;
-    left: 8px;
-    top: 5px;
+    left: 6px;
+    top: 2px;
     width: 6px;
     height: 10px;
-    border: solid #fff;
-    border-width: 0 3px 3px 0;
+    border: solid white;
+    border-width: 0 2px 2px 0;
     transform: rotate(45deg);
   }
 
@@ -1105,7 +1095,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   position: relative;
   animation: modalUp 0.2s;
-  border: 1px solid #e0e0e0;
 }
 
 .modal-bar {
@@ -2029,33 +2018,46 @@
   transform: translateY(0);
 }
 
-/* Styles from login page for registration form */
+/* Styles for registration form in view 12 */
 .card-form { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.25rem; }
 
-.card label { display:block; font-size: 0.85rem; color: #333; margin-top: 0.6rem; margin-bottom: 0.25rem; }
+.card-form label { display:block; font-size: 0.85rem; color: #666; margin-top: 0.6rem; margin-bottom: 0.25rem; font-weight: 500; }
 
-.card input {
+.card-form input {
   width: 100%;
   padding: 0.75rem;
   border-radius: 10px;
-  border: 1px solid #e6e9ee;
-  background: #fff;
+  border: none;
+  background: rgba(255,255,255,0.1);
   box-sizing: border-box;
   font-size: 0.95rem;
-  color: #1f2933;
+  color: #666;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.2s, color 0.2s;
+}
+
+.card-form input:focus {
+  background: rgba(255,255,255,0.2);
+  color: black;
 }
 
 .primary-btn {
   margin-top: 0.6rem;
   width: 100%;
   background: #005bb5;
-  color: #fff;
+  color: white;
   border: none;
   padding: 0.95rem;
   border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 6px 18px rgba(0,91,181,0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: background 0.2s;
+}
+
+.primary-btn:hover {
+  background: #004499;
 }
 
 .primary-btn:active { transform: scale(0.995); }
@@ -2069,17 +2071,24 @@
 }
 
 .ghost-btn {
-  background: transparent;
-  border: 1px solid #d7dbe0;
-  color: #005bb5;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: #666;
   padding: 0.55rem 0.9rem;
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.2s, color 0.2s;
+}
+
+.ghost-btn:hover {
+  background: rgba(255,255,255,0.2);
+  color: black;
 }
 
 /* Error / success messages inside card */
-.card p[style*="color: #b00020"] { color: #b00020; background: #fff5f6; padding: 0.45rem; border-radius: 8px; }
-.card p[style*="color: #007a00"] { color: #0a7a07; background: #f3fff3; padding: 0.45rem; border-radius: 8px; }
+.card p[style*="color: #b00020"] { color: #b00020; background: rgba(255,255,255,0.1); padding: 0.45rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.card p[style*="color: #007a00"] { color: #007a00; background: rgba(255,255,255,0.1); padding: 0.45rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 
 </style>
