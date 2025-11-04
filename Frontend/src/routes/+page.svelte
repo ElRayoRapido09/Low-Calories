@@ -1,14 +1,69 @@
 <script>
-  import { goto } from '$app/navigation';
-  function openCamera() {
-    alert('aqui se abre la camara');
+  import { goto } from "$app/navigation";
+
+  let videoStream;
+  let stream = null;
+
+  async function openCamera() {
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert("Tu navegador no soporta la cámara.");
+        return;
+      }
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+        audio: false,
+      });
+
+      const video = document.getElementById("camera-video");
+      const cameraContainer = document.getElementById("camera-container");
+
+      video.srcObject = stream;
+      cameraContainer.style.display = "flex";
+    } catch (error) {
+      if (
+        error.name === "NotAllowedError" ||
+        error.name === "PermissionDeniedError"
+      ) {
+        alert("Permiso denegado para acceder a la camara");
+      } else if (error.name === "NotFoundError") {
+        alert("No se encontro ninguna camara en el dispositivo.");
+      } else {
+        alert("Error al acceder a la camara: " + error.message);
+      }
+    }
+  }
+
+  function closeCamera() {
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+      stream = null;
+    }
+    document.getElementById("camera-container").style.display = "none";
+  }
+
+  function takePhoto() {
+    const video = document.getElementById("camera-video");
+    const canvas = document.getElementById("camera-canvas");
+    const context = canvas.getContext("2d");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0);
+
+    // Convierte la imagen a base64
+    const imageData = canvas.toDataURL("image/jpeg");
+    console.log("Foto capturada:", imageData);
+
+    // Aquí puedes procesar la imagen o enviarla a tu backend
+    closeCamera();
   }
 
   function goToObjetivos() {
-    goto('/objetivos');
+    goto("/objetivos");
   }
   function goToComidas() {
-    goto('/comidas');
+    goto("/comidas");
   }
 
   console.log("hola layo");
@@ -21,8 +76,14 @@
   let cardsScrollY = $state(0);
   let maxScroll = $state(0);
 
-  let bottomNavHeight = $derived(cardsScrollY <= 50 ? Math.max(50 - (cardsScrollY * 2), 0) : Math.min(50 + ((cardsScrollY - 50) * 0.15), 100));
-  let cardsOpacity = $derived(cardsScrollY <= 50 ? Math.max(1 - (cardsScrollY / 50), 0) : 1);
+  let bottomNavHeight = $derived(
+    cardsScrollY <= 50
+      ? Math.max(50 - cardsScrollY * 2, 0)
+      : Math.min(50 + (cardsScrollY - 50) * 0.15, 100),
+  );
+  let cardsOpacity = $derived(
+    cardsScrollY <= 50 ? Math.max(1 - cardsScrollY / 50, 0) : 1,
+  );
   let cardsTransform = $derived(cardsScrollY <= 50 ? -(cardsScrollY * 2) : 0);
 
   function toggleMenu() {
@@ -41,10 +102,10 @@
 
   function handleTouchMove(e) {
     if (!isDragging || !cardsContainer) return;
-    
+
     const currentY = e.touches[0].clientY;
     const deltaY = currentY - startY;
-    
+
     if (deltaY > 50 && cardsContainer.scrollTop === 0) {
       e.preventDefault();
       cardsContainer.style.transform = `translateY(${Math.min(deltaY - 50, 100)}px)`;
@@ -53,16 +114,16 @@
 
   function handleTouchEnd(e) {
     if (!isDragging || !cardsContainer) return;
-    
+
     const currentY = e.changedTouches[0].clientY;
     const deltaY = currentY - startY;
 
-    cardsContainer.style.transform = 'translateY(0)';
-    
+    cardsContainer.style.transform = "translateY(0)";
+
     if (deltaY > 100 && cardsContainer.scrollTop === 0) {
       openCamera();
     }
-    
+
     isDragging = false;
   }
 
@@ -70,11 +131,10 @@
     if (cardsContainer) {
       cardsScrollY = cardsContainer.scrollTop;
       maxScroll = cardsContainer.scrollHeight - cardsContainer.clientHeight;
-      
-      
-      if (cardsScrollY <= 5) { 
+
+      if (cardsScrollY <= 5) {
         openCamera();
-        
+
         setTimeout(() => {
           if (cardsContainer) {
             cardsContainer.scrollTop = 10;
@@ -85,24 +145,42 @@
   }
 
   function goToBot() {
-    goto('/Bot');
+    goto("/Bot");
   }
   // son los datos estaticos de los objetivos
   let objetivos = $state([
-    { id: 1, titulo: 'Perder 5kg', progreso: 60, descripcion: 'Objetivo de pérdida de peso saludable', icono: '⚖️' },
-    { id: 2, titulo: 'Ganar músculo', progreso: 30, descripcion: 'Aumentar masa muscular con ejercicios', icono: '💪' },
-    { id: 3, titulo: 'Mantener peso', progreso: 80, descripcion: 'Mantener el peso actual', icono: '🎯' }
+    {
+      id: 1,
+      titulo: "Perder 5kg",
+      progreso: 60,
+      descripcion: "Objetivo de pérdida de peso saludable",
+      icono: "⚖️",
+    },
+    {
+      id: 2,
+      titulo: "Ganar músculo",
+      progreso: 30,
+      descripcion: "Aumentar masa muscular con ejercicios",
+      icono: "💪",
+    },
+    {
+      id: 3,
+      titulo: "Mantener peso",
+      progreso: 80,
+      descripcion: "Mantener el peso actual",
+      icono: "🎯",
+    },
   ]);
 
   // datos estaticos de la racha jejeje
   let diasRacha = $state([
-    { dia: 'L', enRacha: false },
-    { dia: 'M', enRacha: false },
-    { dia: 'M', enRacha: false },
-    { dia: 'J', enRacha: false },
-    { dia: 'V', enRacha: true },
-    { dia: 'S', enRacha: true },
-    { dia: 'D', enRacha: true }
+    { dia: "L", enRacha: false },
+    { dia: "M", enRacha: false },
+    { dia: "M", enRacha: false },
+    { dia: "J", enRacha: false },
+    { dia: "V", enRacha: true },
+    { dia: "S", enRacha: true },
+    { dia: "D", enRacha: true },
   ]);
 </script>
 
@@ -111,20 +189,24 @@
     <h1>Low Calories</h1>
   </header>
 
- <section class="streak-section">
-      <div class="section-header">
-        <h2>Mi Racha</h2>
-        <button class="edit-btn">Ver más</button>
-      </div>
-      <div class="streak-list">
-        {#each diasRacha as dia}
-          <div class="streak-icon {dia.enRacha ? 'streak-active' : 'streak-inactive'}">
-            {dia.enRacha ? '🔥' : '🗿'}
-            <span class="streak-day">{dia.dia}</span>
-          </div>
-        {/each}
-      </div>
-    </section>
+  <section class="streak-section">
+    <div class="section-header">
+      <h2>Mi Racha</h2>
+      <button class="edit-btn">Ver más</button>
+    </div>
+    <div class="streak-list">
+      {#each diasRacha as dia}
+        <div
+          class="streak-icon {dia.enRacha
+            ? 'streak-active'
+            : 'streak-inactive'}"
+        >
+          {dia.enRacha ? "🔥" : "🗿"}
+          <span class="streak-day">{dia.dia}</span>
+        </div>
+      {/each}
+    </div>
+  </section>
 
   <div class="content">
     <section class="ingredients-section">
@@ -145,105 +227,130 @@
       </div>
     </section>
 
-    
-
     <section class="recommendations-section">
       <h2>Recomendaciones del día</h2>
-      <p class="subtitle">Estas recetas han sido elegidas exclusivamente para cumplir tu plan</p>
-      
+      <p class="subtitle">
+        Estas recetas han sido elegidas exclusivamente para cumplir tu plan
+      </p>
+
       <div class="recipe-card">
-        <img src="https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=500&h=400&fit=crop" alt="Comida" />
+        <img
+          src="https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=500&h=400&fit=crop"
+          alt="Comida"
+        />
         <div class="recipe-info">
           <h3>Pollo con arroz y puré</h3>
           <p>450 kcal • 30 min</p>
         </div>
       </div>
 
-       <section class="objetivos-section">
-      <h2>Mis Objetivos</h2>
-      <p class="subtitle">Sigue el progreso de tus metas nutricionales</p>
-      
-      {#each objetivos as objetivo}
-        <div class="objetivo-card">
-          <div class="objetivo-icon">{objetivo.icono}</div>
-          <div class="objetivo-info">
-            <h3>{objetivo.titulo}</h3>
-            <p>{objetivo.descripcion}</p>
-            <div class="progreso-bar">
-              <div class="progreso-fill" style="width: {objetivo.progreso}%"></div>
+      <section class="objetivos-section">
+        <h2>Mis Objetivos</h2>
+        <p class="subtitle">Sigue el progreso de tus metas nutricionales</p>
+
+        {#each objetivos as objetivo}
+          <div class="objetivo-card">
+            <div class="objetivo-icon">{objetivo.icono}</div>
+            <div class="objetivo-info">
+              <h3>{objetivo.titulo}</h3>
+              <p>{objetivo.descripcion}</p>
+              <div class="progreso-bar">
+                <div
+                  class="progreso-fill"
+                  style="width: {objetivo.progreso}%"
+                ></div>
+              </div>
+              <span class="progreso-text">{objetivo.progreso}% completado</span>
             </div>
-            <span class="progreso-text">{objetivo.progreso}% completado</span>
           </div>
-        </div>
-      {/each}
-    </section>
+        {/each}
+      </section>
 
       <!-- aqui deben jalar el calendario de planificador_de_comida -->
       <h2>Calendario</h2>
       <div class="calendar-card">
-  <div class="mini-calendar">
-    <div class="calendar-header">
-      <span class="calendar-month">Octubre 2025</span>
-      <span class="calendar-arrows">‹ ›</span>
-    </div>
-    <div class="calendar-days">
-      <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
-    </div>
-    <div class="calendar-dates">
-      <span class="calendar-empty"></span>
-      <span class="calendar-empty"></span>
-      <span class="calendar-empty"></span>
-      <span>1</span><span>2</span><span>3</span><span>4</span>
-      <span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span>
-      <span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span>
-      <span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span>
-      <span>26</span><span>27</span><span>28</span><span>29</span><span>30</span><span>31</span>
-    </div>
-  </div>
-</div>
+        <div class="mini-calendar">
+          <div class="calendar-header">
+            <span class="calendar-month">Octubre 2025</span>
+            <span class="calendar-arrows">‹ ›</span>
+          </div>
+          <div class="calendar-days">
+            <span>L</span><span>M</span><span>M</span><span>J</span><span
+              >V</span
+            ><span>S</span><span>D</span>
+          </div>
+          <div class="calendar-dates">
+            <span class="calendar-empty"></span>
+            <span class="calendar-empty"></span>
+            <span class="calendar-empty"></span>
+            <span>1</span><span>2</span><span>3</span><span>4</span>
+            <span>5</span><span>6</span><span>7</span><span>8</span><span
+              >9</span
+            ><span>10</span><span>11</span>
+            <span>12</span><span>13</span><span>14</span><span>15</span><span
+              >16</span
+            ><span>17</span><span>18</span>
+            <span>19</span><span>20</span><span>21</span><span>22</span><span
+              >23</span
+            ><span>24</span><span>25</span>
+            <span>26</span><span>27</span><span>28</span><span>29</span><span
+              >30</span
+            ><span>31</span>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 
-  
   <nav class="bottom-nav">
     <a href="/ajustes" class="nav-item">
       <span class="nav-icon">⚙️</span>
       <span class="nav-label">Ajustes</span>
     </a>
-    
+
     <a href="/estadisticas" class="nav-item">
       <span class="nav-icon">📊</span>
       <span class="nav-label">Estadísticas</span>
     </a>
-    
+
     <button class="nav-item camera-btn" on:click={openCamera}>
       <span class="camera-icon">📷</span>
     </button>
-    
+
     <a href="/perfil" class="nav-item">
       <span class="nav-icon">👤</span>
       <span class="nav-label">Perfil</span>
     </a>
-    
+
     <a href="/objetivos" class="nav-item">
       <span class="nav-icon">🎯</span>
       <span class="nav-label">Objetivo</span>
     </a>
   </nav>
 
-   <button class="floating-btn" on:click={goToBot}>
-    🤖
-  </button>
+  <button class="floating-btn" on:click={goToBot}> 🤖 </button>
 
+  <div id="camera-container" class="camera-container" style="display: none;">
+    <video id="camera-video" autoplay playsinline></video>
+    <canvas id="camera-canvas" style="display: none;"></canvas>
+
+    <div class="camera-controls">
+      <button id="take-photo-btn" class="camera-btn"> 📷 Tomar Foto </button>
+      <button id="close-camera-btn" class="camera-btn exit-btn">
+        ❌ Salir
+      </button>
+    </div>
+  </div>
 </main>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+  @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap");
 
   :global(body) {
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial,
+      sans-serif;
     background: #ffffff;
     color: #333;
   }
@@ -256,7 +363,6 @@
     padding-bottom: 70px;
   }
 
-
   .header {
     padding: 1rem;
     text-align: center;
@@ -264,20 +370,18 @@
   }
 
   .header h1 {
-    font-family: 'Dancing Script', cursive;
+    font-family: "Dancing Script", cursive;
     font-size: 2rem;
     font-weight: 700;
     margin: 0;
     color: #000;
   }
 
-
   .content {
     flex: 1;
     overflow-y: auto;
     padding: 1rem;
   }
-
 
   .section-header {
     display: flex;
@@ -301,7 +405,6 @@
     cursor: pointer;
   }
 
- 
   .ingredients-section {
     margin-bottom: 2rem;
   }
@@ -313,7 +416,8 @@
     padding-bottom: 0.5rem;
   }
 
-  .ingredient-icon, .ingredient-more {
+  .ingredient-icon,
+  .ingredient-more {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -331,7 +435,6 @@
     font-size: 0.9rem;
     font-weight: 600;
   }
-
 
   .recommendations-section h2 {
     font-size: 1.3rem;
@@ -377,7 +480,6 @@
     color: #666;
   }
 
- 
   .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -421,6 +523,57 @@
     font-weight: 500;
   }
 
+  .camera-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #camera-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .camera-controls {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    z-index: 10000;
+  }
+
+  .camera-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .camera-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .exit-btn {
+    background-color: #f44336;
+  }
 
   .camera-btn {
     position: relative;
@@ -446,16 +599,16 @@
   }
 
   .calendar-card {
-  margin-bottom: 1.5rem;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  background: #fff;
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   .mini-calendar {
     width: 100%;
@@ -527,11 +680,13 @@
     font-size: 1.5rem;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    z-index: 200; 
+    z-index: 200;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
   }
 
   .floating-btn:hover {
