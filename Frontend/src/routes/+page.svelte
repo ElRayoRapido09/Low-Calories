@@ -26,6 +26,7 @@
 
       video.srcObject = stream;
       cameraContainer.style.display = "flex";
+      document.body.style.overflow = "hidden";
     } catch (error) {
       if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
         alert("Permiso denegado para acceder a la camara");
@@ -43,6 +44,7 @@
       stream = null;
     }
     document.getElementById("camera-container").style.display = "none";
+    document.body.style.overflow = "auto";
   }
 
   function takePhoto() {
@@ -186,6 +188,10 @@
     { dia: "D", enRacha: true },
   ]);
 </script>
+
+<svelte:head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+</svelte:head>
 
 <main class="main">
   <header class="header">
@@ -564,28 +570,37 @@
     left: 0;
     width: 100vw;
     height: 100vh;
+    height: 100dvh; /* Usa viewport dinámico en móviles */
     background-color: #000;
     z-index: 9999;
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
   }
 
   #camera-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
   .camera-controls {
     position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     display: flex;
-    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    padding: env(safe-area-inset-bottom, 20px) 20px 20px;
     z-index: 10000;
+    background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
   }
 
   .camera-btn {
@@ -607,54 +622,62 @@
   }
 
   .header-back {
-      position: fixed;
-      left: -140px;
-      top: -700px;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 3rem;
-      transition:
-      transform 0.2s,
-      box-shadow 0.2s;
-    }
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    top: max(20px, env(safe-area-inset-top));
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 10001;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
 
   .back-btn {
-      font-size: 1.5rem;
-      color: #000000;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      padding: 0 0.5rem 0 0;
-      line-height: 1;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: rgba(252, 252, 252);
-      align-items: center;
+    font-size: 1.5rem;
+    color: #000000;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   .back-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
-    }
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  }
 
   .back-btn:active {
-      transform: scale(0.95);
-    }
+    transform: scale(0.95);
+  }
 
   .camera-btn {
-      font-size: 1.5rem;
-      color: #ffffff;
-      text-decoration: none;
-      cursor: pointer;
-      padding: 0 0.5rem 0 0;
-      line-height: 1;
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      background: rgb(255, 255, 255);
-      align-items: center;
+    font-size: 1.8rem;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    border: 4px solid rgba(255, 255, 255, 0.3);
   }
 
   .camera-icon {
@@ -668,6 +691,49 @@
 
   .camera-btn:active {
     transform: scale(0.95);
+  }
+
+  /* Ajustes para dispositivos móviles pequeños */
+  @media screen and (max-width: 375px) {
+    .header-back {
+      left: 15px;
+      top: max(15px, env(safe-area-inset-top));
+    }
+
+    .back-btn {
+      width: 48px;
+      height: 48px;
+      font-size: 1.3rem;
+    }
+
+    .camera-btn {
+      width: 60px;
+      height: 60px;
+      font-size: 1.6rem;
+    }
+  }
+
+  /* Ajustes para orientación landscape */
+  @media screen and (orientation: landscape) {
+    .camera-controls {
+      padding: 15px 20px;
+    }
+
+    .header-back {
+      top: 15px;
+    }
+
+    .camera-btn {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  /* Soporte para notch y safe areas */
+  @supports (padding: max(0px)) {
+    .camera-container {
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
   }
 
   .calendar-card {
