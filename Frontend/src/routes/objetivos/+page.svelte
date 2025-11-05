@@ -9,13 +9,17 @@
   }
 
   function nextView() {
-    if (currentView < 11) {
+    if (currentView === 4) {
+      currentView = 7;
+    } else if (currentView < 11) {
       currentView++;
     }
   }
 
   function prevView() {
-    if (currentView > 1) {
+    if (currentView === 7) {
+      currentView = 4;
+    } else if (currentView > 1) {
       currentView--;
     }
   }
@@ -25,7 +29,6 @@
   let showWeightModal = false;
   let showTargetWeightModal = false;
   let showHeightModal = false;
-  let carouselIndex = 0;
 
   let gender = '';
   let age = '';
@@ -285,180 +288,7 @@
     </section>
   {/if}
 
-  {#if currentView === 5}
-    <section class="card">
-      <div class="progress-indicator">
-        <div class="progress-bar-small">
-          <div class="progress-fill-small" style="width: 50%"></div>
-        </div>
-      </div>
-      
-      <h2>Que tipo de dieta prefieres?</h2>
 
-      <li class="item">
-        <span class="icon">✨</span>
-        <span class="label">Recomendada</span>
-        <p>La mejor opcion para ti, una mezcla equilibrada de nutrientes.</p>
-      </li>
-      
-      <li class="item">
-        <span class="icon">🍗</span>
-        <span class="label">Alta en Proteinas</span>
-        <p>Ideal para ganar músculo y mantener la saciedad.</p>
-      </li>
-
-      <li class="item">
-        <span class="icon">🥑</span>
-        <span class="label">Baja en Carbohidratos</span>
-        <p>Perfecta para perder grasa y controlar el apetito.</p>
-      </li>
-
-      <li class="item">
-        <span class="icon">🌱</span>
-        <span class="label">Baja en Grasas</span>
-        <p>Buena para mejorar la salud cardiovascular y perder peso.</p>
-      </li>
-      
-      <div class="nav-buttons">
-        <button on:click={prevView}>Regresar</button>
-        <button on:click={nextView}>Continuar</button>
-      </div>
-    </section>
-  {/if}
-
-  {#if currentView === 6}
-    
-<section class="card">
-      <div class="progress-indicator">
-        <div class="progress-bar-small">
-          <div class="progress-fill-small" style="width: 60%"></div>
-        </div>
-      </div>
-      
-      <h2>Personalicemos tu Objetivo</h2>
-      <p>Este es el último paso para personalizar tu experiencia.</p>
-
-      <div class="info-item">
-        <span class="info-icon">⚖️</span>
-        <span class="info-label">Peso</span>
-        <button class="info-select" on:click={() => showWeightModal = true}>
-          {weight ? `${weight} kg` : 'Seleccionar'}
-          <span class="chev">›</span>
-        </button>
-      </div>
-
-      <div class="info-item">
-        <span class="info-icon">🎯</span>
-        <span class="info-label">Peso Objetivo</span>
-        <button class="info-select" on:click={() => showTargetWeightModal = true}>
-          {targetWeight ? `${targetWeight} kg` : 'Seleccionar'}
-          <span class="chev">›</span>
-        </button>
-      </div>
-
-      <div class="info-item">   
-        <span class="info-icon">⏱️</span>
-        <span class="info-label">Velocidad de Ganancia de Peso</span>
-        <button class="info-select" on:click={() => showSpeedModal = true}>
-          {selectedSpeed === 'recomendada' ? 'Recomendada' : selectedSpeed === 'rapido' ? 'Rápido' : 'Lento'}
-          <span class="chev">›</span>
-        </button>
-      </div>
-
-      <!-- Modal Peso Actual -->
-      {#if showWeightModal}
-        <div class="modal-overlay" on:click={() => showWeightModal = false}>
-          <div class="modal" on:click|stopPropagation>
-            <div class="modal-bar"></div>
-            <h3>Peso actual</h3>
-            <div class="modal-toggle">
-              <button class:active={weightUnit === 'kg'} on:click={() => weightUnit = 'kg'}>kg</button>
-              <button class:active={weightUnit === 'lbs'} on:click={() => weightUnit = 'lbs'}>lbs</button>
-            </div>
-            <div class="modal-picker">
-              <input type="number" min="30" max="200" bind:value={weight} class="modal-input" />
-              <span class="modal-unit">{weightUnit}</span>
-            </div>
-            <button class="modal-ok" on:click={() => showWeightModal = false}>OK</button>
-          </div>
-        </div>
-      {/if}
-
-      <!-- Modal Peso Objetivo -->
-      {#if showTargetWeightModal}
-        <div class="modal-overlay" on:click={() => showTargetWeightModal = false}>
-          <div class="modal" on:click|stopPropagation>
-            <div class="modal-bar"></div>
-            <h3>Peso Objetivo</h3>
-            <div class="modal-toggle">
-              <button class:active={weightUnit === 'kg'} on:click={() => weightUnit = 'kg'}>kg</button>
-              <button class:active={weightUnit === 'lbs'} on:click={() => weightUnit = 'lbs'}>lbs</button>
-            </div>
-            <div class="modal-picker">
-              <input type="number" min="30" max="200" bind:value={targetWeight} class="modal-input" />
-              <span class="modal-unit">{weightUnit}</span>
-            </div>
-            <button class="modal-ok" on:click={() => showTargetWeightModal = false}>OK</button>
-          </div>
-        </div>
-      {/if}
-
-      <!-- Modal Velocidad -->
-      {#if showSpeedModal}
-  <div class="modal-overlay" on:click={() => showSpeedModal = false}>
-    <div class="modal" on:click|stopPropagation>
-      <div class="modal-bar"></div>
-      <h3>Velocidad de Ganancia de Peso</h3>
-      <button
-        class="speed-option {selectedSpeed === 'recomendada' ? 'active' : ''}"
-        on:click={() => selectedSpeed = 'recomendada'}>
-        <span class="speed-icon">🎧</span>
-        Recomendado
-      </button>
-      {#if selectedSpeed === 'recomendada'}
-        <ul class="speed-details">
-          <li><span class="check">✔️</span> Ganancia óptima de masa muscular y peso</li>
-          <li><span class="check">✔️</span> Resultados visibles en el corto plazo</li>
-          <li><span class="check">✔️</span> Alimentación sostenible</li>
-        </ul>
-      {/if}
-      <button
-        class="speed-option {selectedSpeed === 'rapido' ? 'active' : ''}"
-        on:click={() => selectedSpeed = 'rapido'}>
-        <span class="speed-icon">🚀</span>
-        Rápido
-      </button>
-      {#if selectedSpeed === 'rapido'}
-        <ul class="speed-details">
-          <li><span class="check">✔️</span> Ganancia rápida de peso y músculo</li>
-          <li><span class="check">✔️</span> Ideal para atletas o con poco tiempo</li>
-          <li><span class="check">✔️</span> Requiere mayor disciplina y seguimiento</li>
-        </ul>
-      {/if}
-      <button
-        class="speed-option {selectedSpeed === 'lento' ? 'active' : ''}"
-        on:click={() => selectedSpeed = 'lento'}>
-        <span class="speed-icon">🐢</span>
-        Lento
-      </button>
-      {#if selectedSpeed === 'lento'}
-        <ul class="speed-details">
-          <li><span class="check">✔️</span> Ganancia gradual y sostenible</li>
-          <li><span class="check">✔️</span> Mejor para principiantes</li>
-          <li><span class="check">✔️</span> Menos riesgo de acumular grasa extra</li>
-        </ul>
-      {/if}
-      <button class="modal-ok" on:click={() => showSpeedModal = false}>OK</button>
-    </div>
-  </div>
-{/if}
-      
-      <div class="nav-buttons">
-        <button on:click={prevView}>Regresar</button>
-        <button on:click={nextView}>Continuar</button>
-      </div>
-    </section>
-  {/if}
 
   {#if currentView === 7}
     <section class="card">
@@ -469,81 +299,36 @@
       </div>
       
       <h2>¡Tu progreso y tus calorías!</h2>
-    <div class="carousel">
-      <div class="carousel-track" style="transform: translateX(-{carouselIndex * 100}%);">
-        <!-- Slide 1: Progreso de peso -->
-        <div class="carousel-slide">
-          <div class="carousel-check">
-            <span class="carousel-check-icon">✔️</span>
+      
+      <div class="carousel-check">
+        <span class="carousel-check-icon">✔️</span>
+      </div>
+      <p class="carousel-title">¡Genial! Estas son las calorías que necesitas al día</p>
+      <div class="carousel-metric-card">
+        <div class="metric-kcal">2,167 kcal</div>
+        <div class="metric-macros">
+          <div class="macro">
+            <span class="macro-label">Proteínas</span>
+            <span class="macro-value">100 g</span>
+            <div class="macro-bar"></div>
           </div>
-          <p class="carousel-title">...y así será tu progreso</p>
-          <div class="carousel-metric-card">
-            <div class="metric-header">
-              <span class="metric-label">Objetivo actual</span>
-              <span class="metric-label metric-label-right">Siguiente</span>
-            </div>
-            <div class="metric-graph">
-              <div class="metric-point metric-point-left">
-                <span class="metric-point-label">64 kg</span>
-                <span class="metric-point-dot"></span>
-              </div>
-              <div class="metric-line"></div>
-              <div class="metric-point metric-point-right">
-                <span class="metric-point-label metric-point-label-right">70 kg</span>
-                <span class="metric-point-dot metric-point-dot-right"></span>
-              </div>
-            </div>
-            <div class="metric-footer">
-              <span class="metric-date">Hoy</span>
-              <span class="metric-date">Oct 28</span>
-              <span class="metric-date">Dec 9</span>
-              <span class="metric-date metric-date-right">Dec 29</span>
-            </div>
+          <div class="macro">
+            <span class="macro-label">Carbs</span>
+            <span class="macro-value">252 g</span>
+            <div class="macro-bar"></div>
           </div>
-        </div>
-        <!-- Slide 2: Calorías y macros -->
-        <div class="carousel-slide">
-          <div class="carousel-check">
-            <span class="carousel-check-icon">✔️</span>
-          </div>
-          <p class="carousel-title">¡Genial! Estas son las calorías que necesitas al día</p>
-          <div class="carousel-metric-card">
-            <div class="metric-kcal">2,167 kcal</div>
-            <div class="metric-macros">
-              <div class="macro">
-                <span class="macro-label">Proteínas</span>
-                <span class="macro-value">100 g</span>
-                <div class="macro-bar"></div>
-              </div>
-              <div class="macro">
-                <span class="macro-label">Carbs</span>
-                <span class="macro-value">252 g</span>
-                <div class="macro-bar"></div>
-              </div>
-              <div class="macro">
-                <span class="macro-label">Grasas</span>
-                <span class="macro-value">84 g</span>
-                <div class="macro-bar"></div>
-              </div>
-            </div>
+          <div class="macro">
+            <span class="macro-label">Grasas</span>
+            <span class="macro-value">84 g</span>
+            <div class="macro-bar"></div>
           </div>
         </div>
       </div>
-      <!-- Carousel dots -->
-      <div class="carousel-dots">
-        <span class="carousel-dot" class:active={carouselIndex === 0} on:click={() => carouselIndex = 0}></span>
-        <span class="carousel-dot" class:active={carouselIndex === 1} on:click={() => carouselIndex = 1}></span>
+      
+      <div class="nav-buttons">
+        <button on:click={prevView}>Regresar</button>
+        <button on:click={nextView}>Continuar</button>
       </div>
-    </div>
-    <div class="nav-buttons">
-      <button on:click={prevView}>Regresar</button>
-      <button class="carousel-next" on:click={() => {
-        if (carouselIndex < 1) carouselIndex++;
-        else nextView();
-      }}>
-        {carouselIndex < 1 ? 'Siguiente' : 'Continuar'}
-      </button>
-    </div>
   </section>  
   {/if}
 
@@ -1259,13 +1044,15 @@
   box-shadow: 0 6px 18px rgba(0,0,0,0.18);
   border: 1px solid #e0e0e0;
   padding: 24px 18px;
-  width: 340px; /* Fijo y centrado */
+  width: 100%;
+  max-width: 340px;
   margin-bottom: 18px;
   background: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  box-sizing: border-box;
 }
 @media (max-width: 400px) {
   .carousel-metric-card {
