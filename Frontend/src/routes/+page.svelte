@@ -11,7 +11,13 @@
         return;
       }
       stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
+        video: { 
+          facingMode: "environment",
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+          aspectRatio: { ideal: 16 / 9 },
+          frameRate: { ideal: 30 },
+        },
         audio: false,
       });
 
@@ -21,10 +27,7 @@
       video.srcObject = stream;
       cameraContainer.style.display = "flex";
     } catch (error) {
-      if (
-        error.name === "NotAllowedError" ||
-        error.name === "PermissionDeniedError"
-      ) {
+      if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
         alert("Permiso denegado para acceder a la camara");
       } else if (error.name === "NotFoundError") {
         alert("No se encontro ninguna camara en el dispositivo.");
