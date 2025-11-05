@@ -310,7 +310,10 @@
 
     <a href="/estadisticas" class="nav-item">
       <span class="nav-icon">📊</span>
-      <span class="nav-label">Estadísticas</span>
+      <span class="nav-label">Metricas</span>
+    </a>
+
+    <a href="/estadisticas" class="nav-item">
     </a>
 
     <button class="nav-item camera-btn" on:click={openCamera}>
@@ -494,18 +497,42 @@
     padding: 0 1rem;
     z-index: 100;
   }
+  
+  .nav-item.camera-btn {
+    position: absolute;
+    left: 50%;
+    top: 10px; /* distancia sobre la barra: ajustar según se requiera */
+    transform: translateX(-50%);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #fff; /* círculo blanco */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    z-index: 200;
+    border: none;
+    padding: 0;
+  }
+
+  .nav-item.camera-btn .camera-icon {
+    font-size: 1.6rem;
+    margin: 0;
+  }
 
   .nav-item {
+    text-align: center;
+    align-items: center; 
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
     text-decoration: none;
     color: #666;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 0.4rem 0.6rem;
     transition: color 0.2s;
   }
 
@@ -519,8 +546,13 @@
   }
 
   .nav-label {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     font-weight: 500;
+    margin-top: 2px;
+    text-align: left;
+    line-height: 1;
+    display: block;
+    margin-left: -3px;
   }
 
   .camera-container {
@@ -555,7 +587,7 @@
 
   .camera-btn {
     padding: 15px 30px;
-    font-size: 18px;
+    font-size: 13px;
     font-weight: bold;
     border: none;
     border-radius: 10px;
@@ -615,8 +647,8 @@
       cursor: pointer;
       padding: 0 0.5rem 0 0;
       line-height: 1;
-      width: 70px;
-      height: 70px;
+      width: 55px;
+      height: 55px;
       border-radius: 50%;
       background: rgb(255, 255, 255);
       align-items: center;
