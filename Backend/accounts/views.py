@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from rest_framework import generics
-from accounts.models import Account
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.contrib.auth.hashers import check_password
+from .models import Account
 from accounts.serializers import AccountSerializer
 
 # Create your views here.
@@ -9,3 +13,17 @@ from accounts.serializers import AccountSerializer
 class AccountListAPIView(generics.ListAPIView):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
+
+
+@api_view(['POST'])
+def login_user(request):
+    email = request.data.get('email')
+    password = request.data.get('password')
+    try:
+        user = Account.objects.get(correo=email)
+        if check_password(password, user.password):
+            return Response({'message': 'Login exitoso'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Contraseña incorrecta'}, status=status.HTTP_401_UNAUTHORIZED)
+    except Account.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_401_UNAUTHORIZED)
