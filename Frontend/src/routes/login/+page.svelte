@@ -32,11 +32,24 @@
     if (!validateEmail(email)) { error = 'Introduce un correo válido'; return; }
     if (!password) { error = 'Introduce la contraseña'; return; }
     loading = true;
-    // Aquí se llamaría al backend. Por ahora solo simulamos.
-    await new Promise(r => setTimeout(r, 600));
-    console.log('login', { email, password });
-    success = 'Inicio de sesión simulado. Conecta con tu API para autenticar.';
-    loading = false;
+    try {
+      const response = await fetch('http://localhost:8000/api/accounts/login/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, password: password }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        success = 'Inicio de sesión exitoso.';
+      } else {
+        const data = await response.json();
+        error = data.error || 'Credenciales inválidas.';
+      }
+    } catch (err) {
+      error = 'Error de conexión.';
+    } finally {
+      loading = false;
+    }
   }
 
   async function submitRegister() {
