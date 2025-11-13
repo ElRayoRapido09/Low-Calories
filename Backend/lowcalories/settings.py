@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'foods',
+    'chatbot',  # Nueva app para el chatbot con IA
     'rest_framework',
     'corsheaders',
 ]
@@ -77,16 +78,25 @@ WSGI_APPLICATION = 'lowcalories.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Configuración temporal con SQLite para desarrollo
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'lowcalories',
-        'USER': 'root',
-        'PASSWORD': '12345',
-        'HOST': 'mysql_db',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Configuración original para producción con Docker MySQL:
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'lowcalories',
+#         'USER': 'root',
+#         'PASSWORD': '12345',
+#         'HOST': 'mysql_db',
+#         'PORT': '3306',
+#     }
+# }
 
 
 # Password validation
@@ -132,5 +142,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
+    'http://localhost:5174',  # Puerto alternativo para desarrollo
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:5174',
 ]
+
+# ==========================================
+# CONFIGURACIÓN GOOGLE GEMINI AI CHATBOT
+# ==========================================
+
+# 🔑 API Key de Google Gemini configurada directamente
+# Tu API Key: AIzaSyD5pvAcMBdrYD8E9xaV7I9dnywulawudIw
+# 
+# La API key está configurada directamente en chatbot/gemini_service.py
+# Si necesitas cambiarla, edita ese archivo.
+
+# Configuración del chatbot con Gemini
+GEMINI_API_KEY = 'AIzaSyD5pvAcMBdrYD8E9xaV7I9dnywulawudIw'
+GEMINI_MODEL = 'gemini-1.5-flash'
+CHATBOT_MAX_MESSAGES_HISTORY = 6
+CHATBOT_MAX_OUTPUT_TOKENS = 500
 
