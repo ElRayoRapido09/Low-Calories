@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,6 +26,20 @@ SECRET_KEY = 'django-insecure-dnckoiw0gh0_)mrc8!19s6l=6wmw8(z5#0txr@15hqdmp25(2#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
+
 ALLOWED_HOSTS = []
 
 
@@ -37,15 +52,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'accounts',
     'foods',
-    'chatbot',  # Nueva app para el chatbot con IA
+    'api',
+    'chatbot', 
     'rest_framework',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -86,17 +102,17 @@ DATABASES = {
     }
 }
 
-# Configuración original para producción con Docker MySQL:
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'lowcalories',
-#         'USER': 'root',
-#         'PASSWORD': '12345',
-#         'HOST': 'mysql_db',
-#         'PORT': '3306',
-#     }
-# }
+
+DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': 'lowcalories',
+         'USER': 'root',
+         'PASSWORD': '12345',
+         'HOST': 'mysql_db',
+         'PORT': '3306',
+     }
+}
 
 
 # Password validation
@@ -162,4 +178,14 @@ GEMINI_API_KEY = 'AIzaSyD5pvAcMBdrYD8E9xaV7I9dnywulawudIw'
 GEMINI_MODEL = 'gemini-1.5-flash'
 CHATBOT_MAX_MESSAGES_HISTORY = 6
 CHATBOT_MAX_OUTPUT_TOKENS = 500
+
+# Media files configuration for user uploads
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# API Keys
+CALORIEMAMA_API_KEY = '37700363570332bd9c5072c9d5be16d3' # ¡Reemplaza con tu clave real!
+FATSECRET_CONSUMER_KEY = 'c97439578e7f4c1f95e45ca94260a4b5 '  # Reemplaza con tu clave real
+FATSECRET_CONSUMER_SECRET = '73dde05018fe432d9ca3454a66ed3ea2'  # Reemplaza con tu secreto real
+
 
