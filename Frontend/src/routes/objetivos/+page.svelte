@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
+  import { _ } from 'svelte-i18n';
 
   let currentView = 1; 
 
@@ -71,8 +72,8 @@
 
 <main class="app">
   <header class="top">
-    <a href="/" class="back-btn" aria-label="Volver">‹</a>
-    <h1>Objetivos</h1>
+    <a href="/" class="back-btn" aria-label={$_('common.back')}>‹</a>
+    <h1>{$_('goals.title')}</h1>
   </header>
 
   
@@ -84,27 +85,27 @@
         </div>
       </div>
       
-      <h2>¿Cuál es tu objetivo?</h2>
-      <p>Calcularemos tus calorías necesarias para lograrlo.</p>
+      <h2>{$_('goals.whatIsYourGoal')}</h2>
+      <p>{$_('goals.calculateCalories')}</p>
       <div class="lista">
         <label class="opcion">
           <input type="radio" name="objetivo" value="perder" />
           <span class="checkmark"></span>
-          Perder grasa
+          {$_('goals.loseFat')}
         </label>
         <label class="opcion">
           <input type="radio" name="objetivo" value="mantener" />
           <span class="checkmark"></span>
-          Ganar músculo
+          {$_('goals.gainMuscle')}
         </label>
         <label class="opcion">
           <input type="radio" name="objetivo" value="ganar" />
           <span class="checkmark"></span>
-          Mantener peso
+          {$_('goals.maintainWeight')}
         </label>
       </div>
       <div class="nav-buttons">
-        <button on:click={nextView}>Continuar</button>
+        <button on:click={nextView}>{$_('common.continue')}</button>
       </div>
     </section>
   {/if}
@@ -118,13 +119,12 @@
         </div>
       </div>
       
-      <h2>Excelente
-      </h2>
-      <p>Ahora el primer paso es descubrir cuantas calorías necesitas diariamente.</p>
-      <p>Necesitaremos saber tu edad, sexo, peso y altura.</p>
+      <h2>{$_('goals.excellent')}</h2>
+      <p>{$_('goals.firstStep')}</p>
+      <p>{$_('goals.needInfo')}</p>
     <div class="nav-buttons">
-        <button on:click={prevView}>Regresar</button>
-        <button on:click={nextView}>Continuar</button>
+        <button on:click={prevView}>{$_('goals.return')}</button>
+        <button on:click={nextView}>{$_('common.continue')}</button>
       </div>
     </section>
   {/if}
@@ -138,38 +138,38 @@
         </div>
       </div>
       
-      <h2>Cuéntanos sobre ti</h2>
-      <p>Esta información nos ayudará a calcular tus calorías objetivo.</p>
+      <h2>{$_('goals.tellUsAboutYou')}</h2>
+      <p>{$_('goals.infoHelp')}</p>
     <div class="info-list">
       <div class="info-item">
         <span class="info-icon">👤</span>
-        <span class="info-label">Sexo</span>
+        <span class="info-label">{$_('goals.sex')}</span>
         <button class="info-select" on:click={() => showGenderModal = true}>
-          {gender ? (gender === 'male' ? 'Hombre' : 'Mujer') : 'Seleccionar'}
+          {gender ? (gender === 'male' ? $_('goals.male') : $_('goals.female')) : $_('goals.select')}
           <span class="chev">›</span>
         </button>
       </div>
       <div class="info-item">
         <span class="info-icon">🎂</span>
-        <span class="info-label">Edad</span>
+        <span class="info-label">{$_('goals.age')}</span>
         <button class="info-select" on:click={() => showAgeModal = true}>
-          {age ? `${age} años` : 'Seleccionar'}
+          {age ? `${age} ${$_('goals.years')}` : $_('goals.select')}
           <span class="chev">›</span>
         </button>
       </div>
       <div class="info-item">
         <span class="info-icon">⚖️</span>
-        <span class="info-label">Peso</span>
+        <span class="info-label">{$_('goals.weight')}</span>
         <button class="info-select" on:click={() => showWeightModal = true}>
-          {weight ? `${weight} kg` : 'Seleccionar'}
+          {weight ? `${weight} kg` : $_('goals.select')}
           <span class="chev">›</span>
         </button>
       </div>
       <div class="info-item">
         <span class="info-icon">📏</span>
-        <span class="info-label">Altura</span>
+        <span class="info-label">{$_('goals.height')}</span>
         <button class="info-select" on:click={() => showHeightModal = true}>
-          {height ? `${height} cm` : 'Seleccionar'}
+          {height ? `${height} cm` : $_('goals.select')}
           <span class="chev">›</span>
         </button>
       </div>
@@ -180,9 +180,9 @@
       <div class="modal-overlay" on:click={() => showGenderModal = false}>
         <div class="modal" on:click|stopPropagation>
           <div class="modal-bar"></div>
-          <h3>Sexo</h3>
-          <button class="modal-option" on:click={() => { gender = 'male'; showGenderModal = false; }}>Hombre</button>
-          <button class="modal-option" on:click={() => { gender = 'female'; showGenderModal = false; }}>Mujer</button>
+          <h3>{$_('goals.sex')}</h3>
+          <button class="modal-option" on:click={() => { gender = 'male'; showGenderModal = false; }}>{$_('goals.male')}</button>
+          <button class="modal-option" on:click={() => { gender = 'female'; showGenderModal = false; }}>{$_('goals.female')}</button>
         </div>
       </div>
     {/if}
@@ -192,10 +192,10 @@
       <div class="modal-overlay" on:click={() => showAgeModal = false}>
         <div class="modal" on:click|stopPropagation>
           <div class="modal-bar"></div>
-          <h3>Edad</h3>
+          <h3>{$_('goals.age')}</h3>
           <div class="modal-picker">
             <input type="number" min="10" max="99" bind:value={age} class="modal-input" />
-            <span class="modal-unit">años</span>
+            <span class="modal-unit">{$_('goals.years')}</span>
           </div>
           <button class="modal-ok" on:click={() => showAgeModal = false}>OK</button>
         </div>
@@ -207,7 +207,7 @@
       <div class="modal-overlay" on:click={() => showWeightModal = false}>
         <div class="modal" on:click|stopPropagation>
           <div class="modal-bar"></div>
-          <h3>Peso</h3>
+          <h3>{$_('goals.weight')}</h3>
           <div class="modal-toggle">
             <button class:active={weightUnit === 'kg'} on:click={() => weightUnit = 'kg'}>kg</button>
             <button class:active={weightUnit === 'lbs'} on:click={() => weightUnit = 'lbs'}>lbs</button>
@@ -226,7 +226,7 @@
       <div class="modal-overlay" on:click={() => showHeightModal = false}>
         <div class="modal" on:click|stopPropagation>
           <div class="modal-bar"></div>
-          <h3>Altura</h3>
+          <h3>{$_('goals.height')}</h3>
           <div class="modal-toggle">
             <button class:active={heightUnit === 'cm'} on:click={() => heightUnit = 'cm'}>cm</button>
             <button class:active={heightUnit === 'ft'} on:click={() => heightUnit = 'ft'}>ft/in</button>
@@ -241,8 +241,8 @@
     {/if}
 
     <div class="nav-buttons">
-      <button on:click={prevView}>Regresar</button>
-      <button on:click={nextView}>Continuar</button>
+      <button on:click={prevView}>{$_('goals.return')}</button>
+      <button on:click={nextView}>{$_('common.continue')}</button>
     </div>
   </section>
 {/if}
@@ -255,35 +255,35 @@
         </div>
       </div>
       
-      <h2>¿Cuanta actividad tienes?</h2>
+      <h2>{$_('goals.activity')}</h2>
       <li class="item">
         <span class="icon">🛌</span>
-        <span class="label">nada Activo</span>
+        <span class="label">{$_('goals.notActive')}</span>
       </li>
 
       <li class="item">
         <span class="icon" >🧘</span>
-        <span class="label">Poco activo</span>
+        <span class="label">{$_('goals.lightlyActive')}</span>
       </li>
 
       <li class="item">
         <span class="icon">🚶</span>
-        <span class="label">Moderadamente activo</span>
+        <span class="label">{$_('goals.moderatelyActive')}</span>
       </li>
 
       <li class="item">
         <span class="icon">🤸</span>
-        <span class="label">Muy activo</span>
+        <span class="label">{$_('goals.veryActive')}</span>
       </li>
 
       <li class="item">
         <span class="icon">🧗</span>
-        <span class="label">Atleta</span>
+        <span class="label">{$_('goals.athlete')}</span>
       </li>
       
       <div class="nav-buttons">
-        <button on:click={prevView}>Regresar</button>
-        <button on:click={nextView}>Continuar</button>
+        <button on:click={prevView}>{$_('goals.return')}</button>
+        <button on:click={nextView}>{$_('common.continue')}</button>
       </div>
     </section>
   {/if}
@@ -298,27 +298,27 @@
         </div>
       </div>
       
-      <h2>¡Tu progreso y tus calorías!</h2>
+      <h2>{$_('goals.yourProgress')}</h2>
       
       <div class="carousel-check">
         <span class="carousel-check-icon">✔️</span>
       </div>
-      <p class="carousel-title">¡Genial! Estas son las calorías que necesitas al día</p>
+      <p class="carousel-title">{$_('goals.great')}</p>
       <div class="carousel-metric-card">
         <div class="metric-kcal">2,167 kcal</div>
         <div class="metric-macros">
           <div class="macro">
-            <span class="macro-label">Proteínas</span>
+            <span class="macro-label">{$_('goals.proteins')}</span>
             <span class="macro-value">100 g</span>
             <div class="macro-bar"></div>
           </div>
           <div class="macro">
-            <span class="macro-label">Carbs</span>
+            <span class="macro-label">{$_('goals.carbs')}</span>
             <span class="macro-value">252 g</span>
             <div class="macro-bar"></div>
           </div>
           <div class="macro">
-            <span class="macro-label">Grasas</span>
+            <span class="macro-label">{$_('goals.fats')}</span>
             <span class="macro-value">84 g</span>
             <div class="macro-bar"></div>
           </div>
@@ -351,11 +351,11 @@
           </div>
         </div>
         
-        <h2 class="intro-title">Ahora, personalicemos tu plan de comidas para alcanzar tus calorías diarias</h2>
+        <h2 class="intro-title">{$_('goals.mealPlanIntro')}</h2>
       </div>
       
       <div class="nav-buttons">
-        <button on:click={nextView} class="continue-btn">Continuar</button>
+        <button on:click={nextView} class="continue-btn">{$_('common.continue')}</button>
       </div>
     </section>
   {/if}
@@ -370,48 +370,48 @@
       
       <div class="meal-header">
         <div class="meal-plate-icon">🍽️</div>
-        <h2>¿Cuántas comidas al día deseas?</h2>
-        <p class="meal-subtitle">Elige al menos 2 comidas principales</p>
+        <h2>{$_('goals.howManyMeals')}</h2>
+        <p class="meal-subtitle">{$_('goals.atLeastTwoMeals')}</p>
       </div>
 
       <div class="meal-options">
         <button type="button" class="meal-option" class:selected={selectedMeals.desayuno} on:click={() => toggleMeal('desayuno')}>
           <div class="meal-check" class:visible={selectedMeals.desayuno}>✓</div>
-          <span class="meal-name">Desayuno</span>
-          <span class="meal-type">Principal</span>
+          <span class="meal-name">{$_('goals.breakfast')}</span>
+          <span class="meal-type">{$_('goals.principal')}</span>
         </button>
         
         <button type="button" class="meal-option" class:selected={selectedMeals.almuerzo} on:click={() => toggleMeal('almuerzo')}>
           <div class="meal-check" class:visible={selectedMeals.almuerzo}>✓</div>
-          <span class="meal-name">Almuerzo</span>
-          <span class="meal-type">Principal</span>
+          <span class="meal-name">{$_('goals.lunch')}</span>
+          <span class="meal-type">{$_('goals.principal')}</span>
         </button>
         
         <button type="button" class="meal-option" class:selected={selectedMeals.cena} on:click={() => toggleMeal('cena')}>
           <div class="meal-check" class:visible={selectedMeals.cena}>✓</div>
-          <span class="meal-name">Cena</span>
-          <span class="meal-type">Principal</span>
+          <span class="meal-name">{$_('goals.dinner')}</span>
+          <span class="meal-type">{$_('goals.principal')}</span>
         </button>
         
         <button type="button" class="meal-option add-option" class:selected={selectedMeals.snacks} on:click={() => toggleMeal('snacks')}>
           <div class="meal-add" class:meal-check={selectedMeals.snacks} class:visible={selectedMeals.snacks}>
             {selectedMeals.snacks ? '✓' : '+'}
           </div>
-          <span class="meal-name">Snacks</span>
+          <span class="meal-name">{$_('goals.snacks')}</span>
         </button>
         
         <button type="button" class="meal-option add-option" class:selected={selectedMeals.snacks2} on:click={() => toggleMeal('snacks2')}>
           <div class="meal-add" class:meal-check={selectedMeals.snacks2} class:visible={selectedMeals.snacks2}>
             {selectedMeals.snacks2 ? '✓' : '+'}
           </div>
-          <span class="meal-name">Snacks 2</span>
+          <span class="meal-name">{$_('goals.snacks')} 2</span>
         </button>
       </div>
 
-      <p class="meal-note">No te preocupes, luego lo puedes cambiar</p>
+      <p class="meal-note">{$_('goals.canChangeLater')}</p>
       
       <div class="nav-buttons">
-        <button on:click={nextView} class="continue-btn">Continuar</button>
+        <button on:click={nextView} class="continue-btn">{$_('common.continue')}</button>
       </div>
     </section>
   {/if}
@@ -426,15 +426,15 @@
       
       <div class="preferences-header">
         <div class="preferences-icon">✨</div>
-        <h2>¿Cómo prefieres tus sugerencias de comidas?</h2>
+        <h2>{$_('goals.suggestionPreference')}</h2>
       </div>
 
       <!-- Opciones de tipo de sugerencia -->
       <div class="suggestion-types">
         <button type="button" class="suggestion-option" class:selected={suggestionType === 'recipes'} on:click={() => setSuggestionType('recipes')}>
           <div class="suggestion-content">
-            <h3>Recetas</h3>
-            <p>Instrucciones paso a paso</p>
+            <h3>{$_('goals.recipes')}</h3>
+            <p>{$_('goals.recipesDescription')}</p>
             <div class="recipe-example">
               <div class="recipe-image">🥪</div>
               <span class="recipe-name">Sándwich de Pollo con Aguacate</span>
@@ -444,8 +444,8 @@
         
         <button type="button" class="suggestion-option" class:selected={suggestionType === 'ingredients'} on:click={() => setSuggestionType('ingredients')}>
           <div class="suggestion-content">
-            <h3>Solo ingredientes</h3>
-            <p>Puedes prepararlo como quieras</p>
+            <h3>{$_('goals.ingredientsOnly')}</h3>
+            <p>{$_('goals.ingredientsDescription')}</p>
             <div class="ingredients-list">
               <div class="ingredient-item">
                 <span class="ingredient-icon">🍗</span>
@@ -468,8 +468,8 @@
       </div>
       
       <div class="nav-buttons">
-        <button on:click={prevView}>Regresar</button>
-        <button on:click={nextView} class="continue-btn">Continuar</button>
+        <button on:click={prevView}>{$_('goals.return')}</button>
+        <button on:click={nextView} class="continue-btn">{$_('common.continue')}</button>
       </div>
     </section>
   {/if}
@@ -493,27 +493,27 @@
           </div>
         </div>
         
-        <h2 class="completion-title">¡Configuración Completada!</h2>
-        <p class="completion-subtitle">Tu plan personalizado está listo</p>
+        <h2 class="completion-title">{$_('goals.setupComplete')}</h2>
+        <p class="completion-subtitle">{$_('goals.planReady')}</p>
         
         <div class="completion-summary">
           <div class="summary-item">
             <span class="summary-icon">🎯</span>
-            <span class="summary-text">Objetivo configurado</span>
+            <span class="summary-text">{$_('goals.goalConfigured')}</span>
           </div>
           <div class="summary-item">
             <span class="summary-icon">🍽️</span>
-            <span class="summary-text">Plan de comidas personalizado</span>
+            <span class="summary-text">{$_('goals.customMealPlan')}</span>
           </div>
           <div class="summary-item">
             <span class="summary-icon">📊</span>
-            <span class="summary-text">Calorías y macros calculados</span>
+            <span class="summary-text">{$_('goals.caloriesCalculated')}</span>
           </div>
         </div>
       </div>
       
       <div class="nav-buttons">
-        <button on:click={goToHome} class="completion-btn">Comenzar mi plan</button>
+        <button on:click={goToHome} class="completion-btn">{$_('goals.startPlan')}</button>
       </div>
     </section>
   {/if}

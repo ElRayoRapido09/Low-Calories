@@ -1,11 +1,12 @@
 <script>
   import { onMount } from 'svelte';
+  import { _ } from 'svelte-i18n';
 
   // Estado del chat
   let messages = $state([
     {
       id: 1,
-      content: "¡Hola! Soy tu asistente nutricional inteligente powered by Google Gemini AI 🤖✨\n\n¿En qué puedo ayudarte hoy?\n\n🍎 **Mis especialidades:**\n• Análisis nutricional de alimentos\n• Cálculo de calorías personalizadas\n• Planes de comida personalizados\n• Consejos de alimentación saludable\n• Información sobre macros y micronutrientes\n\n💬 **Ejemplos de preguntas:**\n• \"Analiza las calorías del pollo a la plancha\"\n• \"Dame un plan de comidas para 2000 calorías\"\n• \"¿Qué debo comer para ganar músculo?\"\n• \"¿Cuántas calorías necesito al día?\"",
+      content: `${$_('chatbot.welcome')}\n\n${$_('chatbot.howCanHelp')}\n\n🍎 **${$_('chatbot.specialties')}**\n• ${$_('chatbot.nutritionAnalysis')}\n• ${$_('chatbot.calorieCalculation')}\n• ${$_('chatbot.customMealPlans')}\n• ${$_('chatbot.healthyEating')}\n• ${$_('chatbot.macroMicro')}\n\n💬 **${$_('chatbot.exampleQuestions')}**\n• "${$_('chatbot.question1')}"\n• "${$_('chatbot.question2')}"\n• "${$_('chatbot.question3')}"\n• "${$_('chatbot.question4')}"`,
       sender: 'bot',
       timestamp: new Date().toLocaleTimeString()
     }
@@ -78,7 +79,7 @@
         // Manejar errores de la API
         const errorMsg = {
           id: messages.length + 1,
-          content: data.error || "Lo siento, ha ocurrido un error. Por favor intenta nuevamente.",
+          content: data.error || $_('chatbot.serverError'),
           sender: 'bot',
           timestamp: new Date().toLocaleTimeString()
         };
@@ -91,7 +92,7 @@
       // Mensaje de error para el usuario
       const errorMsg = {
         id: messages.length + 1,
-        content: "⚠️ No pude conectar con el servidor. Verifica tu conexión a internet o intenta más tarde.",
+        content: $_('chatbot.connectionError'),
         sender: 'bot',
         timestamp: new Date().toLocaleTimeString()
       };
@@ -234,10 +235,10 @@
 <main class="chat-main">
 
     <header class="chat-header">
-        <a href="/" class="back-btn" aria-label="Volver">‹</a>
+        <a href="/" class="back-btn" aria-label={$_('common.back')}>‹</a>
         <div class="header-content">
-            <h1>Asistente Nutricional AI</h1>
-            <p>Powered by Google Gemini 🤖✨</p>
+            <h1>{$_('chatbot.title')}</h1>
+            <p>{$_('chatbot.poweredBy')}</p>
         </div>
     </header>
 
@@ -269,7 +270,7 @@
             <span></span>
             <span></span>
           </div>
-          <span class="message-time">Escribiendo...</span>
+          <span class="message-time">{$_('chatbot.typing')}</span>
         </div>
       </div>
     {/if}
@@ -279,17 +280,17 @@
   <div class="chat-input-container">
     <textarea
       bind:value={newMessage}
-      on:keydown={handleKeyPress}
-      placeholder="Escribe tu mensaje aquí... (Shift+Enter para nueva línea)"
+      onkeydown={handleKeyPress}
+      placeholder={$_('chatbot.placeholder')}
       class="chat-input"
       rows="1"
       disabled={isTyping}
     ></textarea>
     <button 
-      on:click={sendMessage} 
+      onclick={sendMessage} 
       class="send-button" 
       disabled={!newMessage.trim() || isTyping}
-      title="Enviar mensaje"
+      title={$_('chatbot.send')}
     >
       {#if isTyping}
         ⏳

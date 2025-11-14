@@ -1,60 +1,61 @@
 <script>
- 
+  import { _ } from 'svelte-i18n';
 </script>
 
 <main class="app">
   <header class="top">
-    <a href="ajustes" class="back-btn" aria-label="Volver">‹</a>
-    <h1>Premium</h1>
+    <a href="ajustes" class="back-btn" aria-label={$_('common.back')}>‹</a>
+    <h1>{$_('premium.title')}</h1>
 </header>
 
 <section class="premium-msj">
-    <h1>Premium</h1>
-    <p>Simplifica tu progreso con el Plan Premium</p>
-    <p>Accede a funciones exclusivas y contenido premium para mejorar tu experiencia.</p>
+    <h1>{$_('premium.title')}</h1>
+    <p>{$_('premium.simplifyProgress')}</p>
+    <p>{$_('premium.accessExclusive')}</p>
 </section>
 
   <section class="card-plan">
-    <h2 class="section-title">Plan individual</h2>
-    <p>El Plan Individual te ofrece todas las funciones premium para un solo usuario, ideal para quienes buscan una experiencia personalizada y sin distracciones.</p>
-    <h2 class="price">$9.99 / mes</h2>
-    <button class="subscribe-btn" aria-label="Suscribirse al Plan Individual">Suscribirse Ahora</button>
+    <h2 class="section-title">{$_('premium.individualPlan')}</h2>
+    <p>{$_('premium.individualDesc')}</p>
+    <h2 class="price">$9.99 {$_('premium.priceMonth')}</h2>
+    <button class="subscribe-btn" aria-label={$_('premium.subscribeNow')}>{$_('premium.subscribeNow')}</button>
   </section>
   <section class="card-plan">
-    <h2 class="section-title">Plan Familiar</h2>
-    <p>El Plan Familiar te permite compartir tu suscripción premium con hasta 5 miembros de tu familia, cada uno con su propio perfil y acceso a todas las funciones exclusivas.</p>
-    <h2 class="price">$14.99 / mes</h2>
-    <button class="subscribe-btn" aria-label="Suscribirse al Plan Familiar">Suscribirse Ahora</button>
+    <h2 class="section-title">{$_('premium.familyPlan')}</h2>
+    <p>{$_('premium.familyDesc')}</p>
+    <h2 class="price">$14.99 {$_('premium.priceMonth')}</h2>
+    <button class="subscribe-btn" aria-label={$_('premium.subscribeNow')}>{$_('premium.subscribeNow')}</button>
   </section>
 
   <section class="card">
-    <h2 class="section-title">Beneficios del Plan Individual</h2>
+    <h2 class="section-title">{$_('premium.benefitsIndividual')}</h2>
     <ul class="list">
-        <li class="item">🚀 Acceso al escaner alimenticio</li>
-      <li class="item">🍽️ Planes de comidas personalizados</li>
-      <li class="item">📊 Seguimiento de progreso</li>
-      <li class="item">🔔 Recordatorios y notificaciones personalizadas.</li>
-      <li class="item">💬 Soporte 24/7</li>
-    <li class="item">🌟 Sin anuncios</li>
+        <li class="item">🚀 {$_('premium.benefit1')}</li>
+      <li class="item">🍽️ {$_('premium.benefit2')}</li>
+      <li class="item">📊 {$_('premium.benefit3')}</li>
+      <li class="item">🔔 {$_('premium.benefit4')}</li>
+      <li class="item">💬 {$_('premium.benefit5')}</li>
+    <li class="item">🌟 {$_('premium.benefit6')}</li>
     </ul>
   </section>
 
   <section class="card">
-    <h2 class="section-title">Beneficios del Plan Familiar</h2>
+    <h2 class="section-title">{$_('premium.benefitsFamily')}</h2>
     <ul class="list">
-      <li class="item">👪 Hasta 5 perfiles individuales</li>
-      <li class="item">🍽️ Planes de comidas personalizados para cada miembro</li>
-      <li class="item">📊 Seguimiento de progreso individual</li>
-      <li class="item">🔔 Recordatorios y notificaciones personalizadas para cada usuario</li>
-      <li class="item">💬 Soporte 24/7</li>
-      <li class="item">💰 Ahorro significativo en comparación con suscripciones individuales</li>
-        <li class="item">🌟 Sin anuncios</li>
+      <li class="item">👪 {$_('premium.familyBenefit1')}</li>
+      <li class="item">🍽️ {$_('premium.familyBenefit2')}</li>
+      <li class="item">📊 {$_('premium.familyBenefit3')}</li>
+      <li class="item">🔔 {$_('premium.familyBenefit4')}</li>
+      <li class="item">💬 {$_('premium.familyBenefit5')}</li>
+      <li class="item">💰 {$_('premium.familyBenefit6')}</li>
+        <li class="item">🌟 {$_('premium.benefit6')}</li>
     </ul>
+  </section>
 
   <section class="card">
-    <h2 class="section-title">Únete Premium</h2>
-    <p>Disfruta de todos los beneficios del Plan Individual por solo $9.99 al mes o del Plan Familiar por solo $14.99 al mes.</p>
-    <button class="subscribe-btn" aria-label="Suscribirse al Plan Familiar">Comienza tu prueba de 30 dias gratis</button>
+    <h2 class="section-title">{$_('premium.joinPremium')}</h2>
+    <p>{$_('premium.joinDesc')}</p>
+    <button class="subscribe-btn" aria-label={$_('premium.freeTrial')}>{$_('premium.freeTrial')}</button>
   </section>
 </main>
 

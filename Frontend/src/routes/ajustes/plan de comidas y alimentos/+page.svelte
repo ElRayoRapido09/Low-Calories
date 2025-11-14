@@ -1,5 +1,7 @@
 <script>
     import { tick } from "svelte";
+    import { _ } from 'svelte-i18n';
+    import { energyUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
 
     // overlay focus element
     let overlayEl;
@@ -81,6 +83,12 @@
         return meals.filter((m) => m.enabled).reduce((s, m) => s + m.kcal, 0);
     }
 
+    // Función para convertir calorías a la unidad seleccionada
+    function displayCalories(kcal) {
+        const converted = convertValue(kcal, 'energy', 'kcal', $energyUnit);
+        return formatWithUnit(converted, $energyUnit, 0);
+    }
+
     
 
     
@@ -149,8 +157,8 @@
 
 <main class="app">
     <header class="top">
-        <a href="/ajustes" class="back-btn" aria-label="Volver">‹</a>
-        <h1>Plan de comidas</h1>
+        <a href="/ajustes" class="back-btn" aria-label={$_('common.back')}>‹</a>
+        <h1>{$_('mealPlan.title')}</h1>
     </header>
 
     <section class="card">
@@ -158,12 +166,12 @@
             <li class="item">
                 <button
                     class="item-btn"
-                    on:click={openFoods}
-                    aria-label="Abrir Alimentos"
+                    onclick={openFoods}
+                    aria-label={$_('mealPlan.foods')}
                 >
                     <div class="left">
                         <span class="icon">🍎</span>
-                        <span class="label">Alimentos</span>
+                        <span class="label">{$_('mealPlan.foods')}</span>
                     </div>
                     <div class="right">
                         <span class="value">3</span>
@@ -175,13 +183,13 @@
             <li class="item">
                 <button
                     class="item-btn"
-                    on:click={openVariety}
-                    aria-label="Abrir Variedad"
+                    onclick={openVariety}
+                    aria-label={$_('mealPlan.variety')}
                 >
                     <div class="left">
                         <span class="icon">🌱</span>
                         <div>
-                            <div class="label">Variedad</div>
+                            <div class="label">{$_('mealPlan.variety')}</div>
                             <div class="sub">{variety}</div>
                         </div>
                     </div>
@@ -194,15 +202,15 @@
             <li class="item">
                 <button
                     class="item-btn"
-                    on:click={openNumMeals}
-                    aria-label="Abrir número de comidas"
+                    onclick={openNumMeals}
+                    aria-label={$_('mealPlan.mealCount')}
                 >
                     <div class="left">
                         <span class="icon">🍔</span>
                         <div>
-                            <div class="label">Número de comidas</div>
+                            <div class="label">{$_('mealPlan.mealCount')}</div>
                             <div class="sub">
-                                {meals.filter((m) => m.enabled).length} comidas
+                                {meals.filter((m) => m.enabled).length} {$_('mealPlan.meals')}
                             </div>
                         </div>
                     </div>
@@ -215,20 +223,20 @@
             <li class="item">
                 <button
                     class="item-btn"
-                    on:click={openSuggestions}
-                    aria-label="Abrir tipos de sugerencias"
+                    onclick={openSuggestions}
+                    aria-label={$_('mealPlan.suggestionTypes')}
                 >
                     <div class="left">
                         <span class="icon">✨</span>
                         <div>
-                            <div class="label">Tipos de Sugerencias</div>
+                            <div class="label">{$_('mealPlan.suggestionTypes')}</div>
                             <div class="sub">
                                 {suggestions.simple
-                                    ? "Alimentos Simples"
+                                    ? $_('mealPlan.simpleFoods')
                                     : ""}{suggestions.simple &&
                                 suggestions.recipes
                                     ? " • "
-                                    : ""}{suggestions.recipes ? "Recetas" : ""}
+                                    : ""}{suggestions.recipes ? $_('mealPlan.recipes') : ""}
                             </div>
                         </div>
                     </div>
@@ -244,41 +252,41 @@
 {#if showFoods}
     <div
         class="overlay"
-        on:click|self={closeFoods}
+        onclick={(e) => { if (e.target === e.currentTarget) closeFoods(); }}
         role="dialog"
         aria-modal="true"
         tabindex="-1"
         bind:this={overlayEl}
-        on:keydown={handleKeyDown}
+        onkeydown={handleKeyDown}
     >
         <div class="overlay-card" role="document">
             <header class="overlay-top">
                 <button
                     class="back-btn overlay-back"
-                    on:click={closeFoods}
-                    aria-label="Cerrar">‹</button
+                    onclick={closeFoods}
+                    aria-label={$_('common.back')}>‹</button
                 >
-                <h1>Alimentos</h1>
+                <h1>{$_('mealPlan.foods')}</h1>
             </header>
 
             <ul class="list foods-list">
                 <li class="item food-item">
-                    <button class="item-btn" on:click={() => openMealFoods('Desayuno')} aria-label="Abrir alimentos Desayuno">
-                        <div class="left"><span class="label">Desayuno</span></div>
+                    <button class="item-btn" onclick={() => openMealFoods('Desayuno')} aria-label={$_('mealPlan.breakfast')}>
+                        <div class="left"><span class="label">{$_('mealPlan.breakfast')}</span></div>
                         <div class="right"><span class="value">37</span><span class="chev">›</span></div>
                     </button>
                 </li>
 
                 <li class="item food-item">
-                    <button class="item-btn" on:click={() => openMealFoods('Comida')} aria-label="Abrir alimentos Comida">
-                        <div class="left"><span class="label">Comida</span></div>
+                    <button class="item-btn" onclick={() => openMealFoods('Comida')} aria-label={$_('mealPlan.lunch')}>
+                        <div class="left"><span class="label">{$_('mealPlan.lunch')}</span></div>
                         <div class="right"><span class="value">35</span><span class="chev">›</span></div>
                     </button>
                 </li>
 
                 <li class="item food-item">
-                    <button class="item-btn" on:click={() => openMealFoods('Cena')} aria-label="Abrir alimentos Cena">
-                        <div class="left"><span class="label">Cena</span></div>
+                    <button class="item-btn" onclick={() => openMealFoods('Cena')} aria-label={$_('mealPlan.dinner')}>
+                        <div class="left"><span class="label">{$_('mealPlan.dinner')}</span></div>
                         <div class="right"><span class="value">42</span><span class="chev">›</span></div>
                     </button>
                 </li>
@@ -290,37 +298,37 @@
 {#if showMealFoods}
     <div
         class="overlay"
-        on:click|self={closeMealFoods}
+        onclick={(e) => { if (e.target === e.currentTarget) closeMealFoods(); }}
         role="dialog"
         aria-modal="true"
         tabindex="-1"
         bind:this={overlayEl}
-        on:keydown={handleKeyDown}
+        onkeydown={handleKeyDown}
     >
         <div class="overlay-card" role="document">
             <header class="overlay-top">
                 <button
                     class="back-btn overlay-back"
-                    on:click={closeMealFoods}
-                    aria-label="Cerrar">‹</button
+                    onclick={closeMealFoods}
+                    aria-label={$_('common.back')}>‹</button
                 >
-                <h1>Alimentos para {currentMeal}</h1>
+                <h1>{$_('mealPlan.foodsFor')} {currentMeal}</h1>
             </header>
 
-            <p class="small-desc">Fitia construirá tus comidas solo con los alimentos seleccionados</p>
+            <p class="small-desc">{$_('mealPlan.buildMeals')}</p>
 
             {#each Object.keys(foodCategories) as cat}
                 <div class="foods-section">
                     <div class="section-head">
-                        <strong>{cat}</strong>
-                        <button class="select-all" on:click={() => selectAllCategory(cat)}>Seleccionar todo</button>
+                        <strong>{cat === 'Proteínas' ? $_('mealPlan.proteins') : 'Carbs'}</strong>
+                        <button class="select-all" onclick={() => selectAllCategory(cat)}>{$_('mealPlan.selectAll')}</button>
                     </div>
                     <div class="chips">
                         {#each foodCategories[cat] as food}
                             <button
                                 class="chip"
                                 class:selected={mealSelections[currentMeal] && mealSelections[currentMeal].has(food)}
-                                on:click={() => toggleFood(food)}
+                                onclick={() => toggleFood(food)}
                                 aria-pressed={mealSelections[currentMeal] && mealSelections[currentMeal].has(food)}
                             >
                                 {food}
@@ -337,21 +345,21 @@
 {#if showVariety}
     <div
         class="overlay"
-        on:click|self={() => (showVariety = false)}
+        onclick={(e) => { if (e.target === e.currentTarget) showVariety = false; }}
         role="dialog"
         aria-modal="true"
         tabindex="-1"
         bind:this={overlayEl}
-        on:keydown={handleKeyDown}
+        onkeydown={handleKeyDown}
     >
         <div class="overlay-card" role="document">
             <header class="overlay-top">
                 <button
                     class="back-btn overlay-back"
-                    on:click={() => (showVariety = false)}
-                    aria-label="Cerrar">‹</button
+                    onclick={() => (showVariety = false)}
+                    aria-label={$_('common.back')}>‹</button
                 >
-                <h1>¿Cuánta variedad te gustaría en tus comidas?</h1>
+                <h1>{$_('mealPlan.howMuchVariety')}</h1>
             </header>
 
             <div class="variety-list">
@@ -359,7 +367,7 @@
                     <button
                         class="option-card"
                         class:selected={variety === opt.title}
-                        on:click={() => selectVariety(opt.id)}
+                        onclick={() => selectVariety(opt.id)}
                         aria-pressed={variety === opt.title}
                     >
                         <div class="option-left">
@@ -379,21 +387,21 @@
 {#if showNumMeals}
     <div
         class="overlay"
-        on:click|self={() => (showNumMeals = false)}
+        onclick={(e) => { if (e.target === e.currentTarget) showNumMeals = false; }}
         role="dialog"
         aria-modal="true"
         tabindex="-1"
         bind:this={overlayEl}
-        on:keydown={handleKeyDown}
+        onkeydown={handleKeyDown}
     >
         <div class="overlay-card" role="document">
             <header class="overlay-top">
                 <button
                     class="back-btn overlay-back"
-                    on:click={() => (showNumMeals = false)}
-                    aria-label="Cerrar">‹</button
+                    onclick={() => (showNumMeals = false)}
+                    aria-label={$_('common.back')}>‹</button
                 >
-                <h1>Número de comidas</h1>
+                <h1>{$_('mealPlan.mealCount')}</h1>
             </header>
 
             <ul class="meals-list">
@@ -404,7 +412,7 @@
                             <button
                                 class="switch"
                                 class:on={m.enabled}
-                                on:click={() => toggleMeal(i)}
+                                onclick={() => toggleMeal(i)}
                                 aria-pressed={m.enabled}
                                 aria-label={`Activar ${m.name}`}
                             >
@@ -412,7 +420,7 @@
                             </button>
                             <div class="meal-info">
                                 <div class="label">{m.name}</div>
-                                <div class="sub">{m.kcal} kcal</div>
+                                <div class="sub">{displayCalories(m.kcal)}</div>
                             </div>
                         </div>
                         
@@ -422,7 +430,7 @@
 
             <div class="meals-footer">
                 <div class="total">
-                    Total <span class="total-val">{totalKcal()} kcal</span>
+                    {$_('mealPlan.total')} <span class="total-val">{displayCalories(totalKcal())}</span>
                 </div>
             </div>
         </div>
@@ -432,49 +440,50 @@
 {#if showSuggestions}
     <div
         class="overlay"
-        on:click|self={() => (showSuggestions = false)}
+        onclick={(e) => { if (e.target === e.currentTarget) showSuggestions = false; }}
         role="dialog"
         aria-modal="true"
         tabindex="-1"
         bind:this={overlayEl}
-        on:keydown={handleKeyDown}
+        onkeydown={handleKeyDown}
     >
         <div class="overlay-card" role="document">
             <header class="overlay-top">
                 <button
                     class="back-btn overlay-back"
-                    on:click={() => (showSuggestions = false)}
-                    aria-label="Cerrar">‹</button
+                    onclick={() => (showSuggestions = false)}
+                    aria-label={$_('common.back')}>‹</button
                 >
-                <h1>Tipo de sugerencias</h1>
+                <h1>{$_('mealPlan.suggestionTypes')}</h1>
             </header>
 
             <section class="suggestion-section">
-                <h3>Alimentos Simples</h3>
+                <h3>{$_('mealPlan.simpleFoods')}</h3>
                 <p>
-                    Te indicaremos los alimentos base, los cuales podrás cocinar
-                    como prefieras. Ejemplo:
+                    {$_('mealPlan.simpleFoodsDesc')}
                 </p>
                 <div class="example">🥚 Huevo - 2 unidades</div>
                 <button
                     class="switch small"
                     class:on={suggestions.simple}
-                    on:click={() => toggleSuggestion("simple")}
+                    onclick={() => toggleSuggestion("simple")}
                     aria-pressed={suggestions.simple}
+                    aria-label={$_('mealPlan.simpleFoods')}
                 ></button>
             </section>
 
             <section class="suggestion-section">
-                <h3>Recetas</h3>
+                <h3>{$_('mealPlan.recipes')}</h3>
                 <p>
-                    Te indicaremos platos con instrucciones detalladas. Ejemplo:
+                    {$_('mealPlan.recipesDesc')}
                 </p>
                 <div class="example">🍳 Omelette de huevo con pan tostado</div>
                 <button
                     class="switch small"
                     class:on={suggestions.recipes}
-                    on:click={() => toggleSuggestion("recipes")}
+                    onclick={() => toggleSuggestion("recipes")}
                     aria-pressed={suggestions.recipes}
+                    aria-label={$_('mealPlan.recipes')}
                 ></button>
             </section>
         </div>

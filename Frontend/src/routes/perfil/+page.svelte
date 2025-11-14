@@ -1,7 +1,22 @@
 <script>
-  $: bottomNavHeight = Math.min(50 + (scrollY * 0.8), 95);
+  import { _ } from 'svelte-i18n';
+  import { massUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
+  
+  let bottomNavHeight = $derived(Math.min(50 + (scrollY * 0.8), 95));
   let scrollY = 0;
   let notificationOpen = false;
+  
+  // Peso almacenado en kg
+  let weightInKg = 62;
+  
+  // Peso convertido a la unidad seleccionada
+  let displayWeight = $derived(
+    Math.round(convertValue(weightInKg, 'mass', 'kg', $massUnit) * 10) / 10
+  );
+  
+  let formattedWeight = $derived(
+    formatWithUnit(displayWeight, $massUnit, 1)
+  );
 
   function toggleNotifications() {
     notificationOpen = !notificationOpen;
@@ -24,30 +39,30 @@
 <main class="main">
   <div class="container-back">
     <header class = "back"> 
-        <a href="/" class="back-btn" aria-label="Volver">‹</a>
-        <h1>Mi Perfil</h1>
+        <a href="/" class="back-btn" aria-label={$_('common.back')}>‹</a>
+        <h1>{$_('profile.title')}</h1>
         <span class="icon">👤</span>
-        <img class="avatar" alt="Perfil" src="src/lib/assets/kk.jpg" />
+        <img class="avatar" alt={$_('navigation.profile')} src="src/lib/assets/kk.jpg" />
         <!-- Botón de notificaciones -->
-        <button class="notification-button" on:click={toggleNotifications}>
+        <button class="notification-button" onclick={toggleNotifications}>
             <i class="fas fa-bell notification-icon"></i>
             <span class="badge">3</span> <!-- Insignia de notificaciones -->
         </button>
         {#if notificationOpen}
-          <div class="dropdown-content" on:click|stopPropagation>
+          <div class="dropdown-content" role="menu" tabindex="-1" onclick={(e) => e.stopPropagation()} onkeydown={(e) => e.key === 'Escape' && closeNotifications()}>
               <!-- Contenido de la notificación -->
-              <h3>Notificaciones</h3>
+              <h3>{$_('profile.notifications')}</h3>
               <div class="notification-item">
-                <p>📢 Has alcanzado tu meta de calorías</p>
-                <span class="notification-time">Hace 2 horas</span>
+                <p>📢 {$_('profile.notification1')}</p>
+                <span class="notification-time">{$_('profile.timeAgo.hours', { values: { count: 2 } })}</span>
               </div>
               <div class="notification-item">
-                <p>✅ Registro completado</p>
-                <span class="notification-time">Hace 4 horas</span>
+                <p>✅ {$_('profile.notification2')}</p>
+                <span class="notification-time">{$_('profile.timeAgo.hours', { values: { count: 4 } })}</span>
               </div>
               <div class="notification-item">
-                <p>🎯 Nueva semana, nuevas metas</p>
-                <span class="notification-time">Hace 1 día</span>
+                <p>🎯 {$_('profile.notification3')}</p>
+                <span class="notification-time">{$_('profile.timeAgo.day')}</span>
               </div>
           </div>
         {/if}
@@ -68,7 +83,7 @@
         </div> 
       </section>
       <h2>Jorge Mendoza Ordoñez</h2>
-        <p>¡Sigue así, campeón!</p>
+        <p>{$_('profile.keepGoing')}</p>
     </div>
       
 
@@ -84,7 +99,7 @@
               🏁
               </div>
               <h2>1800</h2>
-              <p>Meta diaria</p>
+              <p>{$_('profile.dailyGoal')}</p>
             </section>
               <!-- Dias activos -->
             <section class = "card-active">
@@ -92,23 +107,23 @@
               ⚡
               </div>
               <h2>7</h2>
-              <p>Dias activos</p>
+              <p>{$_('profile.activeDays')}</p>
             </section>
               <!-- Informacion personal -->
             <section class = "card-info">
-              <h2>Informacion Personal</h2>
+              <h2>{$_('profile.personalInfo')}</h2>
               <div class = "columns">
                 <div>
-                  <p>Edad</p>
-                  <p>Altura</p>
-                  <p>Peso actual</p>
-                  <p>Objetivo</p>
+                  <p>{$_('profile.age')}</p>
+                  <p>{$_('profile.height')}</p>
+                  <p>{$_('profile.currentWeight')}</p>
+                  <p>{$_('profile.goal')}</p>
                 </div>
                 <div> 
-                  <p>28 anos</p>
+                  <p>28 {$_('profile.years')}</p>
                   <p>165 cm</p>
-                  <p>62 kg</p>
-                  <p>mantener peso</p>
+                  <p>{formattedWeight}</p>
+                  <p>{$_('profile.maintainWeight')}</p>
                 </div>
               </div>
             </section>
@@ -117,10 +132,10 @@
               <div class = "icons">
               🗓
               </div>
-              <h2>Progreso semanal</h2>
+              <h2>{$_('profile.weeklyProgress')}</h2>
               <div class = "columns">
                 <div>
-                  <p>Promedio diario</p>
+                  <p>{$_('profile.dailyAverage')}</p>
                 </div>
                 <div>
                   <p>1,650 Kcal</p>
@@ -129,7 +144,7 @@
                 
               <div class = "progress-container">
                 <div class = "progress-header">
-                  <span>Dias completados</span>
+                  <span>{$_('profile.completedDays')}</span>
                   <span><b>5/7</b></span>
                 </div>
                 <div class = "progress-bar"> 
@@ -148,17 +163,17 @@
     <div class="icons">
       📊
     </div> 
-    <h2>Tendencias</h2>
+    <h2>{$_('profile.trends')}</h2>
     <div class="columns">
         <div>
-              <p>Promedio Semanal</p>
-              <p>Mejor Día</p>
-              <p>Racha Actual</p>
+              <p>{$_('profile.weeklyAverage')}</p>
+              <p>{$_('profile.bestDay')}</p>
+              <p>{$_('profile.currentStreak')}</p>
           </div>
           <div>
               <p>1650 kcal</p>
               <p>1800 kcal</p>
-              <p>5 días</p>
+              <p>{$_('profile.timeAgo.day')}</p>
           </div>
       </div>    
       </section>

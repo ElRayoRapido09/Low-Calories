@@ -1,23 +1,36 @@
 <script>
-  // no JavaScript necesario para el estilo
+  import { _ } from 'svelte-i18n';
+  import { lengthUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
+  
+  // Valores de ejemplo almacenados en la base de datos (siempre en unidades base)
+  let heightInCm = $state(180); // Altura almacenada en cm
+  
+  // Calcular altura en la unidad seleccionada
+  let displayHeight = $derived(
+    convertValue(heightInCm, 'length', 'cm', $lengthUnit)
+  );
+  
+  let formattedHeight = $derived(
+    formatWithUnit(displayHeight, $lengthUnit, 1)
+  );
 </script>
 
 <main class="app">
   <header class="top">
-    <a href="/ajustes" class="back-btn" aria-label="Volver">‹</a>
-    <h1>Cuenta</h1>
+    <a href="/ajustes" class="back-btn" aria-label={$_('common.back')}>‹</a>
+    <h1>{$_('account.title')}</h1>
   </header>
 
-  <h2 class="section-title">Edad, Altura y Sexo</h2>
+  <h2 class="section-title">{$_('account.personalInfo')}</h2>
   <section class="card">
     <ul class="list">
       <li class="item">
         <div class="left">
           <span class="icon">➕</span>
-          <span class="label">Edad</span>
+          <span class="label">{$_('account.age')}</span>
         </div>
         <div class="right">
-          <span class="value">30 años</span>
+          <span class="value">30 {$_('account.years')}</span>
           <span class="chev">›</span>
         </div>
       </li>
@@ -25,10 +38,10 @@
       <li class="item">
         <div class="left">
           <span class="icon">📏</span>
-          <span class="label">Altura</span>
+          <span class="label">{$_('account.height')}</span>
         </div>
         <div class="right">
-          <span class="value">180 cm</span>
+          <span class="value">{formattedHeight}</span>
           <span class="chev">›</span>
         </div>
       </li>
@@ -36,23 +49,23 @@
       <li class="item">
         <div class="left">
           <span class="icon">🚻</span>
-          <span class="label">Sexo</span>
+          <span class="label">{$_('account.gender')}</span>
         </div>
         <div class="right">
-          <span class="value">Masculino</span>
+          <span class="value">{$_('account.male')}</span>
           <span class="chev">›</span>
         </div>
       </li>
     </ul>
   </section>
 
-  <h2 class="section-title">Cuenta</h2>
+  <h2 class="section-title">{$_('account.accountSection')}</h2>
   <section class="card">
     <ul class="list">
       <li class="item">
         <div class="left">
           <span class="icon">📋</span>
-          <span class="label">Administrar suscripción</span>
+          <span class="label">{$_('account.manageSubscription')}</span>
         </div>
         <div class="right">
           <span class="chev">›</span>
@@ -62,7 +75,7 @@
       <li class="item">
         <div class="left">
           <span class="icon">👤</span>
-          <span class="label">ID Usuario</span>
+          <span class="label">{$_('account.userId')}</span>
         </div>
         <div class="right">
           <span class="value">8w46gfbd-4%G$%njrebhej</span>
@@ -72,7 +85,7 @@
       <li class="item">
         <div class="left">
           <span class="icon">📧</span>
-          <span class="label">Email</span>
+          <span class="label">{$_('account.email')}</span>
         </div>
         <div class="right">
           <span class="value">kevin@gmail.com</span>
@@ -82,7 +95,7 @@
       <li class="item">
         <div class="left">
           <span class="icon">🔑</span>
-          <span class="label">Actualizzar contraseña o correo</span>
+          <span class="label">{$_('account.updateCredentials')}</span>
         </div>
         <div class="right">
           <span class="chev">›</span>
@@ -91,21 +104,21 @@
 
       <li class="item">
         <div>
-          <a class="left" href="/login/" aria-label="Abrir Interfaz">
-            <span class="label">Cerrar sesión</span>
+          <a class="left" href="/login/" aria-label={$_('account.logout')}>
+            <span class="label">{$_('account.logout')}</span>
           </a>
         </div>
       </li>
     </ul>
   </section>
 
-  <h2 class="section-title">Otros</h2>
+  <h2 class="section-title">{$_('account.other')}</h2>
   <section class="card">
     <ul class="list">
       <li class="item">
         <div class="left">
           <span class="icon">📄</span>
-          <span class="label">Terminos de Servicio</span>
+          <span class="label">{$_('account.termsOfService')}</span>
         </div>
         <div class="right">
           <span class="chev">›</span>
@@ -122,7 +135,7 @@
     <ul class="list">
       <li class="item">
         <div class="left">
-          <span class="label-red">Eliminar cuenta</span>
+          <span class="label-red">{$_('account.deleteAccount')}</span>
         </div>
       </li>
     </ul>  
@@ -134,7 +147,7 @@
   
   <div class="search">
     <span class="search-icon">🔍</span>
-    <input type="search" placeholder="Busca ajustes, funciones, artículos..." aria-label="buscar ajustes">
+    <input type="search" placeholder={$_('interface.searchPlaceholder')} aria-label={$_('interface.searchPlaceholder')}>
   </div>
 </main>
 

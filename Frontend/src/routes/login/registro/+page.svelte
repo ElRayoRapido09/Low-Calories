@@ -1,6 +1,8 @@
 <script>
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
+  import { _ } from 'svelte-i18n';
+  import { massUnit, lengthUnit } from '$lib/stores/units.js';
 
   let currentView = 1; 
 
@@ -174,15 +176,15 @@
       return;
     }
     if (!validateEmail(email)) {
-      error = 'Introduce un correo válido';
+      error = $_('register.invalidEmail');
       return;
     }
     if (password.length < 6) {
-      error = 'La contraseña debe tener al menos 6 caracteres';
+      error = $_('register.passwordTooShort');
       return;
     }
     if (password !== passwordConfirm) {
-      error = 'Las contraseñas no coinciden';
+      error = $_('register.passwordMismatch');
       return;
     }
     
@@ -192,6 +194,13 @@
     }
     
     loading = true;
+HEAD
+    // Simular registro
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    success = $_('register.successMessage');
+    loading = false;
+    nextView(); // Ir a vista 13
+
     
     try {
       const registroData = {
@@ -247,6 +256,7 @@
     const today = new Date();
     const birthYear = today.getFullYear() - parseInt(age);
     return `${birthYear}-01-01`;
+    
   }
 </script>
 
@@ -353,7 +363,7 @@
         <span class="info-icon">⚖️</span>
         <span class="info-label">Peso</span>
         <button class="info-select" on:click={() => showWeightModal = true}>
-          {weight ? `${weight} kg` : 'Seleccionar'}
+          {weight ? `${weight} ${$massUnit}` : 'Seleccionar'}
           <span class="chev">›</span>
         </button>
       </div>
@@ -361,7 +371,7 @@
         <span class="info-icon">📏</span>
         <span class="info-label">Altura</span>
         <button class="info-select" on:click={() => showHeightModal = true}>
-          {height ? `${height} cm` : 'Seleccionar'}
+          {height ? `${height} ${$lengthUnit}` : 'Seleccionar'}
           <span class="chev">›</span>
         </button>
       </div>
