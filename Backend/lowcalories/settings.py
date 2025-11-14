@@ -87,16 +87,16 @@ DATABASES = {
 }
 
 # Configuración original para producción con Docker MySQL:
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'lowcalories',
-#         'USER': 'root',
-#         'PASSWORD': '12345',
-#         'HOST': 'mysql_db',
-#         'PORT': '3306',
-#     }
-# }
+DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': 'lowcalories',
+         'USER': 'root',
+        'PASSWORD': '12345',
+         'HOST': 'mysql_db',
+         'PORT': '3306',
+     }
+ }
 
 
 # Password validation
