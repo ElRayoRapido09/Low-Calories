@@ -3,6 +3,22 @@
 
   let videoStream;
   let stream = null;
+  let isDetecting = false;
+  let showCaptureButton = true; // Cambiado a true para mostrar el botón inmediatamente
+  let isProcessing = false;
+  let alertMessage = '';
+  let motionDetected = false;
+  let stabilityTimer = null;
+  let detectionAttempts = 0;
+  const MAX_DETECTION_ATTEMPTS = 3;
+  
+  // Variables para detección de movimiento
+  let lastAcceleration = { x: 0, y: 0, z: 0 };
+  let movementThreshold = 1.5;
+  let hasMotionSensor = false;
+  let lastFrameData = null;
+  let pixelChangeThreshold = 30;
+  let motionDetectionInterval = null;
 
   async function openCamera() {
     try {
@@ -27,6 +43,13 @@
       video.srcObject = stream;
       cameraContainer.style.display = "flex";
       document.body.style.overflow = "hidden";
+      
+      // Mostrar el botón de captura inmediatamente
+      showCaptureButton = true;
+      
+      // Iniciar detección de movimiento (opcional ahora)
+      // initMotionDetection();
+      
     } catch (error) {
       if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
         alert("Permiso denegado para acceder a la camara");
@@ -38,30 +61,273 @@
     }
   }
 
+  function initMotionDetection() {
+    // Resetear variables
+    isDetecting = false;
+    detectionAttempts = 0;
+    motionDetected = false;
+    
+    // Intentar usar sensores de movimiento (DeviceMotion)
+    if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
+      // iOS 13+ requiere permiso explícito
+      DeviceMotionEvent.requestPermission()
+        .then(response => {
+          if (response === 'granted') {
+            window.addEventListener('devicemotion', handleDeviceMotion);
+            hasMotionSensor = true;
+            console.log('Sensor de movimiento disponible');
+          } else {
+            startPixelBasedMotionDetection();
+          }
+        })
+        .catch(() => {
+          startPixelBasedMotionDetection();
+        });
+    } else if (window.DeviceMotionEvent) {
+      window.addEventListener('devicemotion', handleDeviceMotion);
+      hasMotionSensor = true;
+      console.log('Sensor de movimiento disponible');
+    } else {
+      // Fallback: usar análisis de píxeles
+      console.log('Sensor de movimiento no disponible, usando análisis de píxeles');
+      startPixelBasedMotionDetection();
+    }
+  }
+
+  function handleDeviceMotion(event) {
+    if (isProcessing) return;
+    
+    const acceleration = event.accelerationIncludingGravity;
+    
+    if (!acceleration) return;
+    
+    // Calcular la diferencia de aceleración
+    const deltaX = Math.abs(acceleration.x - lastAcceleration.x);
+    const deltaY = Math.abs(acceleration.y - lastAcceleration.y);
+    const deltaZ = Math.abs(acceleration.z - lastAcceleration.z);
+    
+    const totalMovement = deltaX + deltaY + deltaZ;
+    
+    // Actualizar última aceleración
+    lastAcceleration = {
+      x: acceleration.x,
+      y: acceleration.y,
+      z: acceleration.z
+    };
+    
+    // Detectar si hay movimiento
+    if (totalMovement > movementThreshold) {
+      motionDetected = true;
+      // Cancelar el temporizador de estabilidad si existe
+      if (stabilityTimer) {
+        clearTimeout(stabilityTimer);
+        stabilityTimer = null;
+      }
+    } else {
+      // Si no hay movimiento, iniciar temporizador de estabilidad
+      if (!stabilityTimer && !isDetecting) {
+        startStabilityTimer();
+      }
+    }
+  }
+
+  function startPixelBasedMotionDetection() {
+    motionDetectionInterval = setInterval(() => {
+      if (isProcessing) return;
+      
+      const video = document.getElementById("camera-video");
+      if (!video || video.readyState !== 4) return;
+      
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = 320;
+      tempCanvas.height = 240;
+      const ctx = tempCanvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
+      
+      const currentFrameData = ctx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+      
+      if (lastFrameData) {
+        const movement = calculatePixelDifference(lastFrameData, currentFrameData);
+        
+        if (movement > pixelChangeThreshold) {
+          motionDetected = true;
+          if (stabilityTimer) {
+            clearTimeout(stabilityTimer);
+            stabilityTimer = null;
+          }
+        } else {
+          if (!stabilityTimer && !isDetecting) {
+            startStabilityTimer();
+          }
+        }
+      }
+      
+      lastFrameData = currentFrameData;
+    }, 200);
+  }
+
+  function calculatePixelDifference(frame1, frame2) {
+    let totalDiff = 0;
+    const pixelCount = frame1.data.length / 4;
+    
+    for (let i = 0; i < frame1.data.length; i += 4) {
+      const r1 = frame1.data[i];
+      const g1 = frame1.data[i + 1];
+      const b1 = frame1.data[i + 2];
+      
+      const r2 = frame2.data[i];
+      const g2 = frame2.data[i + 1];
+      const b2 = frame2.data[i + 2];
+      
+      const diff = Math.abs(r1 - r2) + Math.abs(g1 - g2) + Math.abs(b1 - b2);
+      totalDiff += diff;
+    }
+    
+    return (totalDiff / (pixelCount * 255 * 3)) * 100;
+  }
+
+  function startStabilityTimer() {
+    motionDetected = false;
+    stabilityTimer = setTimeout(() => {
+      if (!motionDetected && !isProcessing) {
+        attemptAutomaticCapture();
+      }
+      stabilityTimer = null;
+    }, 2000);
+  }
+
+  async function attemptAutomaticCapture() {
+    if (isDetecting || isProcessing) return;
+    
+    isDetecting = true;
+    detectionAttempts++;
+    console.log(`Intento de detección automática #${detectionAttempts}`);
+    
+    showAlert('🔍 Detectando comida...');
+    
+    // Capturar frame actual
+    const imageBlob = await captureFrame();
+    
+    // Procesar automáticamente
+    await processImage(imageBlob, true);
+  }
+
+  async function captureFrame() {
+    const video = document.getElementById("camera-video");
+    const canvas = document.getElementById("camera-canvas");
+    const context = canvas.getContext("2d");
+
+    // Establecer tamaño óptimo para mejor calidad
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    
+    context.drawImage(video, 0, 0);
+
+    return new Promise((resolve) => {
+      // Aumentar calidad JPEG a 0.95
+      canvas.toBlob((blob) => {
+        resolve(blob);
+      }, 'image/jpeg', 0.95);  // Calidad 95%
+    });
+}
+
+  async function processImage(imageBlob, isAutomatic = false) {
+    isProcessing = true;
+    showAlert('📤 Procesando imagen...');
+    
+    try {
+      const formData = new FormData();
+      formData.append('image', imageBlob, 'food-scan.jpg');
+      
+      // Obtener el token de autenticación
+      const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+      
+      const headers = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
+      console.log('Enviando imagen a:', 'http://localhost:8000/api/scan-food/');
+      
+      const response = await fetch('http://localhost:8000/api/scan-food/', {
+        method: 'POST',
+        headers: headers,
+        body: formData
+      });
+      
+      console.log('Respuesta del servidor:', response.status);
+      
+      const data = await response.json();
+      console.log('Datos recibidos:', data);
+      
+      if (response.ok && data.success) {
+        // Éxito: redirigir a página de resultados
+        showAlert('✅ ¡Comida detectada exitosamente!');
+        setTimeout(() => {
+          closeCamera();
+          goto(`/food-details?id=${data.historial_id}`);
+        }, 1000);
+      } else {
+        // Error en el procesamiento
+        console.error('Error en procesamiento:', data);
+        showAlert(data.error || '❌ No se pudo reconocer la comida. Intente de nuevo.');
+        isProcessing = false;
+        isDetecting = false;
+      }
+    } catch (error) {
+      console.error('Error procesando imagen:', error);
+      showAlert('❌ Error de conexión. Verifique que el servidor esté corriendo.');
+      isProcessing = false;
+      isDetecting = false;
+    }
+  }
+
+  function showAlert(message) {
+    alertMessage = message;
+    setTimeout(() => {
+      if (!isProcessing) { // Solo limpiar si no está procesando
+        alertMessage = '';
+      }
+    }, 5000);
+  }
+
   function closeCamera() {
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
       stream = null;
     }
+    
+    // Limpiar detección de movimiento
+    if (hasMotionSensor) {
+      window.removeEventListener('devicemotion', handleDeviceMotion);
+    }
+    if (motionDetectionInterval) {
+      clearInterval(motionDetectionInterval);
+      motionDetectionInterval = null;
+    }
+    if (stabilityTimer) {
+      clearTimeout(stabilityTimer);
+      stabilityTimer = null;
+    }
+    
+    // Resetear variables
+    isDetecting = false;
+    showCaptureButton = true; // Mantener en true para la próxima vez
+    isProcessing = false;
+    alertMessage = '';
+    detectionAttempts = 0;
+    lastFrameData = null;
+    
     document.getElementById("camera-container").style.display = "none";
     document.body.style.overflow = "auto";
   }
 
-  function takePhoto() {
-    const video = document.getElementById("camera-video");
-    const canvas = document.getElementById("camera-canvas");
-    const context = canvas.getContext("2d");
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    context.drawImage(video, 0, 0);
-
-    // Convierte la imagen a base64
-    const imageData = canvas.toDataURL("image/jpeg");
-    console.log("Foto capturada:", imageData);
-
-    // Aquí puedes procesar la imagen o enviarla a tu backend
-    closeCamera();
+  async function takePhoto() {
+    if (isProcessing) return; // Evitar múltiples clics
+    
+    console.log('Tomando foto manualmente...');
+    const imageBlob = await captureFrame();
+    await processImage(imageBlob, false);
   }
 
   function goToObjetivos() {
@@ -152,7 +418,7 @@
   function goToBot() {
     goto("/Bot");
   }
-  // son los datos estaticos de los objetivos
+  
   let objetivos = $state([
     {
       id: 1,
@@ -177,7 +443,6 @@
     },
   ]);
 
-  // datos estaticos de la racha jejeje
   let diasRacha = $state([
     { dia: "L", enRacha: false },
     { dia: "M", enRacha: false },
@@ -275,7 +540,6 @@
         {/each}
       </section>
 
-      <!-- aqui deben jalar el calendario de planificador_de_comida -->
       <h2>Calendario</h2>
       <div class="calendar-card">
         <div class="mini-calendar">
@@ -294,17 +558,13 @@
             <span class="calendar-empty"></span>
             <span>1</span><span>2</span><span>3</span><span>4</span>
             <span>5</span><span>6</span><span>7</span><span>8</span><span
-              >9</span
-            ><span>10</span><span>11</span>
+              >9</span><span>10</span><span>11</span>
             <span>12</span><span>13</span><span>14</span><span>15</span><span
-              >16</span
-            ><span>17</span><span>18</span>
+              >16</span><span>17</span><span>18</span>
             <span>19</span><span>20</span><span>21</span><span>22</span><span
-              >23</span
-            ><span>24</span><span>25</span>
+              >23</span><span>24</span><span>25</span>
             <span>26</span><span>27</span><span>28</span><span>29</span><span
-              >30</span
-            ><span>31</span>
+              >30</span><span>31</span>
           </div>
         </div>
       </div>
@@ -346,11 +606,30 @@
     <video id="camera-video" autoplay playsinline></video>
     <canvas id="camera-canvas" style="display: none;"></canvas>
 
+    <!-- Overlay con información de detección -->
+    {#if alertMessage}
+      <div class="alert-overlay">
+        {alertMessage}
+      </div>
+    {/if}
+
     <div class="camera-controls">
       <header class="header-back">
         <button id="close-camera-btn" class="back-btn" on:click={closeCamera}>‹</button>
       </header>
-      <button id="take-photo-btn" class="camera-btn" on:click={takePhoto}> 📷 </button>
+      
+      {#if showCaptureButton && !isProcessing}
+        <button id="take-photo-btn" class="camera-btn-capture" on:click={takePhoto}>
+          📷 Tomar Foto
+        </button>
+      {/if}
+      
+      {#if isProcessing}
+        <div class="processing-overlay">
+          <div class="spinner"></div>
+          <p>Procesando...</p>
+        </div>
+      {/if}
     </div>
   </div>
 </main>
@@ -510,12 +789,12 @@
   .nav-item.camera-btn {
     position: absolute;
     left: 50%;
-    top: 10px; /* distancia sobre la barra: ajustar según se requiera */
+    top: 10px;
     transform: translateX(-50%);
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    background: #fff; /* círculo blanco */
+    background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -570,7 +849,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    height: 100dvh; /* Usa viewport dinámico en móviles */
+    height: 100dvh;
     background-color: #000;
     z-index: 9999;
     display: none;
@@ -589,6 +868,47 @@
     left: 0;
   }
 
+  .alert-overlay {
+    position: absolute;
+    top: 80px;
+    left: 1rem;
+    right: 1rem;
+    background: rgba(255, 152, 0, 0.95);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    z-index: 10001;
+    font-weight: 600;
+    animation: slideDown 0.3s ease-out;
+    backdrop-filter: blur(10px);
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
   .camera-controls {
     position: absolute;
     bottom: 0;
@@ -603,22 +923,48 @@
     background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
   }
 
-  .camera-btn {
-    padding: 15px 30px;
-    font-size: 13px;
+  .camera-btn-capture {
+    padding: 18px 40px;
+    font-size: 1.2rem;
     font-weight: bold;
     border: none;
-    border-radius: 10px;
+    border-radius: 50px;
     cursor: pointer;
     background-color: #4caf50;
     color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 10001;
   }
 
-  .camera-btn:hover {
+  .camera-btn-capture:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.8);
+  }
+
+  .camera-btn-capture:active {
+    transform: scale(0.95);
+  }
+
+  .processing-overlay {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    padding: 1.5rem 2rem;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    text-align: center;
+    color: white;
+  }
+
+  .processing-overlay p {
+    margin: 0;
+    font-weight: 600;
   }
 
   .header-back {
@@ -661,39 +1007,6 @@
     transform: scale(0.95);
   }
 
-  .camera-btn {
-    font-size: 1.8rem;
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    border: 4px solid rgba(255, 255, 255, 0.3);
-  }
-
-  .camera-icon {
-    font-size: 2rem;
-  }
-
-  .camera-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
-  }
-
-  .camera-btn:active {
-    transform: scale(0.95);
-  }
-
-  /* Ajustes para dispositivos móviles pequeños */
   @media screen and (max-width: 375px) {
     .header-back {
       left: 15px;
@@ -706,14 +1019,12 @@
       font-size: 1.3rem;
     }
 
-    .camera-btn {
-      width: 60px;
-      height: 60px;
-      font-size: 1.6rem;
+    .camera-btn-capture {
+      padding: 15px 32px;
+      font-size: 1.05rem;
     }
   }
 
-  /* Ajustes para orientación landscape */
   @media screen and (orientation: landscape) {
     .camera-controls {
       padding: 15px 20px;
@@ -722,14 +1033,8 @@
     .header-back {
       top: 15px;
     }
-
-    .camera-btn {
-      width: 60px;
-      height: 60px;
-    }
   }
 
-  /* Soporte para notch y safe areas */
   @supports (padding: max(0px)) {
     .camera-container {
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
@@ -807,7 +1112,7 @@
 
   .floating-btn {
     position: fixed;
-    bottom: 90px; /* Arriba del bottom-nav */
+    bottom: 90px;
     right: 10px;
     width: 60px;
     height: 60px;
@@ -934,7 +1239,7 @@
   }
 
   .streak-active {
-    background: #ff6b35; /* Naranja rojizo para fuego */
+    background: #ff6b35;
     color: #fff;
   }
 
