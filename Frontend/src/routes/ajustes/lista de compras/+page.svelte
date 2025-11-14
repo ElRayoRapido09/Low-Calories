@@ -1,75 +1,84 @@
 <script>
+  import { _ } from 'svelte-i18n';
+  import { massUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
+  
+  // Función para convertir masa
+  function displayMass(grams) {
+    const converted = convertValue(grams, 'mass', 'g', $massUnit);
+    return formatWithUnit(converted, $massUnit, 1);
+  }
+  
     // datos de ejemplo — sustituye por tus stores/backend
     const startDate = "Jue 09 Oct";
     const endDate = "Mie 15 Oct";
 
     const sections = [
         {
-            title: "Carnes, Aves y Pescados",
+            title: $_('shoppingList.meats'),
             items: [
                 {
                     icon: "🥚",
-                    name: "Huevo - Entero",
-                    qty: "19 unidad - 1.0 kg",
+                    name: $_('shoppingList.egg'),
+                    qty: `19 ${$_('shoppingList.units')} - ${displayMass(1000)}`,
                     checked: true,
                 },
                 { 
                     icon: "🥩", 
-                    name: "Carne", 
-                    qty: "150 g", 
+                    name: $_('shoppingList.meat'), 
+                    qty: displayMass(150), 
                     checked: true 
                 },
                 { 
                     icon: "🍗", 
-                    name: "Pollo", 
-                    qty: "250 g", 
+                    name: $_('shoppingList.chicken'), 
+                    qty: displayMass(250), 
                     checked: true 
                 },
                 { 
                     icon: "🐖", 
-                    name: "Puerco", 
-                    qty: "475 g", 
-                    checked: true 
+                    name: $_('shoppingList.pork'), 
+                    qty: displayMass(475), 
+                    checked: false 
                 },
             ],
         },
         {
-            title: "Lácteos y Embutidos",
+            title: $_('shoppingList.dairy'),
             items: [
                 { 
                     icon: "🥛", 
-                    name: "Leche", 
+                    name: $_('shoppingList.milk'), 
                     qty: "1.1 L", 
                     checked: false 
                 },
                 { 
                     icon: "🍦", 
-                    name: "Yogurt", 
+                    name: $_('shoppingList.yogurt'), 
                     qty: "720 ml", 
                     checked: false 
                 },
                 {
                     icon: "🧀",
-                    name: "Queso Blanco",
-                    qty: "75 g",
+                    name: $_('shoppingList.whiteChees'),
+                    qty: displayMass(75),
                     checked: false,
                 },
                 {
                     icon: "🧀",
-                    name: "Queso Amarillo",
-                    qty: "75 g",
+                    name: $_('shoppingList.yellowCheese'),
+                    qty: displayMass(75),
                     checked: false,
                 },
             ],
         },
         {
-            title: "Frutas",
+            title: $_('shoppingList.fruits'),
             items: [
-                { icon: "🍓", name: "Fresas", qty: "150 g", checked: false },
+                { icon: "🍓", name: $_('shoppingList.strawberries'), qty: "150 g", checked: false },
                 {
                     icon: "🥑",
-                    name: "Aguacate",
-                    qty: "8.8 unidad - 2.1 kg",
+                    name: $_('shoppingList.avocado'),
+                    qty: `8.8 ${$_('shoppingList.units')} - 2.1 kg`,
                     checked: false,
                 },
             ],
@@ -79,11 +88,11 @@
 
 <div class="page">
     <header class="header">
-        <a class="back" href="/ajustes" aria-label="Volver">‹</a>
-        <h1>Lista de Compras</h1>
+        <a class="back" href="/ajustes" aria-label={$_('common.back')}>‹</a>
+        <h1>{$_('shoppingList.title')}</h1>
 
         <div class="actions">
-            <button class="export-btn" aria-label="Exportar">
+            <button class="export-btn" aria-label={$_('shoppingList.export')}>
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
                     ><path
                         d="M12 16V4"
@@ -112,13 +121,13 @@
 
     <div class="date-row">
         <div class="chip">
-            <div class="chip-label">Fecha inicial</div>
+            <div class="chip-label">{$_('shoppingList.startDate')}</div>
             <div class="chip-value">
                 {startDate} <span class="cal">📅</span>
             </div>
         </div>
         <div class="chip">
-            <div class="chip-label">Fecha final</div>
+            <div class="chip-label">{$_('shoppingList.endDate')}</div>
             <div class="chip-value">{endDate} <span class="cal">📅</span></div>
         </div>
     </div>
@@ -140,7 +149,7 @@
                             class:checked={it.checked}
                             class="check"
                             aria-pressed={it.checked}
-                            on:click={() => (it.checked = !it.checked)}
+                            onclick={() => (it.checked = !it.checked)}
                         >
                             {#if it.checked}
                                 <svg
@@ -157,7 +166,7 @@
                                     /></svg
                                 >
                             {:else}
-                                <div class="circle" />
+                                <div class="circle"></div>
                             {/if}
                         </button>
                     </li>

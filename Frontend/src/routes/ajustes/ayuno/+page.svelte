@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { _ } from 'svelte-i18n';
+  
   let ayuno16: number = 16;
   let comida16: number = 8;
   let ayuno14: number = 14;
@@ -102,30 +104,30 @@
 
 <main class="app">
   <header class="top">
-    <a href="/ajustes" class="back-btn" aria-label="Volver">‹</a>
-    <h1>Elige un Ayuno</h1>
+    <a href="/ajustes" class="back-btn" aria-label={$_('common.back')}>‹</a>
+    <h1>{$_('fasting.title')}</h1>
   </header>
 
-  <button type="button" class="card-plan popular" on:click={() => openModal('16:8')}>
+  <button type="button" class="card-plan popular" onclick={() => openModal('16:8')}>
     <div class="left">
       <div class="title">16:8</div>
-      <p class="desc">Ayunar 16 horas y comer dentro de una ventana de 8 horas. Ideal para perder peso y mejorar la salud metabólica.</p>
+      <p class="desc">{$_('fasting.plan168')}</p>
     </div>
   </button>
 
-  <button type="button" class="card-plan" on:click={() => openModal('14:10')}>
+  <button type="button" class="card-plan" onclick={() => openModal('14:10')}>
     <div class="title">14:10</div>
-    <p class="desc">Ayuno moderado: 14 horas de ayuno y 10 horas para comer. Adecuado para principiantes.</p>
+    <p class="desc">{$_('fasting.plan1410')}</p>
   </button>
 
-  <button type="button" class="card-plan" on:click={() => openModal('12:12')}>
+  <button type="button" class="card-plan" onclick={() => openModal('12:12')}>
     <div class="title">12:12</div>
-    <p class="desc">Periodos iguales de 12 horas. Perfecto si empiezas en el ayuno o buscas bajo impacto en tu rutina.</p>
+    <p class="desc">{$_('fasting.plan1212')}</p>
   </button>
 
-  <button type="button" class="card-plan" on:click={() => openModal('Personalizado')}>
-    <div class="title">Personalizado</div>
-    <p class="desc">Ajusta tu horario según tu estilo de vida y objetivos. Ideal para usuarios avanzados o necesidades especiales.</p>
+  <button type="button" class="card-plan" onclick={() => openModal('Personalizado')}>
+    <div class="title">{$_('fasting.custom')}</div>
+    <p class="desc">{$_('fasting.customDesc')}</p>
   </button>
 
   <div style="height:40px"></div>
@@ -135,26 +137,26 @@
       class="modal-overlay"
       role="button"
       tabindex="0"
-      aria-label="Cerrar modal"
-      on:click={closeModal}
-      on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); closeModal(); } }}
+      aria-label={$_('fasting.closeModal')}
+      onclick={closeModal}
+      onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); closeModal(); } }}
     >
       <div
         class="modal"
         role="dialog"
         aria-modal="true"
         tabindex="-1"
-        on:click|stopPropagation
-        on:keydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); closeModal(); } }}
+        onclick={(e) => e.stopPropagation()}
+        onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); closeModal(); } }}
       >
-        <h2>{currentPlan}</h2>
+        <h2>{currentPlan === 'Personalizado' ? $_('fasting.custom') : currentPlan}</h2>
         <div class="inputs">
-          <label>Horas de ayuno: <input type="number" bind:value={tempAyuno} readonly={currentPlan !== 'Personalizado'} /></label>
-          <label>Horas de comida: <input type="number" bind:value={tempComida} readonly={currentPlan !== 'Personalizado'} /></label>
-          <label>Fecha de inicio: <input type="date" bind:value={tempDateStart} /></label>
-          <label>Fecha final: <input type="date" bind:value={tempDateEnd} /></label>
+          <label>{$_('fasting.fastingHours')}: <input type="number" bind:value={tempAyuno} readonly={currentPlan !== 'Personalizado'} /></label>
+          <label>{$_('fasting.eatingHours')}: <input type="number" bind:value={tempComida} readonly={currentPlan !== 'Personalizado'} /></label>
+          <label>{$_('fasting.startDate')}: <input type="date" bind:value={tempDateStart} /></label>
+          <label>{$_('fasting.endDate')}: <input type="date" bind:value={tempDateEnd} /></label>
         </div>
-        <button on:click={closeModal}>Seleccionar</button>
+        <button onclick={closeModal}>{$_('fasting.select')}</button>
       </div>
     </div>
   {/if}

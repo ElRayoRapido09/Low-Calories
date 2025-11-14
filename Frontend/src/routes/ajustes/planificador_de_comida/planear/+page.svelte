@@ -1,9 +1,35 @@
 <script>
+  import { _ } from 'svelte-i18n';
+  import { energyUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
+  
   // datos de ejemplo (sustituye por tus stores / props)
-  let dateLabel = "Jueves 16";
-  let plannedDaysText = "1 / 1 día planeado";
+  let dateLabel = $derived($_('plan.thursday') + " 16");
+  let plannedDaysText = $derived("1 / 1 " + $_('plan.dayPlanned'));
   let kcalPlanned = 2138;
   let kcalTarget = 2167;
+  
+  // Convertir calorías a la unidad seleccionada
+  let displayPlanned = $derived(
+    Math.round(convertValue(kcalPlanned, 'energy', 'kcal', $energyUnit))
+  );
+  
+  let displayTarget = $derived(
+    Math.round(convertValue(kcalTarget, 'energy', 'kcal', $energyUnit))
+  );
+  
+  let formattedPlanned = $derived(
+    formatWithUnit(displayPlanned, $energyUnit, 0)
+  );
+  
+  let formattedTarget = $derived(
+    formatWithUnit(displayTarget, $energyUnit, 0)
+  );
+  
+  // Función para mostrar calorías con unidades
+  function displayCalories(kcal) {
+    const converted = convertValue(kcal, 'energy', 'kcal', $energyUnit);
+    return formatWithUnit(converted, $energyUnit, 0);
+  }
 
   const meals = [
     {
@@ -70,7 +96,7 @@
   ];
 
   // control del modal
-  let showModal = false;
+  let showModal = $state(false);
 
   function openConfirmModal() {
     showModal = true;
@@ -114,9 +140,9 @@
   </nav>
 
   <section class="progress">
-    <div class="label">Calorías planeadas</div>
+    <div class="label">{$_('plan.caloriesPlanned')}</div>
     <div class="value">
-      {kcalPlanned.toLocaleString()}/{kcalTarget.toLocaleString()} kcal
+      {formattedPlanned} / {formattedTarget}
     </div>
     <div class="bar">
       <div
@@ -132,7 +158,7 @@
         <div class="meal-header">
           <div>
             <div class="meal-title">{meal.title}</div>
-            <div class="meal-meta">{meal.kcal} kcal | {meal.macro}</div>
+            <div class="meal-meta">{displayCalories(meal.kcal)} | {meal.macro}</div>
           </div>
           <div class="meal-actions">⋯</div>
         </div>
@@ -148,7 +174,7 @@
                 </div>
               </div>
               <div class="right">
-                <div class="kcal">{it.kcal} kcal</div>
+                <div class="kcal">{displayCalories(it.kcal)}</div>
                 <button class="repeat" title="Repetir">⟳</button>
               </div>
             </li>
@@ -156,7 +182,7 @@
         </ul>
 
         <div class="add-row">
-          <button class="add">＋ Agregar</button>
+          <button class="add">＋ {$_('plan.add')}</button>
         </div>
       </section>
     {/each}
@@ -164,30 +190,30 @@
 
   <div class="bottom-actions">
     <button class="arrows"> ← </button>
-    <button class="phantom">⟲ Recalcular</button>
-    <button class="danger">Vaciar</button>
+    <button class="phantom">⟲ {$_('plan.recalculate')}</button>
+    <button class="danger">{$_('plan.empty')}</button>
     <button class="arrows"> → </button>
-    <button class="confirm" on:click={openConfirmModal}>✔</button>
+    <button class="confirm" onclick={openConfirmModal}>✔</button>
   </div>
 </div>
 
 {#if showModal}
-  <div class="modal-overlay" on:click={cancelPlan} aria-hidden={!showModal}>
+  <div class="modal-overlay" onclick={cancelPlan} aria-hidden={!showModal}>
     <div
       class="modal"
       role="dialog"
       aria-modal="true"
       tabindex="0"
-      on:click|stopPropagation
-      on:keydown={(e) => {
+      onclick={(e) => e.stopPropagation()}
+      onkeydown={(e) => {
         if (e.key === "Escape") cancelPlan();
       }}
     >
-      <h2 class="modal-title">Plan de completados</h2>
-      <p class="modal-body">¿Deseas Terminar?</p>
+      <h2 class="modal-title">{$_('plan.completedPlan')}</h2>
+      <p class="modal-body">{$_('plan.wantToFinish')}</p>
       <div class="modal-actions">
-        <button class="btn-accept" on:click={() => window.location.href = '/ajustes'}>Aceptar</button>
-        <button class="btn-cancel" on:click={cancelPlan}>Cancelar</button>
+        <button class="btn-accept" onclick={() => window.location.href = '/ajustes'}>{$_('common.accept')}</button>
+        <button class="btn-cancel" onclick={cancelPlan}>{$_('common.cancel')}</button>
       </div>
     </div>
   </div>

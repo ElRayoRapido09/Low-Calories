@@ -2,6 +2,7 @@
   // Login / Registro / Recuperación de contraseña
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
+  import { _ } from 'svelte-i18n';
 
   let mode = 'bienvenido'; // 'bienvenido' | 'login' | 'register' | 'recover'
 
@@ -29,8 +30,8 @@
 
   async function submitLogin() {
     clearMessages();
-    if (!validateEmail(email)) { error = 'Introduce un correo válido'; return; }
-    if (!password) { error = 'Introduce la contraseña'; return; }
+    if (!validateEmail(email)) { error = $_('login.invalidEmail'); return; }
+    if (!password) { error = $_('login.enterPassword'); return; }
     loading = true;
     try {
       const response = await fetch('http://localhost:8000/api/accounts/login/', {
@@ -40,13 +41,13 @@
       });
       if (response.ok) {
         const data = await response.json();
-        success = 'Inicio de sesión exitoso.';
+        success = $_('login.loginSuccess');
       } else {
         const data = await response.json();
-        error = data.error || 'Credenciales inválidas.';
+        error = data.error || $_('login.invalidCredentials');
       }
     } catch (err) {
-      error = 'Error de conexión.';
+      error = $_('login.connectionError');
     } finally {
       loading = false;
     }
@@ -54,23 +55,23 @@
 
   async function submitRegister() {
     clearMessages();
-    if (!validateEmail(email)) { error = 'Introduce un correo válido'; return; }
-    if (password.length < 6) { error = 'La contraseña debe tener al menos 6 caracteres'; return; }
-    if (password !== passwordConfirm) { error = 'Las contraseñas no coinciden'; return; }
+    if (!validateEmail(email)) { error = $_('login.invalidEmail'); return; }
+    if (password.length < 6) { error = $_('login.passwordMinLength'); return; }
+    if (password !== passwordConfirm) { error = $_('login.passwordsNotMatch'); return; }
     loading = true;
     await new Promise(r => setTimeout(r, 800));
     console.log('register', { email, password });
-    success = 'Registro simulado. Envía los datos al backend para crear la cuenta.';
+    success = $_('login.registerSuccess');
     loading = false;
   }
 
   async function submitRecover() {
     clearMessages();
-    if (!validateEmail(email)) { error = 'Introduce un correo válido'; return; }
+    if (!validateEmail(email)) { error = $_('login.invalidEmail'); return; }
     loading = true;
     await new Promise(r => setTimeout(r, 600));
     console.log('recover', { email });
-    success = 'Se ha enviado (simulado) un enlace de recuperación a tu correo.';
+    success = $_('login.recoverSuccess');
     loading = false;
   }
 
@@ -109,8 +110,8 @@
 <main class="main">
  
   <header class="header" class:hidden={headerHidden}>
-    <h1>Low Calories</h1>
-    <p>Tu asistente personal de nutrición</p>
+    <h1>{$_('login.title')}</h1>
+    <p>{$_('login.subtitle')}</p>
   </header>
 
   <!-- Centramos el card usando flexbox en cards-container y eliminamos spacers innecesarios -->
@@ -120,16 +121,16 @@
 
       {#if mode === 'bienvenido'}
         <div class="card">
-          <h2 style="margin-bottom:0.5rem">¡Bienvenido a Low Calories!</h2>
-          <p>Tu asistente personal para una nutrición saludable y baja en calorías.</p>
+          <h2 style="margin-bottom:0.5rem">{$_('login.welcome')}</h2>
+          <p>{$_('login.welcomeDescription')}</p>
           <div class="card-actions">
-            <button class="primary-btn" on:click={() => { mode = 'login'; clearMessages(); }}>Iniciar sesión</button>
-            <button class="ghost-btn" on:click={() => goto('/login/registro')}>Crear cuenta</button>
+            <button class="primary-btn" onclick={() => { mode = 'login'; clearMessages(); }}>{$_('login.signIn')}</button>
+            <button class="ghost-btn" onclick={() => goto('/login/registro')}>{$_('login.createAccount')}</button>
           </div>
         </div>
       {:else}
         <div class="card">
-          <h2 style="margin-bottom:0.5rem">{mode === 'login' ? 'Inicia sesión' : mode === 'register' ? 'Regístrate' : 'Recuperar contraseña'}</h2>
+          <h2 style="margin-bottom:0.5rem">{mode === 'login' ? $_('login.login') : mode === 'register' ? $_('login.register') : $_('login.recoverPassword')}</h2>
 
           {#if error}
             <p style="color: #b00020; margin: 0.5rem 0">{error}</p>
@@ -138,37 +139,37 @@
             <p style="color: #007a00; margin: 0.5rem 0">{success}</p>
           {/if}
 
-          <form class="card-form" on:submit|preventDefault={mode === 'login' ? submitLogin : mode === 'register' ? submitRegister : submitRecover}>
-            <label for="email">Correo</label>
-            <input id="email" name="email" type="email" bind:value={email} placeholder="tucorreo@ejemplo.com" />
+          <form class="card-form" onsubmit={(e) => { e.preventDefault(); mode === 'login' ? submitLogin() : mode === 'register' ? submitRegister() : submitRecover(); }}>
+            <label for="email">{$_('login.email')}</label>
+            <input id="email" name="email" type="email" bind:value={email} placeholder={$_('login.emailPlaceholder')} />
 
             {#if mode !== 'recover'}
-              <label for="password">Contraseña</label>
-              <input id="password" name="password" type="password" bind:value={password} placeholder="Contraseña" />
+              <label for="password">{$_('login.password')}</label>
+              <input id="password" name="password" type="password" bind:value={password} placeholder={$_('login.passwordPlaceholder')} />
             {/if}
 
             {#if mode === 'register'}
-              <label for="passwordConfirm">Confirmar contraseña</label>
-              <input id="passwordConfirm" name="passwordConfirm" type="password" bind:value={passwordConfirm} placeholder="Repite la contraseña" />
+              <label for="passwordConfirm">{$_('login.confirmPassword')}</label>
+              <input id="passwordConfirm" name="passwordConfirm" type="password" bind:value={passwordConfirm} placeholder={$_('login.repeatPasswordPlaceholder')} />
             {/if}
 
             <button class="primary-btn">
               {#if loading}
-                Procesando...
+                {$_('login.processing')}
               {:else}
-                {mode === 'login' ? 'Entrar' : mode === 'register' ? 'Crear cuenta' : 'Enviar enlace'}
+                {mode === 'login' ? $_('login.enter') : mode === 'register' ? $_('login.createAccount') : $_('login.sendLink')}
               {/if}
             </button>
           </form>
           <div class="card-actions">
             {#if mode !== 'login'}
-              <button class="ghost-btn" on:click={() => { mode = 'login'; clearMessages(); }}>¿Ya tienes cuenta? Entrar</button>
+              <button class="ghost-btn" onclick={() => { mode = 'login'; clearMessages(); }}>{$_('login.alreadyHaveAccount')}</button>
             {/if}
             {#if mode !== 'register'}
-              <button class="ghost-btn" on:click={() => { mode = 'register'; clearMessages(); }}>Crear cuenta</button>
+              <button class="ghost-btn" onclick={() => { mode = 'register'; clearMessages(); }}>{$_('login.createAccount')}</button>
             {/if}
             {#if mode !== 'recover'}
-              <button class="ghost-btn" on:click={() => { mode = 'recover'; clearMessages(); }}>Recuperar contraseña</button>
+              <button class="ghost-btn" onclick={() => { mode = 'recover'; clearMessages(); }}>{$_('login.recoverPassword')}</button>
             {/if}
           </div>
         </div>

@@ -1,4 +1,7 @@
 <script>
+  import { _ } from 'svelte-i18n';
+  import { energyUnit } from '$lib/stores/units.js';
+  
   let query = '';
   let results = [];
   let loading = false;
@@ -27,10 +30,10 @@
 </script>
 
 <main>
-  <input bind:value={query} placeholder="Buscar alimento (en inglés, ej. avocado)" />
-  <button on:click={searchFood} disabled={loading}>Buscar</button>
+  <input bind:value={query} placeholder={$_('foods.search')} />
+  <button onclick={searchFood} disabled={loading}>{$_('foods.searchButton')}</button>
   {#if loading}
-    <p>Cargando...</p>
+    <p>{$_('foods.loading')}</p>
   {/if}
   {#if error}
     <p style="color: red;">{error}</p>
@@ -38,10 +41,10 @@
   {#if results.length > 0}
     <ul>
       {#each results as food}
-        <li>{food.food_name || 'Sin nombre'} - {food.food_description || 'Sin descripción'}</li>
+        <li>{food.food_name || $_('foods.noName')} - {food.food_description || $_('foods.noDescription')}</li>
       {/each}
     </ul>
   {:else if !loading && query}
-    <p>No se encontraron resultados. Prueba con términos en inglés.</p>
+    <p>{$_('foods.noResults')}</p>
   {/if}
 </main>
