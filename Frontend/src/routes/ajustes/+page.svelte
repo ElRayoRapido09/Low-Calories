@@ -1,20 +1,20 @@
 <script>
-  // no JavaScript necesario para el estilo
+  import { _ } from 'svelte-i18n';
 </script>
 
 <main class="app">
   <header class="top">
-    <a href="/" class="back-btn" aria-label="Volver">‹</a>
-    <h1>Ajustes</h1>
-    <img class="avatar" alt="Perfil" src="src/lib/assets/kk.jpg"/>
+    <a href="/" class="back-btn" aria-label={$_('common.back')}>‹</a>
+    <h1>{$_('settings.title')}</h1>
+    <img class="avatar" alt={$_('settings.profile')} src="src/lib/assets/kk.jpg"/>
   </header>
 
-  <h2 class="section-title">Acceso rápido</h2>
+  <h2 class="section-title">{$_('settings.quickAccess')}</h2>
   <section class="card">
     <ul class="list">
       <li class="item">
         <span class="icon">✨</span>
-        <span class="label">Planificador Automático</span>
+        <span class="label">{$_('settings.autoPlanner')}</span>
         <label class="switch">
           <input type="checkbox" aria-label="activar planificador">
           <span class="slider"></span>
@@ -22,71 +22,71 @@
       </li>
 
       <li>
-        <a class="item" href="/ajustes/planificador_de_comida" aria-label="Abrir Interfaz">
+        <a class="item" href="/ajustes/planificador_de_comida" aria-label={$_('settings.mealPlanner')}>
           <span class="icon">📅</span>
-          <span class="label">Planificador de Comidas</span>
+          <span class="label">{$_('settings.mealPlanner')}</span>
           <span class="chev">›</span>
         </a>
       </li>
 
       <li>
-        <a class="item" href="/ajustes/lista de compras" aria-label="Abrir Interfaz">
+        <a class="item" href="/ajustes/lista de compras" aria-label={$_('settings.shoppingList')}>
           <span class="icon">🛒</span>
-          <span class="label">Lista de Compras</span>
+          <span class="label">{$_('settings.shoppingList')}</span>
           <span class="chev">›</span>
         </a>
       </li>
 
       <li>
-        <a class="item" href="/ajustes/ayuno" aria-label="Abrir Interfaz">
+        <a class="item" href="/ajustes/ayuno" aria-label={$_('settings.fasting')}>
           <span class="icon">⏱️</span>
-          <span class="label">Ayuno</span>
+          <span class="label">{$_('settings.fasting')}</span>
           <span class="chev">›</span>
         </a>
       </li>
     </ul>
   </section>
 
-  <h2 class="section-title">Configuración</h2>
+  <h2 class="section-title">{$_('settings.configuration')}</h2>
   <section class="card">
     <ul class="list">
       <li>
-        <a class="item" href="/ajustes/objetivos, calorias y macros" aria-label="Abrir Interfaz">
+        <a class="item" href="/ajustes/objetivos, calorias y macros" aria-label={$_('settings.goalCaloriesMacros')}>
           <span class="icon">🔥</span>
-          <span class="label">Objetivo, Calorías y Macros</span>
+          <span class="label">{$_('settings.goalCaloriesMacros')}</span>
           <span class="chev">›</span>
         </a>
       </li>
       <li>
-        <a class="item" href="/ajustes/plan de comidas y alimentos" aria-label="Abrir Interfaz">
+        <a class="item" href="/ajustes/plan de comidas y alimentos" aria-label={$_('settings.mealPlanFoods')}>
           <span class="icon">🍎</span>
-          <span class="label">Plan de Comidas y Alimentos</span>
+          <span class="label">{$_('settings.mealPlanFoods')}</span>
           <span class="chev">›</span>
         </a>
       </li>
       <li>
-        <a class="item" href="/objetivos" aria-label="Abrir Interfaz">
+        <a class="item" href="/objetivos" aria-label={$_('settings.redoPlan')}>
           <span class="icon">🔁</span>
-          <span class="label">Rehacer Plan</span>
+          <span class="label">{$_('settings.redoPlan')}</span>
           <span class="chev">›</span>
         </a>
       </li>
       <li>
-        <a class="item" href="/ajustes/interfaz" aria-label="Abrir Interfaz">
+        <a class="item" href="/ajustes/interfaz" aria-label={$_('settings.interface')}>
           <span class="icon">🎨</span>
-          <span class="label">Interfaz</span>
+          <span class="label">{$_('settings.interface')}</span>
           <span class="chev">›</span>
         </a>
       </li>
-      <a class="item" href="/premium" aria-label="Abrir Plan Familiar">
+      <a class="item" href="/premium" aria-label={$_('settings.familyPlan')}>
         <span class="icon">👪</span>
-        <span class="label">Plan Familiar</span>
+        <span class="label">{$_('settings.familyPlan')}</span>
         <span class="chev">›</span>
       </a>
       <li>
-        <a class="item" href="/ajustes/cuenta" aria-label="Abrir cuenta">
+        <a class="item" href="/ajustes/cuenta" aria-label={$_('settings.account')}>
           <span class="icon">👤</span>
-          <span class="label">Cuenta</span>
+          <span class="label">{$_('settings.account')}</span>
           <span class="chev">›</span>
         </a>
       </li>
@@ -95,7 +95,7 @@
 
   <div class="search">
     <span class="search-icon">🔍</span>
-    <input type="search" placeholder="Busca ajustes, funciones, artículos..." aria-label="buscar ajustes">
+    <input type="search" placeholder={$_('settings.searchPlaceholder')} aria-label="buscar ajustes">
   </div>
 </main>
 

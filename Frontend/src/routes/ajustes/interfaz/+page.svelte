@@ -1,83 +1,164 @@
 <script>
-  // no JavaScript necesario para el estilo
+  import { _, locale } from 'svelte-i18n';
+  import { browser } from '$app/environment';
+  import { massUnit, lengthUnit, energyUnit } from '$lib/stores/units.js';
+  
+  let currentLang = $state($locale || 'es');
+  let showMassModal = $state(false);
+  let showLengthModal = $state(false);
+  let showEnergyModal = $state(false);
+  
+  function changeLanguage(lang) {
+    locale.set(lang);
+    currentLang = lang;
+    if (browser) {
+      localStorage.setItem('locale', lang);
+    }
+  }
+  
+  function changeMassUnit(unit) {
+    massUnit.set(unit);
+    showMassModal = false;
+  }
+  
+  function changeLengthUnit(unit) {
+    lengthUnit.set(unit);
+    showLengthModal = false;
+  }
+  
+  function changeEnergyUnit(unit) {
+    energyUnit.set(unit);
+    showEnergyModal = false;
+  }
 </script>
 
 <main class="app">
   <header class="top">
-    <a href="/ajustes" class="back-btn" aria-label="Volver">‹</a>
-    <h1>Interfaz</h1>
+    <a href="/ajustes" class="back-btn" aria-label={$_('common.back')}>‹</a>
+    <h1>{$_('interface.title')}</h1>
   </header>
 
   <h2 class="section-title">Idioma</h2>
   <section class="card">
     <ul class="list">
-      <li class="item">
-        <div class="left">
-          <span class="icon">🌐</span>
-          <span class="label">Lenguaje de interfaz</span>
-        </div>
-        <div class="right">
-          <span class="value">Español</span>
-          <span class="chev">›</span>
-        </div>
+      <li>
+        <button type="button" class="item" onclick={() => changeLanguage(currentLang === 'es' ? 'en' : 'es')}>
+          <div class="left">
+            <span class="icon">🌐</span>
+            <span class="label">{$_('interface.language')}</span>
+          </div>
+          <div class="right">
+            <span class="value">{currentLang === 'es' ? $_('interface.spanish') : $_('interface.english')}</span>
+            <span class="chev">›</span>
+          </div>
+        </button>
       </li>
 
-      <li class="item">
-        <div class="left">
-          <span class="icon">📚</span>
-          <span class="label">Lenguaje de base de datos</span>
-        </div>
-        <div class="right">
-          <span class="value">Español</span>
-          <span class="chev">›</span>
+      <li>
+        <div class="item">
+          <div class="left">
+            <span class="icon">📚</span>
+            <span class="label">{$_('interface.databaseLanguage')}</span>
+          </div>
+          <div class="right">
+            <span class="value">{currentLang === 'es' ? $_('interface.spanish') : $_('interface.english')}</span>
+            <span class="chev">›</span>
+          </div>
         </div>
       </li>
     </ul>
   </section>
 
-  <h2 class="section-title">Unidades</h2>
+  <h2 class="section-title">{$_('interface.units')}</h2>
   <section class="card">
     <ul class="list">
-      <li class="item">
-        <div class="left">
-          <span class="icon">⚖️</span>
-          <span class="label">Unidad de masa/volumen</span>
-        </div>
-        <div class="right">
-          <span class="value">g / kg / ml</span>
-          <span class="chev">›</span>
-        </div>
+      <li>
+        <button type="button" class="item" onclick={() => showMassModal = true}>
+          <div class="left">
+            <span class="icon">⚖️</span>
+            <span class="label">{$_('interface.massUnit')}</span>
+          </div>
+          <div class="right">
+            <span class="value">{$massUnit}</span>
+            <span class="chev">›</span>
+          </div>
+        </button>
       </li>
 
-      <li class="item">
-        <div class="left">
-          <span class="icon">📏</span>
-          <span class="label">Unidad de longitud</span>
-        </div>
-        <div class="right">
-          <span class="value">cm</span>
-          <span class="chev">›</span>
-        </div>
+      <li>
+        <button type="button" class="item" onclick={() => showLengthModal = true}>
+          <div class="left">
+            <span class="icon">📏</span>
+            <span class="label">{$_('interface.lengthUnit')}</span>
+          </div>
+          <div class="right">
+            <span class="value">{$lengthUnit}</span>
+            <span class="chev">›</span>
+          </div>
+        </button>
       </li>
 
-      <li class="item">
-        <div class="left">
-          <span class="icon">⚡</span>
-          <span class="label">Unidad de energía</span>
-        </div>
-        <div class="right">
-          <span class="value">kcal</span>
-          <span class="chev">›</span>
-        </div>
+      <li>
+        <button type="button" class="item" onclick={() => showEnergyModal = true}>
+          <div class="left">
+            <span class="icon">⚡</span>
+            <span class="label">{$_('interface.energyUnit')}</span>
+          </div>
+          <div class="right">
+            <span class="value">{$energyUnit}</span>
+            <span class="chev">›</span>
+          </div>
+        </button>
       </li>
     </ul>
   </section>
 
   <div class="search">
     <span class="search-icon">🔍</span>
-    <input type="search" placeholder="Busca ajustes, funciones, artículos..." aria-label="buscar ajustes">
+    <input type="search" placeholder={$_('interface.searchPlaceholder')} aria-label="buscar ajustes">
   </div>
 </main>
+
+<!-- Modal para unidad de masa -->
+{#if showMassModal}
+  <div class="modal-overlay" onclick={() => showMassModal = false} onkeydown={(e) => e.key === 'Escape' && (showMassModal = false)} role="button" tabindex="0" aria-label="Cerrar modal">
+    <div class="modal" role="dialog" aria-modal="true" tabindex="-1" onclick={(e) => e.stopPropagation()}>
+      <div class="modal-bar"></div>
+      <h3>{$_('interface.massUnit')}</h3>
+      <button class="modal-option" onclick={() => changeMassUnit('g')}>{$_('interface.massUnits.g')}</button>
+      <button class="modal-option" onclick={() => changeMassUnit('kg')}>{$_('interface.massUnits.kg')}</button>
+      <button class="modal-option" onclick={() => changeMassUnit('lb')}>{$_('interface.massUnits.lb')}</button>
+      <button class="modal-option" onclick={() => changeMassUnit('oz')}>{$_('interface.massUnits.oz')}</button>
+    </div>
+  </div>
+{/if}
+
+<!-- Modal para unidad de longitud -->
+{#if showLengthModal}
+  <div class="modal-overlay" onclick={() => showLengthModal = false} onkeydown={(e) => e.key === 'Escape' && (showLengthModal = false)} role="button" tabindex="0" aria-label="Cerrar modal">
+    <div class="modal" role="dialog" aria-modal="true" tabindex="-1" onclick={(e) => e.stopPropagation()}>
+      <div class="modal-bar"></div>
+      <h3>{$_('interface.lengthUnit')}</h3>
+      <button class="modal-option" onclick={() => changeLengthUnit('cm')}>{$_('interface.lengthUnits.cm')}</button>
+      <button class="modal-option" onclick={() => changeLengthUnit('m')}>{$_('interface.lengthUnits.m')}</button>
+      <button class="modal-option" onclick={() => changeLengthUnit('ft')}>{$_('interface.lengthUnits.ft')}</button>
+      <button class="modal-option" onclick={() => changeLengthUnit('in')}>{$_('interface.lengthUnits.in')}</button>
+    </div>
+  </div>
+{/if}
+
+<!-- Modal para unidad de energía -->
+{#if showEnergyModal}
+  <div class="modal-overlay" onclick={() => showEnergyModal = false} onkeydown={(e) => e.key === 'Escape' && (showEnergyModal = false)} role="button" tabindex="0" aria-label="Cerrar modal">
+    <div class="modal" role="dialog" aria-modal="true" tabindex="-1" onclick={(e) => e.stopPropagation()}>
+      <div class="modal-bar"></div>
+      <h3>{$_('interface.energyUnit')}</h3>
+      <button class="modal-option" onclick={() => changeEnergyUnit('kcal')}>{$_('interface.energyUnits.kcal')}</button>
+      <button class="modal-option" onclick={() => changeEnergyUnit('kj')}>{$_('interface.energyUnits.kj')}</button>
+      <button class="modal-option" onclick={() => changeEnergyUnit('cal')}>{$_('interface.energyUnits.cal')}</button>
+    </div>
+  </div>
+{/if}
 
 <style>
   :global(html) {
@@ -166,6 +247,16 @@
     border-radius: 12px;
     margin-bottom: 10px;
     background: none; /* ajuste: más opaco en modo claro si quieres */
+    width: 100%;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  button.item:hover {
+    background: rgba(0, 102, 204, 0.1);
   }
 
   .item:last-child {
@@ -260,5 +351,78 @@
     .item, .search { background: #fff; color: #222; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; }
     .icon { color: #111; background: linear-gradient(180deg,#0066cc,#2077cd); }
     .value { color: #666; }
+  }
+
+  /* Estilos para modales */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modal {
+    background: #ffffff;
+    border-radius: 18px 18px 0 0;
+    width: 100%;
+    max-width: 420px;
+    padding: 32px 24px 24px 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: relative;
+    animation: modalUp 0.2s;
+  }
+
+  @keyframes modalUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .modal-bar {
+    width: 48px;
+    height: 5px;
+    background: #005bb5;
+    border-radius: 3px;
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.5;
+  }
+
+  .modal h3 {
+    text-align: center;
+    color: #000;
+    font-size: 22px;
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+
+  .modal-option {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #666;
+    border: none;
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    text-align: left;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    font-family: inherit;
+  }
+
+  .modal-option:hover {
+    background: #f0f0f0;
+    color: #000;
   }
 </style>

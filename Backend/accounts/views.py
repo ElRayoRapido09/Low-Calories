@@ -27,3 +27,18 @@ def login_user(request):
             return Response({'error': 'Contraseña incorrecta'}, status=status.HTTP_401_UNAUTHORIZED)
     except Account.DoesNotExist:
         return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['POST'])
+def register_user(request):
+    serializer = AccountSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({
+            'message': 'Usuario registrado exitosamente',
+            'user': {
+                'nombre': serializer.data.get('nombre'),
+                'correo': serializer.data.get('correo')
+            }
+        }, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

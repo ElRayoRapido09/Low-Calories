@@ -1,11 +1,27 @@
 <script lang="ts">
+  import { _ } from 'svelte-i18n';
+  import { massUnit, energyUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
+  
   let showModal: boolean = false;
   let currentItem: string = '';
 
-  // Variables para Objetivos y Calorias
-  let caloriasObjetivo: number = 2000;
-  let pesoObjetivo: number = 70;
-  let objetivoTipo: 'ganar' | 'mantener' | 'bajar' = 'mantener'; // 'ganar', 'mantener', 'bajar'
+  // Variables para Objetivos y Calorias (almacenadas en unidades base)
+  let caloriasObjetivoBase: number = 2000; // siempre en kcal
+  let pesoObjetivoBase: number = 70; // siempre en kg
+  let objetivoTipo: 'ganar' | 'mantener' | 'bajar' = 'mantener';
+
+  // Variables calculadas para display
+  let caloriasObjetivo = $derived(
+    Math.round(convertValue(caloriasObjetivoBase, 'energy', 'kcal', $energyUnit))
+  );
+  
+  let formattedCalories = $derived(
+    formatWithUnit(caloriasObjetivo, $energyUnit, 0)
+  );
+  
+  let pesoObjetivo = $derived(
+    Math.round(convertValue(pesoObjetivoBase, 'mass', 'kg', $massUnit) * 10) / 10
+  );
 
   // Variables para Macros
   let proteinas: number = 150; // g
@@ -29,17 +45,17 @@
 
 <main class="app">
   <header class="top">
-    <a href="/ajustes" class="back-btn" aria-label="Volver">‹</a>
-    <h1>Objetivo, Calorias y Macros</h1>
+    <a href="/ajustes" class="back-btn" aria-label={$_('common.back')}>‹</a>
+    <h1>{$_('goalsCaloriesMacros.title')}</h1>
   </header>
 
   <section class="card">
     <ul class="list">
       <li>
-        <button class="item" type="button" on:click={() => openModal('Objetivos y Calorias')}>
+        <button class="item" type="button" onclick={() => openModal('Objetivos y Calorias')}>
           <div class="left">
             <span class="icon">🔥</span>
-            <span class="label">Objetivos y Calorias</span>
+            <span class="label">{$_('goalsCaloriesMacros.goalsCalories')}</span>
           </div>
           <div class="right">
             <span class="chev" aria-hidden="true">›</span>
@@ -48,10 +64,10 @@
       </li>
 
       <li>
-        <button class="item" type="button" on:click={() => openModal('Macros y Tipos de dietas')}>
+        <button class="item" type="button" onclick={() => openModal('Macros y Tipos de dietas')}>
           <div class="left">
             <span class="icon">🍎</span>
-            <span class="label">Macros y Tipos de dietas</span>
+            <span class="label">{$_('goalsCaloriesMacros.macrosDiets')}</span>
           </div>
           <div class="right">
             <span class="chev" aria-hidden="true">›</span>
@@ -60,10 +76,10 @@
       </li>
 
       <li>
-        <button class="item" type="button" on:click={() => openModal('Funciones Inteligentes')}>
+        <button class="item" type="button" onclick={() => openModal('Funciones Inteligentes')}>
           <div class="left">
             <span class="icon">✨</span>
-            <span class="label">Funciones Inteligentes</span>
+            <span class="label">{$_('goalsCaloriesMacros.smartFunctions')}</span>
           </div>
           <div class="right">
             <span class="chev" aria-hidden="true">›</span>
@@ -79,8 +95,8 @@
       role="button"
       tabindex="0"
       aria-label="Cerrar modal"
-      on:click={closeModal}
-      on:keydown={(e) => {
+      onclick={closeModal}
+      onkeydown={(e) => {
         // support Enter and Space to activate the overlay close
         if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
           e.preventDefault();
@@ -93,40 +109,40 @@
         role="dialog"
         aria-modal="true"
         tabindex="0"
-        on:click|stopPropagation
-        on:keydown={(e) => {
+        onclick={(e) => e.stopPropagation()}
+        onkeydown={(e) => {
           // allow Escape to close the dialog
           if (e.key === 'Escape') {
             closeModal();
           }
         }}
       >
-        <h2>{currentItem}</h2>
+        <h2>{currentItem === 'Objetivos y Calorias' ? $_('goalsCaloriesMacros.goalsCalories') : currentItem === 'Macros y Tipos de dietas' ? $_('goalsCaloriesMacros.macrosDiets') : $_('goalsCaloriesMacros.smartFunctions')}</h2>
         {#if currentItem === 'Objetivos y Calorias'}
           <div class="inputs">
-            <label>🎯 Objetivo: 
+            <label>🎯 {$_('goalsCaloriesMacros.goal')}: 
               <select bind:value={objetivoTipo}>
-                <option value="ganar">Ganar peso</option>
-                <option value="mantener">Mantener peso</option>
-                <option value="bajar">Bajar peso</option>
+                <option value="ganar">{$_('goalsCaloriesMacros.gainWeight')}</option>
+                <option value="mantener">{$_('goalsCaloriesMacros.maintainWeight')}</option>
+                <option value="bajar">{$_('goalsCaloriesMacros.loseWeight')}</option>
               </select>
             </label>
-            <label>🔥 Calorías objetivo: <input type="number" bind:value={caloriasObjetivo} placeholder="e.g. 2000" /></label>
-            <label>⚖️ Peso objetivo (kg): <input type="number" bind:value={pesoObjetivo} placeholder="e.g. 70" /></label>
+            <label>🔥 {$_('goalsCaloriesMacros.caloriesGoal')}: <input type="text" value={formattedCalories} readonly /></label>
+            <label>⚖️ {$_('goalsCaloriesMacros.targetWeight')}: <input type="number" value={pesoObjetivo} readonly /> {$massUnit}</label>
           </div>
         {:else if currentItem === 'Macros y Tipos de dietas'}
           <div class="inputs">
-            <label>🍗 Proteínas (g): <input type="number" bind:value={proteinas} placeholder="e.g. 150" /></label>
-            <label>🌾 Carbohidratos (g): <input type="number" bind:value={carbohidratos} placeholder="e.g. 200" /></label>
-            <label>🥑 Grasas (g): <input type="number" bind:value={grasas} placeholder="e.g. 70" /></label>
+            <label>🍗 {$_('goalsCaloriesMacros.proteins')}: <input type="number" bind:value={proteinas} placeholder="e.g. 150" /></label>
+            <label>🌾 {$_('goalsCaloriesMacros.carbs')}: <input type="number" bind:value={carbohidratos} placeholder="e.g. 200" /></label>
+            <label>🥑 {$_('goalsCaloriesMacros.fats')}: <input type="number" bind:value={grasas} placeholder="e.g. 70" /></label>
           </div>
         {:else if currentItem === 'Funciones Inteligentes'}
           <div class="inputs">
-            <label><input type="checkbox" bind:checked={iaRecomendaciones} /> 🤖 Recomendaciones IA</label>
-            <label><input type="checkbox" bind:checked={iaAjustes} /> ⚙️ Ajustes automáticos</label>
+            <label><input type="checkbox" bind:checked={iaRecomendaciones} /> 🤖 {$_('goalsCaloriesMacros.aiRecommendations')}</label>
+            <label><input type="checkbox" bind:checked={iaAjustes} /> ⚙️ {$_('goalsCaloriesMacros.autoAdjustments')}</label>
           </div>
         {/if}
-        <button on:click={closeModal}>Guardar</button>
+        <button onclick={closeModal}>{$_('goalsCaloriesMacros.save')}</button>
       </div>
     </div>
   {/if}

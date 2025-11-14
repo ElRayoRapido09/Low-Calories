@@ -1,31 +1,42 @@
 <script>
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { _ } from 'svelte-i18n';
+  import { energyUnit } from '$lib/stores/units.js';
 
-  const weekdays = ["Lu", "Ma", "Mi", "Ju", "Vi", "Sá", "Do"];
-  const monthNames = [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre",
-  ];
+  let weekdays = $derived([
+    $_('mealPlanner.weekdays.mon'),
+    $_('mealPlanner.weekdays.tue'),
+    $_('mealPlanner.weekdays.wed'),
+    $_('mealPlanner.weekdays.thu'),
+    $_('mealPlanner.weekdays.fri'),
+    $_('mealPlanner.weekdays.sat'),
+    $_('mealPlanner.weekdays.sun')
+  ]);
+
+  let monthNames = $derived([
+    $_('home.months.0'),
+    $_('home.months.1'),
+    $_('home.months.2'),
+    $_('home.months.3'),
+    $_('home.months.4'),
+    $_('home.months.5'),
+    $_('home.months.6'),
+    $_('home.months.7'),
+    $_('home.months.8'),
+    $_('home.months.9'),
+    $_('home.months.10'),
+    $_('home.months.11')
+  ]);
 
   let today = new Date();
   let year = today.getFullYear();
   let month = today.getMonth(); // 0-11
-  let months = []; // array de {year, month, grid}
+  let months = $state([]); // array de {year, month, grid}
 
   // selección de rango
-  let rangeStart = null;
-  let rangeEnd = null;
+  let rangeStart = $state(null);
+  let rangeEnd = $state(null);
 
   function startOfDay(d) {
     return new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -124,10 +135,10 @@
 
 <main class="app">
   <header class="top">
-    <a href="/ajustes" class="back-btn" aria-label="Volver">‹</a>
+    <a href="/ajustes" class="back-btn" aria-label={$_('common.back')}>‹</a>
     <div class="header-center">
       <div class="icon">📅</div>
-      <h1>¿Qué días quieres planificar?</h1>
+      <h1>{$_('mealPlanner.title')}</h1>
     </div>
   </header>
 
@@ -143,7 +154,7 @@
           {#each m.grid as day}
             <button
               class="cell"
-              on:click={() => selectDay(day)}
+              onclick={() => selectDay(day)}
               disabled={!day}
               aria-pressed={inRange(day)}
             >
@@ -152,7 +163,7 @@
                 class:inactive={!day}>{day ? day.getDate() : ""}</span
               >
               {#if inRange(day)}
-                <span class="dot" />
+                <span class="dot"></span>
               {/if}
             </button>
           {/each}
@@ -164,18 +175,18 @@
   <div class="footer-gap"></div>
 
   <div class="bottom">
-    <button class="btn secondary" on:click={clearSelection}>Limpiar</button>
+    <button class="btn secondary" onclick={clearSelection}>{$_('mealPlanner.clear')}</button>
     <button
       class="btn primary"
-      on:click={confirmRange}
+      onclick={confirmRange}
       disabled={!rangeStart || !rangeEnd}
       aria-disabled={!rangeStart || !rangeEnd}
     >
       <span class="item">
         {#if rangeStart && rangeEnd}
-          Seleccionar {rangeStart.toLocaleDateString()} – {rangeEnd.toLocaleDateString()}
+          {$_('mealPlanner.select')} {rangeStart.toLocaleDateString()} – {rangeEnd.toLocaleDateString()}
         {:else}
-          Selecciona un rango
+          {$_('mealPlanner.selectRange')}
         {/if}
       </span>
     </button>

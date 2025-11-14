@@ -1,7 +1,8 @@
 <script>
   import { goto } from "$app/navigation";
+  import { _ } from 'svelte-i18n';
+  import { energyUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
 
-  let videoStream;
   let stream = null;
   let isDetecting = false;
   let showCaptureButton = true; // Cambiado a true para mostrar el botón inmediatamente
@@ -20,10 +21,22 @@
   let pixelChangeThreshold = 30;
   let motionDetectionInterval = null;
 
+  // Valor de calorías almacenado (siempre en kcal)
+  let recipeCalories = $state(450);
+  
+  // Convertir calorías a la unidad seleccionada
+  let displayCalories = $derived(
+    convertValue(recipeCalories, 'energy', 'kcal', $energyUnit)
+  );
+  
+  let formattedCalories = $derived(
+    formatWithUnit(displayCalories, $energyUnit, 0)
+  );
+
   async function openCamera() {
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        alert("Tu navegador no soporta la cámara.");
+        alert($_('home.camera.notSupported'));
         return;
       }
       stream = await navigator.mediaDevices.getUserMedia({
@@ -52,11 +65,11 @@
       
     } catch (error) {
       if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
-        alert("Permiso denegado para acceder a la camara");
+        alert($_('home.camera.permissionDenied'));
       } else if (error.name === "NotFoundError") {
-        alert("No se encontro ninguna camara en el dispositivo.");
+        alert($_('home.camera.notFound'));
       } else {
-        alert("Error al acceder a la camara: " + error.message);
+        alert($_('home.camera.error') + ': ' + error.message);
       }
     }
   }
@@ -337,8 +350,6 @@
     goto("/comidas");
   }
 
-  console.log("hola layo");
-
   let isMenuOpen = $state(false);
   let scrollY = $state(0);
   let cardsContainer = $state(null);
@@ -422,36 +433,49 @@
   let objetivos = $state([
     {
       id: 1,
-      titulo: "Perder 5kg",
+      titulo: $_('home.loseWeight'),
       progreso: 60,
-      descripcion: "Objetivo de pérdida de peso saludable",
+      descripcion: $_('home.loseWeightDesc'),
       icono: "⚖️",
     },
     {
       id: 2,
-      titulo: "Ganar músculo",
+      titulo: $_('home.gainMuscle'),
       progreso: 30,
-      descripcion: "Aumentar masa muscular con ejercicios",
+      descripcion: $_('home.gainMuscleDesc'),
       icono: "💪",
     },
     {
       id: 3,
-      titulo: "Mantener peso",
+      titulo: $_('home.maintainWeight'),
       progreso: 80,
-      descripcion: "Mantener el peso actual",
+      descripcion: $_('home.maintainWeightDesc'),
       icono: "🎯",
     },
   ]);
 
   let diasRacha = $state([
-    { dia: "L", enRacha: false },
-    { dia: "M", enRacha: false },
-    { dia: "M", enRacha: false },
-    { dia: "J", enRacha: false },
-    { dia: "V", enRacha: true },
-    { dia: "S", enRacha: true },
-    { dia: "D", enRacha: true },
+    { dia: $_('home.dayAbbr.mon'), enRacha: false },
+    { dia: $_('home.dayAbbr.tue'), enRacha: false },
+    { dia: $_('home.dayAbbr.wed'), enRacha: false },
+    { dia: $_('home.dayAbbr.thu'), enRacha: false },
+    { dia: $_('home.dayAbbr.fri'), enRacha: true },
+    { dia: $_('home.dayAbbr.sat'), enRacha: true },
+    { dia: $_('home.dayAbbr.sun'), enRacha: true },
   ]);
+
+   
+  let currentDate = $state(new Date());
+let currentMonth = $derived($_(`home.months.${currentDate.getMonth()}`));
+let currentYear = $derived(currentDate.getFullYear());
+
+function previousMonth() {
+  currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+}
+
+function nextMonth() {
+  currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+}
 </script>
 
 <svelte:head>
@@ -460,13 +484,13 @@
 
 <main class="main">
   <header class="header">
-    <h1>Low Calories</h1>
+    <h1>{$_('home.title')}</h1>
   </header>
 
   <section class="streak-section">
     <div class="section-header">
-      <h2>Mi Racha</h2>
-      <button class="edit-btn">Ver más</button>
+      <h2>{$_('home.myStreak')}</h2>
+      <button class="edit-btn">{$_('home.viewMore')}</button>
     </div>
     <div class="streak-list">
       {#each diasRacha as dia}
@@ -485,8 +509,8 @@
   <div class="content">
     <section class="ingredients-section">
       <div class="section-header">
-        <h2>¿Qué tienes en tu cocina?</h2>
-        <button class="edit-btn">Editar</button>
+        <h2>{$_('home.kitchen')}</h2>
+        <button class="edit-btn">{$_('common.edit')}</button>
       </div>
       <div class="ingredients-list">
         <div class="ingredient-icon">🍗</div>
@@ -502,25 +526,25 @@
     </section>
 
     <section class="recommendations-section">
-      <h2>Recomendaciones del día</h2>
+      <h2>{$_('home.recommendations')}</h2>
       <p class="subtitle">
-        Estas recetas han sido elegidas exclusivamente para cumplir tu plan
+        {$_('home.recommendationsSubtitle')}
       </p>
 
       <div class="recipe-card">
         <img
           src="https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=500&h=400&fit=crop"
-          alt="Comida"
+          alt="Arroz con pollo"
         />
         <div class="recipe-info">
-          <h3>Pollo con arroz y puré</h3>
-          <p>450 kcal • 30 min</p>
+          <h3>Arroz con pollo</h3>
+          <p>{formattedCalories} • 30 min</p>
         </div>
       </div>
 
       <section class="objetivos-section">
-        <h2>Mis Objetivos</h2>
-        <p class="subtitle">Sigue el progreso de tus metas nutricionales</p>
+        <h2>{$_('home.myGoals')}</h2>
+        <p class="subtitle">{$_('home.goalsSubtitle')}</p>
 
         {#each objetivos as objetivo}
           <div class="objetivo-card">
@@ -534,7 +558,7 @@
                   style="width: {objetivo.progreso}%"
                 ></div>
               </div>
-              <span class="progreso-text">{objetivo.progreso}% completado</span>
+              <span class="progreso-text">{objetivo.progreso}% {$_('home.completed')}</span>
             </div>
           </div>
         {/each}
@@ -574,33 +598,33 @@
   <nav class="bottom-nav">
     <a href="/ajustes" class="nav-item">
       <span class="nav-icon">⚙️</span>
-      <span class="nav-label">Ajustes</span>
+      <span class="nav-label">{$_('navigation.settings')}</span>
     </a>
 
     <a href="/estadisticas" class="nav-item">
       <span class="nav-icon">📊</span>
-      <span class="nav-label">Metricas</span>
+      <span class="nav-label">{$_('navigation.metrics')}</span>
     </a>
 
     <a href="/estadisticas" class="nav-item">
     </a>
 
-    <button class="nav-item camera-btn" on:click={openCamera}>
+    <button class="nav-item camera-btn" onclick={openCamera}>
       <span class="camera-icon">📷</span>
     </button>
 
     <a href="/perfil" class="nav-item">
       <span class="nav-icon">👤</span>
-      <span class="nav-label">Perfil</span>
+      <span class="nav-label">{$_('navigation.profile')}</span>
     </a>
 
     <a href="/objetivos" class="nav-item">
       <span class="nav-icon">🎯</span>
-      <span class="nav-label">Objetivo</span>
+      <span class="nav-label">{$_('navigation.goals')}</span>
     </a>
   </nav>
 
-  <button class="floating-btn" on:click={goToBot}> 🤖 </button>
+  <button class="floating-btn" onclick={goToBot}> 🤖 </button>
 
   <div id="camera-container" class="camera-container" style="display: none;">
     <video id="camera-video" autoplay playsinline></video>
@@ -615,11 +639,11 @@
 
     <div class="camera-controls">
       <header class="header-back">
-        <button id="close-camera-btn" class="back-btn" on:click={closeCamera}>‹</button>
+        <button id="close-camera-btn" class="back-btn" onclick={closeCamera}>‹</button>
       </header>
       
       {#if showCaptureButton && !isProcessing}
-        <button id="take-photo-btn" class="camera-btn-capture" on:click={takePhoto}>
+        <button id="take-photo-btn" class="camera-btn-capture" onclick={takePhoto}>
           📷 Tomar Foto
         </button>
       {/if}

@@ -1,3 +1,54 @@
+<script>
+  import { _ } from 'svelte-i18n';
+  import { energyUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
+  
+  // Valores de calorías almacenados (siempre en kcal)
+  let caloriesConsumed = $state(1240);
+  let caloriesGoal = $state(1800);
+  
+  // Calorías por día de la semana (en kcal)
+  let weekCalories = $state([
+    { dia: 'mon', kcal: 1650 },
+    { dia: 'tue', kcal: 1720 },
+    { dia: 'wed', kcal: 1580 },
+    { dia: 'thu', kcal: 1890 },
+    { dia: 'fri', kcal: 1640 },
+    { dia: 'sat', kcal: 1200 },
+    { dia: 'sun', kcal: null }
+  ]);
+  
+  // Valores convertidos
+  let displayConsumed = $derived(
+    Math.round(convertValue(caloriesConsumed, 'energy', 'kcal', $energyUnit))
+  );
+  
+  let displayGoal = $derived(
+    Math.round(convertValue(caloriesGoal, 'energy', 'kcal', $energyUnit))
+  );
+  
+  let displayWeekCalories = $derived(
+    weekCalories.map(d => {
+      if (!d.kcal) return { dia: d.dia, kcal: d.kcal, display: null };
+      
+      const converted = convertValue(d.kcal, 'energy', 'kcal', $energyUnit);
+      // Formatear según la unidad para compactar valores grandes
+      let formatted;
+      if ($energyUnit === 'cal') {
+        // Mostrar en formato compacto (1.65k en lugar de 1650000)
+        formatted = converted >= 1000 ? `${(converted / 1000).toFixed(1)}k` : Math.round(converted);
+      } else if ($energyUnit === 'kj') {
+        // kJ suele ser 4x más grande que kcal
+        formatted = Math.round(converted);
+      } else {
+        // kcal - valor normal
+        formatted = Math.round(converted);
+      }
+      
+      return { dia: d.dia, kcal: d.kcal, display: formatted };
+    })
+  );
+</script>
+
 <div class="bg"></div>
 <div class="bg bg2"></div>
 <div class="bg bg3"></div>
@@ -5,43 +56,43 @@
 <main>
     <header>
       <header class="header-back">
-          <a href="/" class="back-btn" aria-label="Volver">‹</a>
-          <h1>Estadísticas</h1>
+          <a href="/" class="back-btn" aria-label={$_('common.back')}>‹</a>
+          <h1>{$_('statistics.title')}</h1>
       </header>
-        <p>Visualiza tus progresos y logros</p>
+        <p>{$_('statistics.subtitle')}</p>
     </header>
   <section class="card-calorias">
       <div class = "icons">
       📈
       </div>
-    <h2>Progreso Semanal</h2>
-    <p>Aquí puedes ver tu progreso semanal en términos de calorías consumidas y quemadas.</p>
+    <h2>{$_('statistics.weeklyProgress')}</h2>
+    <p>{$_('statistics.weeklyProgressDescription')}</p>
     <div class="progress-container">
       <div class="progress-header">
-        <span>Este es el progreso de las calorias consumidas</span>
-        <span><b>1240/1800</b></span>
+        <span>{$_('statistics.caloriesProgress')}</span>
+        <span><b>{displayConsumed}/{displayGoal} {$energyUnit}</b></span>
       </div>
       <div class="progress-bar">
-        <div class="progress-fill" style="width: 71%;"></div>
+        <div class="progress-fill" style="width: {(caloriesConsumed/caloriesGoal)*100}%;"></div>
       </div>
     </div>
 
     <!-- Aquí podrías agregar gráficos o tablas para mostrar las estadísticas -->
   </section>
   <section class="card-macronutrientes">
-    <h2>Macronutrientes de hoy</h2>
-    <p>Has alcanzado 5 metas de alimentación saludable este mes. ¡Sigue así!</p>
-    <p>Proteínas: 30g</p>
+    <h2>{$_('statistics.todayMacros')}</h2>
+    <p>{$_('statistics.achievedGoals')}</p>
+    <p>{$_('statistics.proteins')}: 30g</p>
     <div class="progress-bar-container">
     <div class="progress-bar" style="width: {onprogress}%"></div>
   </div>
 
-    <p>Carbohidratos: 50g</p>
+    <p>{$_('statistics.carbs')}: 50g</p>
     <div class="progress-bar-container">
     <div class="progress-bar" style="width: {onprogress}%"></div>
   </div>
 
-    <p>Grasas: 20g</p>
+    <p>{$_('statistics.fats')}: 20g</p>
     <div class="progress-bar-container">
     <div class="progress-bar" style="width: {onprogress}%"></div>
   </div>
@@ -50,23 +101,15 @@
     <div class="icons">
       📅
     </div> 
-    <h2>Esta semana</h2>
+    <h2>{$_('statistics.thisWeek')}</h2>
     <div class="semana-bar">
-      {#each [
-        { dia: 'L', kcal: 1650 },
-        { dia: 'M', kcal: 1720 },
-        { dia: 'M', kcal: 1580 },
-        { dia: 'J', kcal: 1890 },
-        { dia: 'V', kcal: 1640 },
-        { dia: 'S', kcal: 1200 },
-        { dia: 'D', kcal: null }
-      ] as d}
+      {#each displayWeekCalories as d}
         <div class="dia">
           <div class="barra" style="opacity: {d.kcal ? 1 : 0.3}; background: linear-gradient(180deg, #0a3d62 70%, #38ada9 100%);">
             <!-- Puedes ajustar el alto según el valor si lo deseas -->
           </div>
-          <div class="letra">{d.dia}</div>
-          <div class="valor">{d.kcal ?? '-'}</div>
+          <div class="letra">{$_(`home.dayAbbr.${d.dia}`)}</div>
+          <div class="valor">{d.display ?? '-'}</div>
         </div>
       {/each}
     </div>
@@ -301,40 +344,8 @@
     margin-bottom: 0.2rem;
   }
   .valor {
-    font-size: 0.95rem;
+    font-size: 0.75rem;
     color: #38ada9;
     font-weight: 500;
   }
-  .semana-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin: 1.5rem 0 0.5rem 0;
-  gap: 0.5rem;
-}
-.dia {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 40px;
-}
-.barra {
-  width: 100%;
-  height: 48px;
-  border-radius: 16px;
-  background: #e0ecf7;
-  margin-bottom: 0.3rem;
-  transition: opacity 0.3s;
-}
-.letra {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 0.2rem;
-}
-.valor {
-  font-size: 0.95rem;
-  color: #38ada9;
-  font-weight: 500;
-}
 </style>
