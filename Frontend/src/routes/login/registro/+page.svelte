@@ -7,6 +7,8 @@
   let currentView = 1; 
 
   // Campos para registro
+  let name = '';
+  let lastname = '';
   let email = '';
   let password = '';
   let passwordConfirm = '';
@@ -93,8 +95,86 @@
     return /\S+@\S+\.\S+/.test(value);
   }
 
+  // Variables para cálculo de calorías
+  let caloriesCalculated = 0;
+  let proteinsCalculated = 0;
+  let carbsCalculated = 0;
+  let fatsCalculated = 0;
+  let activityLevel = 'Moderado';
+  let dietType = 'Recomendada';
+
+  // Calcular calorías usando fórmula de Harris-Benedict
+  function calculateCalories() {
+    if (!gender || !age || !weight || !height) {
+      return;
+    }
+
+    const ageNum = parseInt(age);
+    const weightNum = parseFloat(weight);
+    const heightNum = parseFloat(height);
+
+    // Tasa Metabólica Basal (TMB)
+    let bmr;
+    if (gender === 'male') {
+      bmr = 10 * weightNum + 6.25 * heightNum - 5 * ageNum + 5;
+    } else {
+      bmr = 10 * weightNum + 6.25 * heightNum - 5 * ageNum - 161;
+    }
+
+    // Factor de actividad
+    const activityFactors = {
+      'Sedentario': 1.2,
+      'Poco activo': 1.375,
+      'Moderado': 1.55,
+      'Muy activo': 1.725,
+      'Atleta': 1.9
+    };
+    const activityFactor = activityFactors[activityLevel] || 1.55;
+
+    // Calorías de mantenimiento
+    let maintenanceCalories = bmr * activityFactor;
+
+    // Ajustar según objetivo
+    if (goal === 'perder') {
+      caloriesCalculated = Math.round(maintenanceCalories - 500);
+    } else if (goal === 'ganar') {
+      caloriesCalculated = Math.round(maintenanceCalories + 300);
+    } else {
+      caloriesCalculated = Math.round(maintenanceCalories);
+    }
+
+    // Calcular macros según tipo de dieta
+    if (dietType === 'Alta en Proteinas') {
+      proteinsCalculated = Math.round((caloriesCalculated * 0.35) / 4);
+      carbsCalculated = Math.round((caloriesCalculated * 0.35) / 4);
+      fatsCalculated = Math.round((caloriesCalculated * 0.30) / 9);
+    } else if (dietType === 'Baja en Carbohidratos') {
+      proteinsCalculated = Math.round((caloriesCalculated * 0.30) / 4);
+      carbsCalculated = Math.round((caloriesCalculated * 0.20) / 4);
+      fatsCalculated = Math.round((caloriesCalculated * 0.50) / 9);
+    } else if (dietType === 'Baja en Grasas') {
+      proteinsCalculated = Math.round((caloriesCalculated * 0.30) / 4);
+      carbsCalculated = Math.round((caloriesCalculated * 0.50) / 4);
+      fatsCalculated = Math.round((caloriesCalculated * 0.20) / 9);
+    } else {
+      proteinsCalculated = Math.round((caloriesCalculated * 0.30) / 4);
+      carbsCalculated = Math.round((caloriesCalculated * 0.40) / 4);
+      fatsCalculated = Math.round((caloriesCalculated * 0.30) / 9);
+    }
+  }
+
+  // Calcular cuando cambia la vista 8
+  $: if (currentView === 8) {
+    calculateCalories();
+  }
+
   async function submitRegister() {
     clearMessages();
+    
+    if (!name || !lastname) {
+      error = 'Por favor completa tu nombre y apellidos';
+      return;
+    }
     if (!validateEmail(email)) {
       error = $_('register.invalidEmail');
       return;
@@ -107,12 +187,76 @@
       error = $_('register.passwordMismatch');
       return;
     }
+    
+    if (!gender || !age || !weight || !height || !goal) {
+      error = 'Por favor completa toda la información requerida';
+      return;
+    }
+    
     loading = true;
+HEAD
     // Simular registro
     await new Promise(resolve => setTimeout(resolve, 1000));
     success = $_('register.successMessage');
     loading = false;
     nextView(); // Ir a vista 13
+
+    
+    try {
+      const registroData = {
+        nombre: name,
+        apellido: lastname,
+        correo: email,
+        telefono: '0000000000',
+        password: password,
+        peso: parseFloat(weight),
+        altura: parseFloat(height),
+        fech_cumpleanos: calculateBirthDate(age),
+        entrenamiento: activityLevel
+      };
+      
+      const response = await fetch('http://localhost:8000/api/accounts/register/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(registroData)
+      });
+      
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('Respuesta no-JSON:', text);
+        error = 'Error del servidor. Verifica que el backend esté corriendo.';
+        return;
+      }
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        success = '¡Registro exitoso! Bienvenido a Low Calories.';
+        setTimeout(() => {
+          nextView();
+        }, 1000);
+      } else {
+        error = data.error || 'Error al registrar.';
+        if (data.correo) {
+          error = 'Este correo ya está registrado.';
+        }
+      }
+    } catch (err) {
+      error = 'Error de conexión. Verifica que el servidor esté corriendo.';
+      console.error('Error:', err);
+    } finally {
+      loading = false;
+    }
+  }
+  
+  function calculateBirthDate(age) {
+    const today = new Date();
+    const birthYear = today.getFullYear() - parseInt(age);
+    return `${birthYear}-01-01`;
+    
   }
 </script>
 
@@ -153,12 +297,12 @@
         <label class="opcion">
           <input type="radio" name="objetivo" value="mantener" bind:group={goal} />
           <span class="checkmark"></span>
-          Ganar músculo
+          Mantener peso
         </label>
         <label class="opcion">
           <input type="radio" name="objetivo" value="ganar" bind:group={goal} />
           <span class="checkmark"></span>
-          Mantener peso
+          Ganar músculo
         </label>
       </div>
       <div class="nav-buttons">
@@ -314,30 +458,42 @@
       </div>
       
       <h2>¿Cuanta actividad tienes?</h2>
-      <li class="item">
-        <span class="icon">🛌</span>
-        <span class="label">nada Activo</span>
-      </li>
+      <div class="lista">
+        <label class="opcion">
+          <input type="radio" name="actividad" value="Sedentario" bind:group={activityLevel} />
+          <span class="checkmark"></span>
+          <span class="icon">🛌</span>
+          <span class="label">Sedentario</span>
+        </label>
 
-      <li class="item">
-        <span class="icon" >🧘</span>
-        <span class="label">Poco activo</span>
-      </li>
+        <label class="opcion">
+          <input type="radio" name="actividad" value="Poco activo" bind:group={activityLevel} />
+          <span class="checkmark"></span>
+          <span class="icon">🧘</span>
+          <span class="label">Poco activo</span>
+        </label>
 
-      <li class="item">
-        <span class="icon">🚶</span>
-        <span class="label">Moderadamente activo</span>
-      </li>
+        <label class="opcion">
+          <input type="radio" name="actividad" value="Moderado" bind:group={activityLevel} />
+          <span class="checkmark"></span>
+          <span class="icon">🚶</span>
+          <span class="label">Moderado</span>
+        </label>
 
-      <li class="item">
-        <span class="icon">🤸</span>
-        <span class="label">Muy activo</span>
-      </li>
+        <label class="opcion">
+          <input type="radio" name="actividad" value="Muy activo" bind:group={activityLevel} />
+          <span class="checkmark"></span>
+          <span class="icon">🤸</span>
+          <span class="label">Muy activo</span>
+        </label>
 
-      <li class="item">
-        <span class="icon">🧗</span>
-        <span class="label">Atleta</span>
-      </li>
+        <label class="opcion">
+          <input type="radio" name="actividad" value="Atleta" bind:group={activityLevel} />
+          <span class="checkmark"></span>
+          <span class="icon">🧗</span>
+          <span class="label">Atleta</span>
+        </label>
+      </div>
       
       <div class="nav-buttons">
         <button on:click={prevView}>Regresar</button>
@@ -354,31 +510,57 @@
         </div>
       </div>
       
-      <h2>Que tipo de dieta prefieres?</h2>
+      <h2>¿Qué tipo de dieta prefieres?</h2>
 
-      <li class="item">
-        <span class="icon">✨</span>
-        <span class="label">Recomendada</span>
-        <p>La mejor opcion para ti, una mezcla equilibrada de nutrientes.</p>
-      </li>
-      
-      <li class="item">
-        <span class="icon">🍗</span>
-        <span class="label">Alta en Proteinas</span>
-        <p>Ideal para ganar músculo y mantener la saciedad.</p>
-      </li>
+      <div class="lista">
+        <label class="opcion">
+          <input type="radio" name="dieta" value="Recomendada" bind:group={dietType} />
+          <span class="checkmark"></span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="icon" style="width: auto; height: auto;">✨</span>
+              <span class="label" style="flex: none;">Recomendada</span>
+            </div>
+            <p style="margin: 4px 0 0 36px; font-size: 14px;">La mejor opción para ti, una mezcla equilibrada de nutrientes.</p>
+          </div>
+        </label>
+        
+        <label class="opcion">
+          <input type="radio" name="dieta" value="Alta en Proteinas" bind:group={dietType} />
+          <span class="checkmark"></span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="icon" style="width: auto; height: auto;">🍗</span>
+              <span class="label" style="flex: none;">Alta en Proteínas</span>
+            </div>
+            <p style="margin: 4px 0 0 36px; font-size: 14px;">Ideal para ganar músculo y mantener la saciedad.</p>
+          </div>
+        </label>
 
-      <li class="item">
-        <span class="icon">🥑</span>
-        <span class="label">Baja en Carbohidratos</span>
-        <p>Perfecta para perder grasa y controlar el apetito.</p>
-      </li>
+        <label class="opcion">
+          <input type="radio" name="dieta" value="Baja en Carbohidratos" bind:group={dietType} />
+          <span class="checkmark"></span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="icon" style="width: auto; height: auto;">🥑</span>
+              <span class="label" style="flex: none;">Baja en Carbohidratos</span>
+            </div>
+            <p style="margin: 4px 0 0 36px; font-size: 14px;">Perfecta para perder grasa y controlar el apetito.</p>
+          </div>
+        </label>
 
-      <li class="item">
-        <span class="icon">🌱</span>
-        <span class="label">Baja en Grasas</span>
-        <p>Buena para mejorar la salud cardiovascular y perder peso.</p>
-      </li>
+        <label class="opcion">
+          <input type="radio" name="dieta" value="Baja en Grasas" bind:group={dietType} />
+          <span class="checkmark"></span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="icon" style="width: auto; height: auto;">🌱</span>
+              <span class="label" style="flex: none;">Baja en Grasas</span>
+            </div>
+            <p style="margin: 4px 0 0 36px; font-size: 14px;">Buena para mejorar la salud cardiovascular y perder peso.</p>
+          </div>
+        </label>
+      </div>
       
       <div class="nav-buttons">
         <button on:click={prevView}>Regresar</button>
@@ -402,22 +584,22 @@
       </div>
       <p class="carousel-title">¡Genial! Estas son las calorías que necesitas al día</p>
       <div class="carousel-metric-card">
-        <div class="metric-kcal">2,167 kcal</div>
+        <div class="metric-kcal">{caloriesCalculated.toLocaleString()} kcal</div>
         <div class="metric-macros">
           <div class="macro">
             <span class="macro-label">Proteínas</span>
-            <span class="macro-value">100 g</span>
-            <div class="macro-bar"></div>
+            <span class="macro-value">{proteinsCalculated} g</span>
+            <div class="macro-bar" style="background: #ff6b6b;"></div>
           </div>
           <div class="macro">
             <span class="macro-label">Carbs</span>
-            <span class="macro-value">252 g</span>
-            <div class="macro-bar"></div>
+            <span class="macro-value">{carbsCalculated} g</span>
+            <div class="macro-bar" style="background: #4ecdc4;"></div>
           </div>
           <div class="macro">
             <span class="macro-label">Grasas</span>
-            <span class="macro-value">84 g</span>
-            <div class="macro-bar"></div>
+            <span class="macro-value">{fatsCalculated} g</span>
+            <div class="macro-bar" style="background: #ffd93d;"></div>
           </div>
         </div>
       </div>
@@ -589,6 +771,13 @@
       {/if}
       
       <form class="card-form" on:submit|preventDefault={submitRegister}>
+
+        <label for="name">nombre</label>
+        <input id="name" name="email" type="text" bind:value={name} placeholder="Tu nombre" />
+
+        <label for="lastname">Apellidos</label>
+        <input id="lastname" name="lastname" type="text" bind:value={lastname} placeholder="Tus apellidos" />
+
         <label for="email">Correo</label>
         <input id="email" name="email" type="email" bind:value={email} placeholder="tucorreo@ejemplo.com" />
 
