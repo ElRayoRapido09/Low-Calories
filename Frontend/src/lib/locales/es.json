@@ -43,7 +43,9 @@
       "notSupported": "Lo siento, tu navegador no soporta acceso a cámara",
       "permissionDenied": "No se otorgó permiso para acceder a la cámara",
       "notFound": "No se encontró ninguna cámara",
-      "error": "Error al acceder a la cámara"
+      "error": "Error al acceder a la cámara",
+      "takePhoto": "📷 Tomar Foto",
+      "processingImage": "Procesando..."
     },
     "daysOfWeek": {
       "monday": "L",

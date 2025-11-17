@@ -688,14 +688,14 @@
       
       {#if showCaptureButton && !isProcessing}
         <button id="take-photo-btn" class="camera-btn-capture" onclick={takePhoto}>
-          📷 Tomar Foto
+          {$_('home.camera.takePhoto')}
         </button>
       {/if}
       
       {#if isProcessing}
         <div class="processing-overlay">
           <div class="spinner"></div>
-          <p>Procesando...</p>
+          <p>{$_('home.camera.processingImage')}</p>
         </div>
       {/if}
     </div>

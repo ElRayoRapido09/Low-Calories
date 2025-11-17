@@ -43,7 +43,9 @@
       "notSupported": "Sorry, your browser does not support camera access",
       "permissionDenied": "Camera access permission was not granted",
       "notFound": "No camera found",
-      "error": "Error accessing camera"
+      "error": "Error accessing camera",
+      "takePhoto": "📷 Take Photo",
+      "processingImage": "Processing..."
     },
     "daysOfWeek": {
       "monday": "M",
