@@ -24,7 +24,9 @@
     "recommendationsSubtitle": "These recipes have been exclusively chosen to meet your plan",
     "myGoals": "My Goals",
     "goalsSubtitle": "Track your nutritional goals progress",
-    "calendar": "Calendar",
+    "calendar": {
+      "title": "Calendar"
+    },
     "loseWeight": "Lose weight",
     "loseWeightDesc": "Reduce calories in a healthy way",
     "gainMuscle": "Gain muscle",
@@ -32,6 +34,17 @@
     "maintainWeight": "Maintain weight",
     "maintainWeightDesc": "Balance your diet",
     "completed": "completed",
+    "camera": {
+      "detecting": "🔍 Detecting food...",
+      "processing": "📤 Processing image...",
+      "success": "✅ Food detected successfully!",
+      "noRecognition": "❌ Could not recognize the food. Please try again.",
+      "connectionError": "❌ Connection error. Please verify the server is running.",
+      "notSupported": "Sorry, your browser does not support camera access",
+      "permissionDenied": "Camera access permission was not granted",
+      "notFound": "No camera found",
+      "error": "Error accessing camera"
+    },
     "daysOfWeek": {
       "monday": "M",
       "tuesday": "T",
@@ -146,6 +159,17 @@
     "recipesDescription": "Step-by-step instructions",
     "ingredientsOnly": "Ingredients only",
     "ingredientsDescription": "You can prepare it however you want",
+    "exampleRecipe": "Chicken Avocado Sandwich",
+    "exampleIngredients": {
+      "chicken": "Chicken",
+      "rice": "Rice",
+      "avocado": "Avocado",
+      "chickenAmount": "1 medium fillet",
+      "riceAmount": "1 cup",
+      "avocadoAmount": "1/2 unit"
+    },
+    "backButton": "Back",
+    "continueButton": "Continue",
     "setupComplete": "Setup Complete!",
     "planReady": "Your personalized plan is ready",
     "goalConfigured": "Goal configured",
@@ -301,6 +325,7 @@
     "total": "Total",
     "simpleFoodsDesc": "We will indicate the base foods, which you can cook as you prefer. Example:",
     "recipesDesc": "We will indicate dishes with detailed instructions. Example:",
+    "recipeExample": "🍳 Egg omelette with toasted bread",
     "meals": "meals"
   },
   "mealPlanner": {
@@ -391,10 +416,33 @@
     }
   },
   "register": {
-    "invalidEmail": "Please enter a valid email",
-    "passwordTooShort": "Password must be at least 6 characters long",
+    "welcomeTitle": "Let's start your journey to a healthier life!",
+    "welcomeDescription": "Now we will set up your personalized plan to achieve your nutrition and wellness goals.",
+    "goalQuestion": "What is your goal?",
+    "goalDescription": "We will calculate the calories you need to achieve it.",
+    "excellentTitle": "Excellent",
+    "caloriesIntro": "Now the first step is to discover how many calories you need daily.",
+    "needInfoText": "We will need to know your age, gender, weight and height.",
+    "tellUsAboutYou": "Tell us about yourself",
+    "infoHelps": "This information will help us calculate your target calories.",
+    "dietTypeQuestion": "What type of diet do you prefer?",
+    "balanced": "Balanced",
+    "balancedDescription": "The best option for you, a balanced mix of nutrients.",
+    "highProtein": "High Protein",
+    "highProteinDescription": "Ideal for building muscle and maintaining satiety.",
+    "lowCarb": "Low Carb",
+    "lowCarbDescription": "Perfect for losing fat and controlling appetite.",
+    "lowFat": "Low Fat",
+    "lowFatDescription": "Good for improving cardiovascular health and losing weight.",
+    "caloriesResult": "Great! These are the calories you need per day",
+    "customizePlan": "Now, let's customize your meal plan to achieve your goals.",
+    "mealsPerDay": "How many meals per day do you want?",
+    "mealsPerDayHint": "Choose at least 2 main meals",
+    "suggestionPreference": "How do you prefer your meal suggestions?",
+    "invalidEmail": "Enter a valid email",
+    "passwordTooShort": "Password must be at least 6 characters",
     "passwordMismatch": "Passwords do not match",
-    "successMessage": "Registration successful. Connect with your API to register."
+    "successMessage": "Registration successful. Connect to your API to register."
   },
   "premium": {
     "title": "Premium",
@@ -431,5 +479,29 @@
     "noResults": "No results found. Try terms in English.",
     "noName": "No name",
     "noDescription": "No description"
+  },
+  "foodDetails": {
+    "title": "Food Details",
+    "loading": "Loading nutritional information...",
+    "error": "Oops...",
+    "noIdProvided": "History ID not provided",
+    "loadError": "Error loading data",
+    "notFound": "Food not found",
+    "backButton": "Back",
+    "nutritionalDetails": "Nutritional Details",
+    "scanned": "Scanned",
+    "unknownFood": "Unknown food",
+    "nutritionalInfo": "Nutritional Information",
+    "calories": "Calories",
+    "protein": "Protein",
+    "carbs": "Carbohydrates",
+    "fat": "Fat",
+    "servingInfo": "Serving consumed",
+    "additionalInfo": "Additional Information",
+    "registrationMethod": "Registration method",
+    "mealType": "Meal type",
+    "notSpecified": "Not specified",
+    "backToHome": "Back to home",
+    "scanDetected": "Food detected successfully!"
   }
 }

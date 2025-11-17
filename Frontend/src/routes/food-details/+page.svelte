@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
+    import { _ } from 'svelte-i18n';
     
     let foodData = null;
     let loading = true;
@@ -14,7 +15,7 @@
         console.log('🔍 ID del historial:', historialId);
         
         if (!historialId) {
-            error = 'ID de historial no proporcionado';
+            error = $_('foodDetails.noIdProvided');
             loading = false;
             return;
         }
@@ -38,7 +39,7 @@
             });
             
             if (!response.ok) {
-                throw new Error('Error al cargar los datos');
+                throw new Error($_('foodDetails.loadError'));
             }
             
             const historyData = await response.json();
@@ -49,7 +50,7 @@
             console.log('🍽️ Datos de la comida encontrada:', foodData);
             
             if (!foodData) {
-                error = 'Comida no encontrada';
+                error = $_('foodDetails.notFound');
             }
             
         } catch (err) {
@@ -96,7 +97,7 @@
 </script>
 
 <svelte:head>
-    <title>Detalles de Comida - Low Calories</title>
+    <title>{$_('foodDetails.title')} - Low Calories</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </svelte:head>
 
@@ -104,36 +105,36 @@
     {#if loading}
         <div class="loading">
             <div class="spinner"></div>
-            <p>Cargando información nutricional...</p>
+            <p>{$_('foodDetails.loading')}</p>
         </div>
     {:else if error}
         <div class="error-container">
             <div class="error-icon">⚠️</div>
-            <h2>Oops...</h2>
+            <h2>{$_('foodDetails.error')}</h2>
             <p>{error}</p>
-            <button class="btn-primary" on:click={goBack}>Volver al inicio</button>
+            <button class="btn-primary" on:click={goBack}>{$_('foodDetails.backToHome')}</button>
         </div>
     {:else if foodData}
         <div class="header">
             <button class="back-btn" on:click={goBack}>
                 <span class="back-icon">←</span>
-                <span>Volver</span>
+                <span>{$_('foodDetails.backButton')}</span>
             </button>
-            <h1>Detalles Nutricionales</h1>
+            <h1>{$_('foodDetails.nutritionalDetails')}</h1>
         </div>
         
         <div class="content">
             {#if foodData.image_url}
                 <div class="image-container">
-                    <img src={foodData.image_url} alt={foodData.nombre_alimento || 'Alimento'} />
+                    <img src={foodData.image_url} alt={foodData.nombre_alimento || $_('foodDetails.unknownFood')} />
                     <div class="image-overlay">
-                        <span class="scan-badge">✓ Escaneado</span>
+                        <span class="scan-badge">✓ {$_('foodDetails.scanned')}</span>
                     </div>
                 </div>
             {/if}
             
             <div class="food-info">
-                <h2>{foodData.nombre_alimento || 'Alimento desconocido'}</h2>
+                <h2>{foodData.nombre_alimento || $_('foodDetails.unknownFood')}</h2>
                 <p class="scan-date">
                     📅 {formatDate(foodData.fecha)}
                 </p>
@@ -144,7 +145,7 @@
             
             <div class="section-title">
                 <span class="icon">📊</span>
-                <h3>Información Nutricional</h3>
+                <h3>{$_('foodDetails.nutritionalInfo')}</h3>
             </div>
             
             <div class="nutrition-grid">
@@ -152,7 +153,7 @@
                     <div class="card-icon">🔥</div>
                     <div class="card-content">
                         <div class="value">{formatNumber(foodData.calorias)}</div>
-                        <div class="label">Calorías</div>
+                        <div class="label">{$_('foodDetails.calories')}</div>
                         <div class="unit">kcal</div>
                     </div>
                 </div>
@@ -161,7 +162,7 @@
                     <div class="card-icon">🥩</div>
                     <div class="card-content">
                         <div class="value">{formatNumber(foodData.proteinas)}</div>
-                        <div class="label">Proteína</div>
+                        <div class="label">{$_('foodDetails.protein')}</div>
                         <div class="unit">g</div>
                     </div>
                 </div>
@@ -170,7 +171,7 @@
                     <div class="card-icon">🍞</div>
                     <div class="card-content">
                         <div class="value">{formatNumber(foodData.carbohidratos)}</div>
-                        <div class="label">Carbohidratos</div>
+                        <div class="label">{$_('foodDetails.carbs')}</div>
                         <div class="unit">g</div>
                     </div>
                 </div>
@@ -179,7 +180,7 @@
                     <div class="card-icon">🥑</div>
                     <div class="card-content">
                         <div class="value">{formatNumber(foodData.grasas)}</div>
-                        <div class="label">Grasas</div>
+                        <div class="label">{$_('foodDetails.fat')}</div>
                         <div class="unit">g</div>
                     </div>
                 </div>
@@ -188,29 +189,29 @@
             {#if foodData.cantidad_consumida}
                 <div class="serving-info">
                     <span class="icon">🍽️</span>
-                    <span>Cantidad consumida: <strong>{foodData.cantidad_consumida}g</strong></span>
+                    <span>{$_('foodDetails.servingInfo')}: <strong>{foodData.cantidad_consumida}g</strong></span>
                 </div>
             {/if}
             
             <div class="section-title">
                 <span class="icon">ℹ️</span>
-                <h3>Información Adicional</h3>
+                <h3>{$_('foodDetails.additionalInfo')}</h3>
             </div>
             
             <div class="info-card">
                 <div class="info-row">
-                    <span class="info-label">Método de registro:</span>
-                    <span class="info-value">{foodData.metodo_registro || 'No especificado'}</span>
+                    <span class="info-label">{$_('foodDetails.registrationMethod')}:</span>
+                    <span class="info-value">{foodData.metodo_registro || $_('foodDetails.notSpecified')}</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Tipo de comida:</span>
-                    <span class="info-value">{foodData.tipo_comida || 'No especificado'}</span>
+                    <span class="info-label">{$_('foodDetails.mealType')}:</span>
+                    <span class="info-value">{foodData.tipo_comida || $_('foodDetails.notSpecified')}</span>
                 </div>
             </div>
             
             <div class="actions">
                 <button class="btn-secondary" on:click={goBack}>
-                    🏠 Volver al inicio
+                    🏠 {$_('foodDetails.backToHome')}
                 </button>
             </div>
         </div>

@@ -326,8 +326,8 @@
       </div>
       
       <div class="nav-buttons">
-        <button on:click={prevView}>Regresar</button>
-        <button on:click={nextView}>Continuar</button>
+        <button on:click={prevView}>{$_('goals.backButton')}</button>
+        <button on:click={nextView}>{$_('goals.continueButton')}</button>
       </div>
   </section>  
   {/if}
@@ -437,7 +437,7 @@
             <p>{$_('goals.recipesDescription')}</p>
             <div class="recipe-example">
               <div class="recipe-image">🥪</div>
-              <span class="recipe-name">Sándwich de Pollo con Aguacate</span>
+              <span class="recipe-name">{$_('goals.exampleRecipe')}</span>
             </div>
           </div>
         </button>
@@ -449,18 +449,18 @@
             <div class="ingredients-list">
               <div class="ingredient-item">
                 <span class="ingredient-icon">🍗</span>
-                <span class="ingredient-name">Pollo</span>
-                <span class="ingredient-amount">1 filete mediano</span>
+                <span class="ingredient-name">{$_('goals.exampleIngredients.chicken')}</span>
+                <span class="ingredient-amount">{$_('goals.exampleIngredients.chickenAmount')}</span>
               </div>
               <div class="ingredient-item">
                 <span class="ingredient-icon">🍚</span>
-                <span class="ingredient-name">Arroz</span>
-                <span class="ingredient-amount">1 taza</span>
+                <span class="ingredient-name">{$_('goals.exampleIngredients.rice')}</span>
+                <span class="ingredient-amount">{$_('goals.exampleIngredients.riceAmount')}</span>
               </div>
               <div class="ingredient-item">
                 <span class="ingredient-icon">🥑</span>
-                <span class="ingredient-name">Aguacate</span>
-                <span class="ingredient-amount">1/2 unidad</span>
+                <span class="ingredient-name">{$_('goals.exampleIngredients.avocado')}</span>
+                <span class="ingredient-amount">{$_('goals.exampleIngredients.avocadoAmount')}</span>
               </div>
             </div>
           </div>
