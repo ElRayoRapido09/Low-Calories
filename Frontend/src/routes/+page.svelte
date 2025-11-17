@@ -21,6 +21,61 @@
   let pixelChangeThreshold = 30;
   let motionDetectionInterval = null;
 
+  // Variables para el calendario
+  let currentDate = $state(new Date());
+  let currentMonth = $derived(currentDate.getMonth());
+  let currentYear = $derived(currentDate.getFullYear());
+  
+  // Función para obtener días del mes
+  function getDaysInMonth(year, month) {
+    return new Date(year, month + 1, 0).getDate();
+  }
+  
+  // Función para obtener el primer día de la semana del mes (0 = domingo, 1 = lunes, etc.)
+  function getFirstDayOfMonth(year, month) {
+    const firstDay = new Date(year, month, 1).getDay();
+    // Convertir domingo (0) a 7 para que lunes sea 1
+    return firstDay === 0 ? 6 : firstDay - 1;
+  }
+  
+  // Calcular días del calendario
+  let calendarDays = $derived.by(() => {
+    const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+    const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
+    const days = [];
+    
+    // Agregar espacios vacíos para los días antes del inicio del mes
+    for (let i = 0; i < firstDay; i++) {
+      days.push({ type: 'empty', value: '' });
+    }
+    
+    // Agregar los días del mes
+    for (let i = 1; i <= daysInMonth; i++) {
+      const isToday = i === new Date().getDate() && 
+                      currentMonth === new Date().getMonth() && 
+                      currentYear === new Date().getFullYear();
+      days.push({ type: 'day', value: i, isToday });
+    }
+    
+    return days;
+  });
+  
+  function previousMonth() {
+    if (currentMonth === 0) {
+      currentDate = new Date(currentYear - 1, 11, 1);
+    } else {
+      currentDate = new Date(currentYear, currentMonth - 1, 1);
+    }
+  }
+  
+  function nextMonth() {
+    if (currentMonth === 11) {
+      currentDate = new Date(currentYear + 1, 0, 1);
+    } else {
+      currentDate = new Date(currentYear, currentMonth + 1, 1);
+    }
+  }
+
   // Valor de calorías almacenado (siempre en kcal)
   let recipeCalories = $state(450);
   
@@ -216,7 +271,7 @@
     detectionAttempts++;
     console.log(`Intento de detección automática #${detectionAttempts}`);
     
-    showAlert('🔍 Detectando comida...');
+    showAlert($_('home.camera.detecting'));
     
     // Capturar frame actual
     const imageBlob = await captureFrame();
@@ -246,7 +301,7 @@
 
   async function processImage(imageBlob, isAutomatic = false) {
     isProcessing = true;
-    showAlert('📤 Procesando imagen...');
+    showAlert($_('home.camera.processing'));
     
     try {
       const formData = new FormData();
@@ -275,7 +330,7 @@
       
       if (response.ok && data.success) {
         // Éxito: redirigir a página de resultados
-        showAlert('✅ ¡Comida detectada exitosamente!');
+        showAlert($_('home.camera.success'));
         setTimeout(() => {
           closeCamera();
           goto(`/food-details?id=${data.historial_id}`);
@@ -283,13 +338,13 @@
       } else {
         // Error en el procesamiento
         console.error('Error en procesamiento:', data);
-        showAlert(data.error || '❌ No se pudo reconocer la comida. Intente de nuevo.');
+        showAlert(data.error || $_('home.camera.noRecognition'));
         isProcessing = false;
         isDetecting = false;
       }
     } catch (error) {
       console.error('Error procesando imagen:', error);
-      showAlert('❌ Error de conexión. Verifique que el servidor esté corriendo.');
+      showAlert($_('home.camera.connectionError'));
       isProcessing = false;
       isDetecting = false;
     }
@@ -465,17 +520,6 @@
   ]);
 
    
-  let currentDate = $state(new Date());
-let currentMonth = $derived($_(`home.months.${currentDate.getMonth()}`));
-let currentYear = $derived(currentDate.getFullYear());
-
-function previousMonth() {
-  currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
-}
-
-function nextMonth() {
-  currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-}
 </script>
 
 <svelte:head>
@@ -537,7 +581,7 @@ function nextMonth() {
           alt="Arroz con pollo"
         />
         <div class="recipe-info">
-          <h3>Arroz con pollo</h3>
+          <h3>{$_('home.recommendations')}</h3>
           <p>{formattedCalories} • 30 min</p>
         </div>
       </div>
@@ -564,31 +608,31 @@ function nextMonth() {
         {/each}
       </section>
 
-      <h2>Calendario</h2>
+      <h2>{$_('home.calendar.title')}</h2>
       <div class="calendar-card">
         <div class="mini-calendar">
           <div class="calendar-header">
-            <span class="calendar-month">Octubre 2025</span>
-            <span class="calendar-arrows">‹ ›</span>
+            <button class="calendar-arrow-btn" onclick={previousMonth} aria-label="Mes anterior">‹</button>
+            <span class="calendar-month">{$_(`home.months.${currentMonth}`)} {currentYear}</span>
+            <button class="calendar-arrow-btn" onclick={nextMonth} aria-label="Mes siguiente">›</button>
           </div>
           <div class="calendar-days">
-            <span>L</span><span>M</span><span>M</span><span>J</span><span
-              >V</span
-            ><span>S</span><span>D</span>
+            <span>{$_('home.dayAbbr.mon')}</span>
+            <span>{$_('home.dayAbbr.tue')}</span>
+            <span>{$_('home.dayAbbr.wed')}</span>
+            <span>{$_('home.dayAbbr.thu')}</span>
+            <span>{$_('home.dayAbbr.fri')}</span>
+            <span>{$_('home.dayAbbr.sat')}</span>
+            <span>{$_('home.dayAbbr.sun')}</span>
           </div>
           <div class="calendar-dates">
-            <span class="calendar-empty"></span>
-            <span class="calendar-empty"></span>
-            <span class="calendar-empty"></span>
-            <span>1</span><span>2</span><span>3</span><span>4</span>
-            <span>5</span><span>6</span><span>7</span><span>8</span><span
-              >9</span><span>10</span><span>11</span>
-            <span>12</span><span>13</span><span>14</span><span>15</span><span
-              >16</span><span>17</span><span>18</span>
-            <span>19</span><span>20</span><span>21</span><span>22</span><span
-              >23</span><span>24</span><span>25</span>
-            <span>26</span><span>27</span><span>28</span><span>29</span><span
-              >30</span><span>31</span>
+            {#each calendarDays as day}
+              {#if day.type === 'empty'}
+                <span class="calendar-empty"></span>
+              {:else}
+                <span class:calendar-today={day.isToday}>{day.value}</span>
+              {/if}
+            {/each}
           </div>
         </div>
       </div>
@@ -644,14 +688,14 @@ function nextMonth() {
       
       {#if showCaptureButton && !isProcessing}
         <button id="take-photo-btn" class="camera-btn-capture" onclick={takePhoto}>
-          📷 Tomar Foto
+          {$_('home.camera.takePhoto')}
         </button>
       {/if}
       
       {#if isProcessing}
         <div class="processing-overlay">
           <div class="spinner"></div>
-          <p>Procesando...</p>
+          <p>{$_('home.camera.processingImage')}</p>
         </div>
       {/if}
     </div>
@@ -1096,11 +1140,31 @@ function nextMonth() {
     font-size: 1rem;
     font-weight: 700;
   }
-  .calendar-arrows {
-    font-size: 1.2rem;
-    color: #666;
+  
+  .calendar-arrow-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #005bb5;
     cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    transition: transform 0.2s;
   }
+  
+  .calendar-arrow-btn:hover {
+    transform: scale(1.2);
+  }
+  
+  .calendar-arrow-btn:active {
+    transform: scale(0.95);
+  }
+  
+  .calendar-today {
+    background: #005bb5 !important;
+    color: #fff !important;
+    font-weight: 700;
+  }
+  
   .calendar-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);

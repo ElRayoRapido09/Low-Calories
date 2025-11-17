@@ -4,7 +4,7 @@
   
   let bottomNavHeight = $derived(Math.min(50 + (scrollY * 0.8), 95));
   let scrollY = 0;
-  let notificationOpen = false;
+  let notificationOpen = $state(false);
   
   // Peso almacenado en kg
   let weightInKg = 62;

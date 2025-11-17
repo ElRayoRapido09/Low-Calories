@@ -270,10 +270,10 @@ HEAD
         </div>
       </div>
       
-      <h2>¡Empecemos tu viaje hacia una vida más saludable!</h2>
-      <p>Ahora vamos a configurar tu plan personalizado para alcanzar tus objetivos de nutrición y bienestar.</p>
+      <h2>{$_('register.welcomeTitle')}</h2>
+      <p>{$_('register.welcomeDescription')}</p>
       <div class="nav-buttons">
-        <button on:click={nextView}>Continuar</button>
+        <button on:click={nextView}>{$_('goals.continueButton')}</button>
       </div>
     </section>
   {/if}
@@ -286,8 +286,8 @@ HEAD
         </div>
       </div>
       
-      <h2>¿Cuál es tu objetivo?</h2>
-      <p>Calcularemos tus calorías necesarias para lograrlo.</p>
+      <h2>{$_('register.goalQuestion')}</h2>
+      <p>{$_('register.goalDescription')}</p>
       <div class="lista">
         <label class="opcion">
           <input type="radio" name="objetivo" value="perder" bind:group={goal} />
@@ -306,7 +306,7 @@ HEAD
         </label>
       </div>
       <div class="nav-buttons">
-        <button on:click={nextView}>Continuar</button>
+        <button on:click={nextView}>{$_('goals.continueButton')}</button>
       </div>
     </section>
   {/if}
@@ -320,13 +320,13 @@ HEAD
         </div>
       </div>
       
-      <h2>Excelente
+      <h2>{$_('register.excellentTitle')}
       </h2>
-      <p>Ahora el primer paso es descubrir cuantas calorías necesitas diariamente.</p>
-      <p>Necesitaremos saber tu edad, sexo, peso y altura.</p>
+      <p>{$_('register.caloriesIntro')}</p>
+      <p>{$_('register.needInfoText')}</p>
     <div class="nav-buttons">
-        <button on:click={prevView}>Regresar</button>
-        <button on:click={nextView}>Continuar</button>
+        <button on:click={prevView}>{$_('goals.backButton')}</button>
+        <button on:click={nextView}>{$_('goals.continueButton')}</button>
       </div>
     </section>
   {/if}
@@ -340,8 +340,8 @@ HEAD
         </div>
       </div>
       
-      <h2>Cuéntanos sobre ti</h2>
-      <p>Esta información nos ayudará a calcular tus calorías objetivo.</p>
+      <h2>{$_('register.tellUsAboutYou')}</h2>
+      <p>{$_('register.infoHelps')}</p>
     <div class="info-list">
       <div class="info-item">
         <span class="info-icon">👤</span>
@@ -510,7 +510,7 @@ HEAD
         </div>
       </div>
       
-      <h2>¿Qué tipo de dieta prefieres?</h2>
+      <h2>{$_('register.dietTypeQuestion')}</h2>
 
       <div class="lista">
         <label class="opcion">
@@ -519,9 +519,9 @@ HEAD
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <span class="icon" style="width: auto; height: auto;">✨</span>
-              <span class="label" style="flex: none;">Recomendada</span>
+              <span class="label" style="flex: none;">{$_('register.balanced')}</span>
             </div>
-            <p style="margin: 4px 0 0 36px; font-size: 14px;">La mejor opción para ti, una mezcla equilibrada de nutrientes.</p>
+            <p style="margin: 4px 0 0 36px; font-size: 14px;">{$_('register.balancedDescription')}</p>
           </div>
         </label>
         
@@ -531,9 +531,9 @@ HEAD
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <span class="icon" style="width: auto; height: auto;">🍗</span>
-              <span class="label" style="flex: none;">Alta en Proteínas</span>
+              <span class="label" style="flex: none;">{$_('register.highProtein')}</span>
             </div>
-            <p style="margin: 4px 0 0 36px; font-size: 14px;">Ideal para ganar músculo y mantener la saciedad.</p>
+            <p style="margin: 4px 0 0 36px; font-size: 14px;">{$_('register.highProteinDescription')}</p>
           </div>
         </label>
 
@@ -543,9 +543,9 @@ HEAD
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <span class="icon" style="width: auto; height: auto;">🥑</span>
-              <span class="label" style="flex: none;">Baja en Carbohidratos</span>
+              <span class="label" style="flex: none;">{$_('register.lowCarb')}</span>
             </div>
-            <p style="margin: 4px 0 0 36px; font-size: 14px;">Perfecta para perder grasa y controlar el apetito.</p>
+            <p style="margin: 4px 0 0 36px; font-size: 14px;">{$_('register.lowCarbDescription')}</p>
           </div>
         </label>
 
@@ -555,16 +555,16 @@ HEAD
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <span class="icon" style="width: auto; height: auto;">🌱</span>
-              <span class="label" style="flex: none;">Baja en Grasas</span>
+              <span class="label" style="flex: none;">{$_('register.lowFat')}</span>
             </div>
-            <p style="margin: 4px 0 0 36px; font-size: 14px;">Buena para mejorar la salud cardiovascular y perder peso.</p>
+            <p style="margin: 4px 0 0 36px; font-size: 14px;">{$_('register.lowFatDescription')}</p>
           </div>
         </label>
       </div>
       
       <div class="nav-buttons">
-        <button on:click={prevView}>Regresar</button>
-        <button on:click={nextView}>Continuar</button>
+        <button on:click={prevView}>{$_('goals.backButton')}</button>
+        <button on:click={nextView}>{$_('goals.continueButton')}</button>
       </div>
     </section>
   {/if}
@@ -582,7 +582,7 @@ HEAD
       <div class="carousel-check">
         <span class="carousel-check-icon">✔️</span>
       </div>
-      <p class="carousel-title">¡Genial! Estas son las calorías que necesitas al día</p>
+      <p class="carousel-title">{$_('register.caloriesResult')}</p>
       <div class="carousel-metric-card">
         <div class="metric-kcal">{caloriesCalculated.toLocaleString()} kcal</div>
         <div class="metric-macros">
@@ -630,11 +630,11 @@ HEAD
           </div>
         </div>
         
-        <h2 class="intro-title">Ahora, personalicemos tu plan de comidas para alcanzar tus calorías diarias</h2>
+        <h2 class="intro-title">{$_('register.customizePlan')}</h2>
       </div>
       
       <div class="nav-buttons">
-        <button on:click={nextView} class="continue-btn">Continuar</button>
+        <button on:click={nextView} class="continue-btn">{$_('goals.continueButton')}</button>
       </div>
     </section>
   {/if}
@@ -649,8 +649,8 @@ HEAD
       
       <div class="meal-header">
         <div class="meal-plate-icon">🍽️</div>
-        <h2>¿Cuántas comidas al día deseas?</h2>
-        <p class="meal-subtitle">Elige al menos 2 comidas principales</p>
+        <h2>{$_('register.mealsPerDay')}</h2>
+        <p class="meal-subtitle">{$_('register.mealsPerDayHint')}</p>
       </div>
 
       <div class="meal-options">
@@ -705,41 +705,41 @@ HEAD
       
       <div class="preferences-header">
         <div class="preferences-icon">✨</div>
-        <h2>¿Cómo prefieres tus sugerencias de comidas?</h2>
+        <h2>{$_('register.suggestionPreference')}</h2>
       </div>
 
       <!-- Opciones de tipo de sugerencia -->
       <div class="suggestion-types">
         <button type="button" class="suggestion-option" class:selected={suggestionType === 'recipes'} on:click={() => setSuggestionType('recipes')}>
           <div class="suggestion-content">
-            <h3>Recetas</h3>
-            <p>Instrucciones paso a paso</p>
+            <h3>{$_('goals.recipes')}</h3>
+            <p>{$_('goals.recipesDescription')}</p>
             <div class="recipe-example">
               <div class="recipe-image">🥪</div>
-              <span class="recipe-name">Sándwich de Pollo con Aguacate</span>
+              <span class="recipe-name">{$_('goals.exampleRecipe')}</span>
             </div>
           </div>
         </button>
         
         <button type="button" class="suggestion-option" class:selected={suggestionType === 'ingredients'} on:click={() => setSuggestionType('ingredients')}>
           <div class="suggestion-content">
-            <h3>Solo ingredientes</h3>
-            <p>Puedes prepararlo como quieras</p>
+            <h3>{$_('goals.ingredientsOnly')}</h3>
+            <p>{$_('goals.ingredientsDescription')}</p>
             <div class="ingredients-list">
               <div class="ingredient-item">
                 <span class="ingredient-icon">🍗</span>
-                <span class="ingredient-name">Pollo</span>
-                <span class="ingredient-amount">1 filete mediano</span>
+                <span class="ingredient-name">{$_('goals.exampleIngredients.chicken')}</span>
+                <span class="ingredient-amount">{$_('goals.exampleIngredients.chickenAmount')}</span>
               </div>
               <div class="ingredient-item">
                 <span class="ingredient-icon">🍚</span>
-                <span class="ingredient-name">Arroz</span>
-                <span class="ingredient-amount">1 taza</span>
+                <span class="ingredient-name">{$_('goals.exampleIngredients.rice')}</span>
+                <span class="ingredient-amount">{$_('goals.exampleIngredients.riceAmount')}</span>
               </div>
               <div class="ingredient-item">
                 <span class="ingredient-icon">🥑</span>
-                <span class="ingredient-name">Aguacate</span>
-                <span class="ingredient-amount">1/2 unidad</span>
+                <span class="ingredient-name">{$_('goals.exampleIngredients.avocado')}</span>
+                <span class="ingredient-amount">{$_('goals.exampleIngredients.avocadoAmount')}</span>
               </div>
             </div>
           </div>
@@ -823,15 +823,15 @@ HEAD
         <div class="completion-summary">
           <div class="summary-item">
             <span class="summary-icon">🎯</span>
-            <span class="summary-text">Objetivo configurado</span>
+            <span class="summary-text">{$_('goals.goalConfigured')}</span>
           </div>
           <div class="summary-item">
             <span class="summary-icon">🍽️</span>
-            <span class="summary-text">Plan de comidas personalizado</span>
+            <span class="summary-text">{$_('goals.customMealPlan')}</span>
           </div>
           <div class="summary-item">
             <span class="summary-icon">📊</span>
-            <span class="summary-text">Calorías y macros calculados</span>
+            <span class="summary-text">{$_('goals.caloriesCalculated')}</span>
           </div>
           <div class="summary-item">
             <span class="summary-icon">✅</span>

@@ -477,7 +477,7 @@
                 <p>
                     {$_('mealPlan.recipesDesc')}
                 </p>
-                <div class="example">🍳 Omelette de huevo con pan tostado</div>
+                <div class="example">{$_('mealPlan.recipeExample')}</div>
                 <button
                     class="switch small"
                     class:on={suggestions.recipes}
