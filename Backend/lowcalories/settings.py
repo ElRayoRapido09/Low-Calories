@@ -111,6 +111,9 @@ DATABASES = {
          'PASSWORD': '12345',
          'HOST': 'mysql_db',
          'PORT': '3306',
+         'OPTIONS': {
+            'charset': 'utf8mb4',        
+         },
  }
 }
 
@@ -167,13 +170,12 @@ CORS_ALLOWED_ORIGINS = [
 # ==========================================
 
 # 🔑 API Key de Google Gemini configurada directamente
-# Tu API Key: AIzaSyD5pvAcMBdrYD8E9xaV7I9dnywulawudIw
 # 
 # La API key está configurada directamente en chatbot/gemini_service.py
 # Si necesitas cambiarla, edita ese archivo.
 
 # Configuración del chatbot con Gemini
-GEMINI_API_KEY = 'AIzaSyD5pvAcMBdrYD8E9xaV7I9dnywulawudIw'
+GEMINI_API_KEY = 'AIzaSyD5pvAcMBdrYD8E9xaV7I9dnywuIawudIw'
 GEMINI_MODEL = 'gemini-1.5-flash'
 CHATBOT_MAX_MESSAGES_HISTORY = 6
 CHATBOT_MAX_OUTPUT_TOKENS = 500

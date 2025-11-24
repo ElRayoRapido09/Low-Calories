@@ -12,7 +12,7 @@ class GeminiService:
     
     def __init__(self):
         # 🔑 Tu API Key de Gemini
-        self.api_key = "AIzaSyD5pvAcMBdrYD8E9xaV7I9dnywuIawudIw"
+        self.api_key = settings.GEMINI_API_KEY
         
         # URL de la API de Gemini
         self.api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
