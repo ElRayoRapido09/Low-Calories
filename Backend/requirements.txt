@@ -1,7 +1,8 @@
 asgiref==3.10.0
 Django==4.2.25
 djangorestframework==3.16.1
-mysqlclient==2.2.7
+pymysql==1.1.0
+#mysqlclient==2.2.7
 pillow==11.3.0
 sqlparse==0.5.3
 typing_extensions==4.15.0
