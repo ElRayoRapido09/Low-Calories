@@ -40,7 +40,9 @@ LOGGING = {
     },
 }
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*.vercel.app',
+]
 
 
 # Application definition
@@ -88,7 +90,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'lowcalories.wsgi.application'
+WSGI_APPLICATION = 'lowcalories.wsgi.app'
 
 
 # Database
@@ -151,7 +153,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -163,6 +168,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5174',  # Puerto alternativo para desarrollo
     'http://127.0.0.1:5173',
     'http://127.0.0.1:5174',
+    '*.vercel.app',
 ]
 
 # ==========================================
@@ -188,5 +194,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CALORIEMAMA_API_KEY = '37700363570332bd9c5072c9d5be16d3' # ¡Reemplaza con tu clave real!
 FATSECRET_CONSUMER_KEY = 'c97439578e7f4c1f95e45ca94260a4b5 '  # Reemplaza con tu clave real
 FATSECRET_CONSUMER_SECRET = '73dde05018fe432d9ca3454a66ed3ea2'  # Reemplaza con tu secreto real
-
-
