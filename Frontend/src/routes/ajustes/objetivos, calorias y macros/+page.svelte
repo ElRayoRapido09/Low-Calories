@@ -1,7 +1,12 @@
 <script lang="ts">
   import { _ } from 'svelte-i18n';
   import { massUnit, energyUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
-  
+  import { 
+    Flame,         // 🔥 Objetivos y Calorías
+    Apple,         // 🍎 Macros y Tipos de dietas
+    Sparkles,      // ✨ Funciones Inteligentes
+  } from 'lucide-svelte';
+
   let showModal: boolean = false;
   let currentItem: string = '';
 
@@ -54,7 +59,7 @@
       <li>
         <button class="item" type="button" onclick={() => openModal('Objetivos y Calorias')}>
           <div class="left">
-            <span class="icon">🔥</span>
+            <Flame size={20} strokeWidth={2} class="icon" />
             <span class="label">{$_('goalsCaloriesMacros.goalsCalories')}</span>
           </div>
           <div class="right">
@@ -66,7 +71,7 @@
       <li>
         <button class="item" type="button" onclick={() => openModal('Macros y Tipos de dietas')}>
           <div class="left">
-            <span class="icon">🍎</span>
+            <Apple size={20} strokeWidth={2} class="icon" />
             <span class="label">{$_('goalsCaloriesMacros.macrosDiets')}</span>
           </div>
           <div class="right">
@@ -78,7 +83,7 @@
       <li>
         <button class="item" type="button" onclick={() => openModal('Funciones Inteligentes')}>
           <div class="left">
-            <span class="icon">✨</span>
+            <Sparkles size={20} strokeWidth={2} class="icon" />
             <span class="label">{$_('goalsCaloriesMacros.smartFunctions')}</span>
           </div>
           <div class="right">

@@ -1,6 +1,18 @@
 <script>
   import { _ } from 'svelte-i18n';
   import { massUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
+  import {
+    BarChart3,     // 📊 Tendencias
+    Calendar,      // 🗓 Progreso semanal
+    Target,        // 🏁 Meta diaria
+    Zap,           // ⚡ Días activos
+    Bell,          // 🔔 Notificaciones
+    User,          // 👤 Usuario/Perfil
+    Plus,          // ➕ Edad
+    Ruler,         // 📏 Altura
+    Scale,         // ⚖️ Peso actual
+    Target as TargetIcon, // 🎯 Objetivo
+  } from 'lucide-svelte';
   
   let bottomNavHeight = $derived(Math.min(50 + (scrollY * 0.8), 95));
   let scrollY = 0;
@@ -34,18 +46,20 @@
   }
 </script>
 
- <svelte:window bind:scrollY on:click={handleClickOutside} />
+<svelte:window bind:scrollY on:click={handleClickOutside} />
 
 <main class="main">
   <div class="container-back">
-    <header class = "back"> 
+    <header class="back"> 
         <a href="/" class="back-btn" aria-label={$_('common.back')}>‹</a>
         <h1>{$_('profile.title')}</h1>
-        <span class="icon">👤</span>
+        <span class="icon">
+          <User size={20} strokeWidth={2} />
+        </span>
         <img class="avatar" alt={$_('navigation.profile')} src="src/lib/assets/kk.jpg" />
         <!-- Botón de notificaciones -->
         <button class="notification-button" onclick={toggleNotifications}>
-            <i class="fas fa-bell notification-icon"></i>
+            <Bell size={20} strokeWidth={2} />
             <span class="badge">3</span> <!-- Insignia de notificaciones -->
         </button>
         {#if notificationOpen}
@@ -68,7 +82,6 @@
         {/if}
       </header>
   </div>
-  
 
 <div class="bg"></div>
 <div class="bg bg2"></div>
@@ -85,7 +98,6 @@
       <h2>Jorge Mendoza Ordoñez</h2>
         <p>{$_('profile.keepGoing')}</p>
     </div>
-      
 
   <div class="spacer-container"></div>
 
@@ -94,32 +106,44 @@
           <div class="carousel-wrapper">
 
               <!-- Meta diaria -->
-            <section class = "card-meta">
-              <div class = "icons">
-              🏁
+            <section class="card-meta">
+              <div class="icons">
+                <Target size={32} strokeWidth={2} />
               </div>
               <h2>1800</h2>
               <p>{$_('profile.dailyGoal')}</p>
             </section>
               <!-- Dias activos -->
-            <section class = "card-active">
-              <div class = "icons">
-              ⚡
+            <section class="card-active">
+              <div class="icons">
+                <Zap size={32} strokeWidth={2} />
               </div>
               <h2>7</h2>
               <p>{$_('profile.activeDays')}</p>
             </section>
               <!-- Informacion personal -->
-            <section class = "card-info">
+            <section class="card-info">
               <h2>{$_('profile.personalInfo')}</h2>
-              <div class = "columns">
-                <div>
-                  <p>{$_('profile.age')}</p>
-                  <p>{$_('profile.height')}</p>
-                  <p>{$_('profile.currentWeight')}</p>
-                  <p>{$_('profile.goal')}</p>
+              <div class="columns">
+                <div class="info-labels">
+                  <p class="info-row">
+                    <Plus size={16} strokeWidth={2} class="info-icon" />
+                    {$_('profile.age')}
+                  </p>
+                  <p class="info-row">
+                    <Ruler size={16} strokeWidth={2} class="info-icon" />
+                    {$_('profile.height')}
+                  </p>
+                  <p class="info-row">
+                    <Scale size={16} strokeWidth={2} class="info-icon" />
+                    {$_('profile.currentWeight')}
+                  </p>
+                  <p class="info-row">
+                    <TargetIcon size={16} strokeWidth={2} class="info-icon" />
+                    {$_('profile.goal')}
+                  </p>
                 </div>
-                <div> 
+                <div class="info-values"> 
                   <p>28 {$_('profile.years')}</p>
                   <p>165 cm</p>
                   <p>{formattedWeight}</p>
@@ -128,12 +152,12 @@
               </div>
             </section>
                 <!-- Progreso semanal -->
-            <section class = "card-progress">
-              <div class = "icons">
-              🗓
+            <section class="card-progress">
+              <div class="icons">
+                <Calendar size={32} strokeWidth={2} />
               </div>
               <h2>{$_('profile.weeklyProgress')}</h2>
-              <div class = "columns">
+              <div class="columns">
                 <div>
                   <p>{$_('profile.dailyAverage')}</p>
                 </div>
@@ -142,13 +166,13 @@
                 </div>
               </div>
                 
-              <div class = "progress-container">
-                <div class = "progress-header">
+              <div class="progress-container">
+                <div class="progress-header">
                   <span>{$_('profile.completedDays')}</span>
                   <span><b>5/7</b></span>
                 </div>
-                <div class = "progress-bar"> 
-                  <div class = "progres-fill" style = "width: 71%;"></div>
+                <div class="progress-bar"> 
+                  <div class="progres-fill" style="width: 71%;"></div>
                 </div>
               </div>
             </section>
@@ -161,7 +185,7 @@
     <div class="card-tendencias-container">
         <section class="card-tendencias">
     <div class="icons">
-      📊
+      <BarChart3 size={32} strokeWidth={2} />
     </div> 
     <h2>{$_('profile.trends')}</h2>
     <div class="columns">
@@ -222,12 +246,13 @@
         padding: 10px;
         border-radius: 5px;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .notification-icon {
-        font-size: 20px;
+    .notification-button :global(svg) {
         color: #333;
-        position: right
     }
 
     .badge {

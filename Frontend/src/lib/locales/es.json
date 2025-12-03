@@ -82,9 +82,10 @@
   },
   "navigation": {
     "settings": "Ajustes",
-    "metrics": "Metricas",
+    "stats": "Estadísticas",
+    "meals": "Comidas",
     "profile": "Perfil",
-    "goals": "Objetivo"
+    "goals": "Objetivos"
   },
   "profile": {
     "title": "Mi Perfil",

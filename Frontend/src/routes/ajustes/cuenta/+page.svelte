@@ -1,6 +1,17 @@
 <script>
   import { _ } from 'svelte-i18n';
   import { lengthUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
+  import { 
+    Plus,          // Edad
+    Ruler,         // Altura
+    Users,         // Sexo
+    FileText,      // Administrar suscripción
+    User,          // ID Usuario
+    Mail,          // Email
+    Key,           // Actualizar contraseña
+    FileCheck,     // Términos de Servicio
+    Search,        // Buscar
+  } from 'lucide-svelte';
   
   // Valores de ejemplo almacenados en la base de datos (siempre en unidades base)
   let heightInCm = $state(180); // Altura almacenada en cm
@@ -26,7 +37,9 @@
     <ul class="list">
       <li class="item">
         <div class="left">
-          <span class="icon">➕</span>
+          <span class="icon">
+            <Plus size={20} strokeWidth={2} />
+          </span>
           <span class="label">{$_('account.age')}</span>
         </div>
         <div class="right">
@@ -37,7 +50,9 @@
 
       <li class="item">
         <div class="left">
-          <span class="icon">📏</span>
+          <span class="icon">
+            <Ruler size={20} strokeWidth={2} />
+          </span>
           <span class="label">{$_('account.height')}</span>
         </div>
         <div class="right">
@@ -48,7 +63,9 @@
 
       <li class="item">
         <div class="left">
-          <span class="icon">🚻</span>
+          <span class="icon">
+            <Users size={20} strokeWidth={2} />
+          </span>
           <span class="label">{$_('account.gender')}</span>
         </div>
         <div class="right">
@@ -64,7 +81,9 @@
     <ul class="list">
       <li class="item">
         <div class="left">
-          <span class="icon">📋</span>
+          <span class="icon">
+            <FileText size={20} strokeWidth={2} />
+          </span>
           <span class="label">{$_('account.manageSubscription')}</span>
         </div>
         <div class="right">
@@ -74,7 +93,9 @@
 
       <li class="item">
         <div class="left">
-          <span class="icon">👤</span>
+          <span class="icon">
+            <User size={20} strokeWidth={2} />
+          </span>
           <span class="label">{$_('account.userId')}</span>
         </div>
         <div class="right">
@@ -84,7 +105,9 @@
 
       <li class="item">
         <div class="left">
-          <span class="icon">📧</span>
+          <span class="icon">
+            <Mail size={20} strokeWidth={2} />
+          </span>
           <span class="label">{$_('account.email')}</span>
         </div>
         <div class="right">
@@ -94,7 +117,9 @@
 
       <li class="item">
         <div class="left">
-          <span class="icon">🔑</span>
+          <span class="icon">
+            <Key size={20} strokeWidth={2} />
+          </span>
           <span class="label">{$_('account.updateCredentials')}</span>
         </div>
         <div class="right">
@@ -117,7 +142,9 @@
     <ul class="list">
       <li class="item">
         <div class="left">
-          <span class="icon">📄</span>
+          <span class="icon">
+            <FileCheck size={20} strokeWidth={2} />
+          </span>
           <span class="label">{$_('account.termsOfService')}</span>
         </div>
         <div class="right">
@@ -146,7 +173,9 @@
   </section>
   
   <div class="search">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon">
+      <Search size={18} strokeWidth={2} />
+    </span>
     <input type="search" placeholder={$_('interface.searchPlaceholder')} aria-label={$_('interface.searchPlaceholder')}>
   </div>
 </main>
@@ -273,7 +302,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #111;
+    color: #fff; /* Cambiado de #111 a #fff para iconos blancos */
     font-size: 18px;
     flex-shrink: 0;
   }
@@ -338,6 +367,9 @@
   .search-icon {
     color: #0066cc;
     font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   @media (prefers-color-scheme: light) {
@@ -345,8 +377,18 @@
       background: #ffffff;
       color: #111;
     }
-    .item, .search { background: #fff; color: #222; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; }
-    .icon { color: #111; background: linear-gradient(180deg,#0066cc,#2077cd); }
-    .value { color: #666; }
+    .item, .search { 
+      background: #fff; 
+      color: #222; 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+      border: 1px solid #e0e0e0; 
+    }
+    .icon { 
+      color: #fff; /* Iconos blancos en modo claro también */
+      background: linear-gradient(180deg,#0066cc,#2077cd); 
+    }
+    .value { 
+      color: #666; 
+    }
   }
 </style>

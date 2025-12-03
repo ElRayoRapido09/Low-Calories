@@ -2,6 +2,12 @@
     import { tick } from "svelte";
     import { _ } from 'svelte-i18n';
     import { energyUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
+    import { 
+        Apple,         // Alimentos
+        Sprout,        // Variedad
+        Sandwich,      // Número de comidas
+        Sparkles,      // Tipos de Sugerencias
+    } from 'lucide-svelte';
 
     // overlay focus element
     let overlayEl;
@@ -170,7 +176,9 @@
                     aria-label={$_('mealPlan.foods')}
                 >
                     <div class="left">
-                        <span class="icon">🍎</span>
+                        <span class="icon">
+                            <Apple size={20} strokeWidth={2} />
+                        </span>
                         <span class="label">{$_('mealPlan.foods')}</span>
                     </div>
                     <div class="right">
@@ -187,7 +195,9 @@
                     aria-label={$_('mealPlan.variety')}
                 >
                     <div class="left">
-                        <span class="icon">🌱</span>
+                        <span class="icon">
+                            <Sprout size={20} strokeWidth={2} />
+                        </span>
                         <div>
                             <div class="label">{$_('mealPlan.variety')}</div>
                             <div class="sub">{variety}</div>
@@ -206,7 +216,9 @@
                     aria-label={$_('mealPlan.mealCount')}
                 >
                     <div class="left">
-                        <span class="icon">🍔</span>
+                        <span class="icon">
+                            <Sandwich size={20} strokeWidth={2} />
+                        </span>
                         <div>
                             <div class="label">{$_('mealPlan.mealCount')}</div>
                             <div class="sub">
@@ -227,7 +239,9 @@
                     aria-label={$_('mealPlan.suggestionTypes')}
                 >
                     <div class="left">
-                        <span class="icon">✨</span>
+                        <span class="icon">
+                            <Sparkles size={20} strokeWidth={2} />
+                        </span>
                         <div>
                             <div class="label">{$_('mealPlan.suggestionTypes')}</div>
                             <div class="sub">
@@ -616,7 +630,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: #111;
+        color: #fff; /* Cambiado de #111 a #fff para iconos blancos */
         font-size: 18px;
         flex-shrink: 0;
     }
@@ -655,7 +669,7 @@
             border: 1px solid #e0e0e0;
         }
         .icon {
-            color: #111;
+            color: #fff; /* Iconos blancos en modo claro también */
             background: linear-gradient(180deg, #0066cc, #2077cd);
         }
         .value {

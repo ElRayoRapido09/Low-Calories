@@ -2,6 +2,9 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { _ } from 'svelte-i18n';
+  import {
+    Calendar
+  } from 'lucide-svelte';
   import { energyUnit } from '$lib/stores/units.js';
 
   let weekdays = $derived([
@@ -137,7 +140,9 @@
   <header class="top">
     <a href="/ajustes" class="back-btn" aria-label={$_('common.back')}>‹</a>
     <div class="header-center">
-      <div class="icon">📅</div>
+    <span class="icon">
+            <Calendar size={20} strokeWidth={2} />
+          </span>
       <h1>{$_('mealPlanner.title')}</h1>
     </div>
   </header>
