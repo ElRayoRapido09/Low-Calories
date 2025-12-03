@@ -1,6 +1,37 @@
 <script>
   import { goto } from "$app/navigation";
   import { _ } from 'svelte-i18n';
+  import { 
+    Camera, 
+    Settings, 
+    User, 
+    Target,
+    TrendingUp,
+    Bot,
+    Calendar,
+    Utensils,
+    Home,
+    Flame,
+    ChevronDown,
+    // Iconos de alimentos
+    Drumstick,
+    Beef,
+    Sandwich,
+    Egg,
+    CandyIcon,
+    Cookie,
+    Pizza,
+    Apple,
+    Fish,
+    IceCream,
+    Coffee,
+    Soup,
+    // Iconos de objetivos
+    Scale,         // Balanza - Perder peso
+    Dumbbell,      // Pesas - Ganar músculo
+    Target as TargetIcon, // Objetivo - Mantener peso
+  } from 'lucide-svelte';
+  
   import { energyUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
 
   let stream = null;
@@ -491,21 +522,21 @@
       titulo: $_('home.loseWeight'),
       progreso: 60,
       descripcion: $_('home.loseWeightDesc'),
-      icono: "⚖️",
+      icono: "scale", // Cambiado de emoji a identificador
     },
     {
       id: 2,
       titulo: $_('home.gainMuscle'),
       progreso: 30,
       descripcion: $_('home.gainMuscleDesc'),
-      icono: "💪",
+      icono: "dumbbell",
     },
     {
       id: 3,
       titulo: $_('home.maintainWeight'),
       progreso: 80,
       descripcion: $_('home.maintainWeightDesc'),
-      icono: "🎯",
+      icono: "target",
     },
   ]);
 
@@ -543,7 +574,11 @@
             ? 'streak-active'
             : 'streak-inactive'}"
         >
-          {dia.enRacha ? "🔥" : "🗿"}
+          {#if dia.enRacha}
+            <Flame size={24} strokeWidth={2} />
+            {:else}
+            <ChevronDown size={24} strokeWidth={2} />
+          {/if}
           <span class="streak-day">{dia.dia}</span>
         </div>
       {/each}
@@ -557,14 +592,30 @@
         <button class="edit-btn">{$_('common.edit')}</button>
       </div>
       <div class="ingredients-list">
-        <div class="ingredient-icon">🍗</div>
-        <div class="ingredient-icon">🥩</div>
-        <div class="ingredient-icon">🍞</div>
-        <div class="ingredient-icon">🥚</div>
-        <div class="ingredient-icon">🥚</div>
-        <div class="ingredient-icon">🥓</div>
-        <div class="ingredient-icon">🥓</div>
-        <div class="ingredient-icon">🍖</div>
+        <div class="ingredient-icon">
+          <Drumstick size={28} strokeWidth={2} />
+        </div>
+        <div class="ingredient-icon ingredient-red">
+          <Beef size={28} strokeWidth={2} />
+        </div>
+        <div class="ingredient-icon ingredient-brown">
+          <Sandwich size={28} strokeWidth={2} />
+        </div>
+        <div class="ingredient-icon ingredient-yellow">
+          <Egg size={28} strokeWidth={2} />
+        </div>
+        <div class="ingredient-icon ingredient-orange">
+          <Apple size={28} strokeWidth={2} />
+        </div>
+        <div class="ingredient-icon ingredient-pink">
+          <CandyIcon size={28} strokeWidth={2} />
+        </div>
+        <div class="ingredient-icon ingredient-red">
+          <Pizza size={28} strokeWidth={2} />
+        </div>
+        <div class="ingredient-icon ingredient-blue">
+          <Fish size={28} strokeWidth={2} />
+        </div>
         <div class="ingredient-more">+99</div>
       </div>
     </section>
@@ -592,7 +643,15 @@
 
         {#each objetivos as objetivo}
           <div class="objetivo-card">
-            <div class="objetivo-icon">{objetivo.icono}</div>
+            <div class="objetivo-icon">
+              {#if objetivo.icono === 'scale'}
+                <Scale size={32} strokeWidth={2} />
+              {:else if objetivo.icono === 'dumbbell'}
+                <Dumbbell size={32} strokeWidth={2} />
+              {:else if objetivo.icono === 'target'}
+                <TargetIcon size={32} strokeWidth={2} />
+              {/if}
+            </div>
             <div class="objetivo-info">
               <h3>{objetivo.titulo}</h3>
               <p>{objetivo.descripcion}</p>
@@ -641,34 +700,33 @@
 
   <nav class="bottom-nav">
     <a href="/ajustes" class="nav-item">
-      <span class="nav-icon">⚙️</span>
+      <Settings size={24} strokeWidth={2} />
       <span class="nav-label">{$_('navigation.settings')}</span>
     </a>
 
     <a href="/estadisticas" class="nav-item">
-      <span class="nav-icon">📊</span>
-      <span class="nav-label">{$_('navigation.metrics')}</span>
-    </a>
-
-    <a href="/estadisticas" class="nav-item">
+      <TrendingUp size={24} strokeWidth={2} />
+      <span class="nav-label">{$_('navigation.stats')}</span>
     </a>
 
     <button class="nav-item camera-btn" onclick={openCamera}>
-      <span class="camera-icon">📷</span>
+      <Camera size={28} strokeWidth={2.5} />
     </button>
 
     <a href="/perfil" class="nav-item">
-      <span class="nav-icon">👤</span>
+      <User size={24} strokeWidth={2} />
       <span class="nav-label">{$_('navigation.profile')}</span>
     </a>
 
     <a href="/objetivos" class="nav-item">
-      <span class="nav-icon">🎯</span>
+      <Target size={24} strokeWidth={2} />
       <span class="nav-label">{$_('navigation.goals')}</span>
     </a>
   </nav>
 
-  <button class="floating-btn" onclick={goToBot}> 🤖 </button>
+  <button class="floating-btn" onclick={goToBot}>
+    <Bot size={28} strokeWidth={2} />
+  </button>
 
   <div id="camera-container" class="camera-container" style="display: none;">
     <video id="camera-video" autoplay playsinline></video>
@@ -786,8 +844,39 @@
     justify-content: center;
     font-size: 1.5rem;
     flex-shrink: 0;
+    color: #fff;
   }
 
+  .ingredient-icon.ingredient-red {
+    background: #e74c3c;
+  }
+
+  .ingredient-icon.ingredient-brown {
+    background: #d68910;
+  }
+
+  .ingredient-icon.ingredient-yellow {
+    background: #f39c12;
+  }
+
+  .ingredient-icon.ingredient-orange {
+    background: #ff6b35;
+  }
+
+  .ingredient-icon.ingredient-pink {
+    background: #e91e63;
+  }
+
+  .ingredient-icon.ingredient-blue {
+    background: #3498db;
+  }
+
+  .ingredient-more {
+    background: #005bb5;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
   .ingredient-more {
     background: #005bb5;
     color: #fff;
@@ -847,29 +936,32 @@
     height: 70px;
     background: #fff;
     border-top: 1px solid #e0e0e0;
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: 1fr 1fr 80px 1fr 1fr;
     align-items: center;
-    padding: 0 1rem;
+    padding: 0 0.5rem;
     z-index: 100;
+    gap: 0.25rem;
   }
   
   .nav-item.camera-btn {
-    position: absolute;
-    left: 50%;
-    top: 10px;
-    transform: translateX(-50%);
-    width: 45px;
-    height: 45px;
+    position: relative;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     z-index: 200;
     border: none;
     padding: 0;
+    margin: 0 auto;
+    justify-self: center;
   }
 
   .nav-item.camera-btn .camera-icon {
@@ -888,8 +980,11 @@
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.4rem 0.6rem;
+    padding: 0.3rem 0.2rem;
     transition: color 0.2s;
+    min-width: 0;
+    flex: 1;
+    max-width: 70px;
   }
 
   .nav-item:hover {
@@ -902,13 +997,16 @@
   }
 
   .nav-label {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 500;
     margin-top: 2px;
-    text-align: left;
+    text-align: center;
     line-height: 1;
     display: block;
-    margin-left: -3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
   }
 
   .camera-container {
@@ -1259,9 +1357,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
     margin-right: 1rem;
     flex-shrink: 0;
+    color: #fff;
   }
 
   .objetivo-info {
@@ -1321,9 +1419,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
     flex-shrink: 0;
     position: relative;
+    gap: 2px;
   }
 
   .streak-active {
@@ -1333,12 +1431,12 @@
 
   .streak-inactive {
     background: #f5f5f5;
-    color: #666;
+    color: #999;
   }
 
   .streak-day {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 600;
-    margin-top: 2px;
+    line-height: 1;
   }
 </style>

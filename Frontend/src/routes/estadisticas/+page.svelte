@@ -1,6 +1,10 @@
 <script>
   import { _ } from 'svelte-i18n';
   import { energyUnit, convertValue, formatWithUnit } from '$lib/stores/units.js';
+  import { 
+    TrendingUp,    // Progreso Semanal
+    Calendar,      // Esta semana
+  } from 'lucide-svelte';
   
   // Valores de calorías almacenados (siempre en kcal)
   let caloriesConsumed = $state(1240);
@@ -62,8 +66,8 @@
         <p>{$_('statistics.subtitle')}</p>
     </header>
   <section class="card-calorias">
-      <div class = "icons">
-      📈
+      <div class="icons">
+        <TrendingUp size={32} strokeWidth={2} />
       </div>
     <h2>{$_('statistics.weeklyProgress')}</h2>
     <p>{$_('statistics.weeklyProgressDescription')}</p>
@@ -99,7 +103,7 @@
   </section>
   <section class="card-semana">
     <div class="icons">
-      📅
+      <Calendar size={32} strokeWidth={2} />
     </div> 
     <h2>{$_('statistics.thisWeek')}</h2>
     <div class="semana-bar">
@@ -182,18 +186,18 @@
       margin: 0;
       color: #ffffff;
       }
-      .icons{
-      width: 80px;
-      height: 80px;
-      background: #0066cc;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      color: white;
-      margin: 0 auto 1.5rem auto;
-      }
+      .icons {
+    width: 80px;
+    height: 80px;
+    background: #0066cc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    margin: 0 auto 1.5rem auto;
+  }
       .card-calorias{
           border-radius: 1rem;
           padding: 2rem;

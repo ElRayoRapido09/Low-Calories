@@ -2,6 +2,14 @@
   import { _, locale } from 'svelte-i18n';
   import { browser } from '$app/environment';
   import { massUnit, lengthUnit, energyUnit } from '$lib/stores/units.js';
+  import { 
+    Globe,         // Lenguaje de interfaz
+    Database,      // Lenguaje de la base de datos
+    Scale,         // Unidad de masa/volumen
+    Ruler,         // Unidad de longitud
+    Zap,           // Unidad de energía
+    Search,        // Buscar
+  } from 'lucide-svelte';
   
   let currentLang = $state($locale || 'es');
   let showMassModal = $state(false);
@@ -44,7 +52,9 @@
       <li>
         <button type="button" class="item" onclick={() => changeLanguage(currentLang === 'es' ? 'en' : 'es')}>
           <div class="left">
-            <span class="icon">🌐</span>
+            <span class="icon">
+              <Globe size={20} strokeWidth={2} />
+            </span>
             <span class="label">{$_('interface.language')}</span>
           </div>
           <div class="right">
@@ -57,7 +67,9 @@
       <li>
         <div class="item">
           <div class="left">
-            <span class="icon">📚</span>
+            <span class="icon">
+              <Database size={20} strokeWidth={2} />
+            </span>
             <span class="label">{$_('interface.databaseLanguage')}</span>
           </div>
           <div class="right">
@@ -75,7 +87,9 @@
       <li>
         <button type="button" class="item" onclick={() => showMassModal = true}>
           <div class="left">
-            <span class="icon">⚖️</span>
+            <span class="icon">
+              <Scale size={20} strokeWidth={2} />
+            </span>
             <span class="label">{$_('interface.massUnit')}</span>
           </div>
           <div class="right">
@@ -88,7 +102,9 @@
       <li>
         <button type="button" class="item" onclick={() => showLengthModal = true}>
           <div class="left">
-            <span class="icon">📏</span>
+            <span class="icon">
+              <Ruler size={20} strokeWidth={2} />
+            </span>
             <span class="label">{$_('interface.lengthUnit')}</span>
           </div>
           <div class="right">
@@ -101,7 +117,9 @@
       <li>
         <button type="button" class="item" onclick={() => showEnergyModal = true}>
           <div class="left">
-            <span class="icon">⚡</span>
+            <span class="icon">
+              <Zap size={20} strokeWidth={2} />
+            </span>
             <span class="label">{$_('interface.energyUnit')}</span>
           </div>
           <div class="right">
@@ -114,7 +132,9 @@
   </section>
 
   <div class="search">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon">
+      <Search size={18} strokeWidth={2} />
+    </span>
     <input type="search" placeholder={$_('interface.searchPlaceholder')} aria-label="buscar ajustes">
   </div>
 </main>
@@ -285,7 +305,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #111;
+    color: #fff; /* Cambiado de #111 a #fff para iconos blancos */
     font-size: 18px;
     flex-shrink: 0;
   }
@@ -341,6 +361,9 @@
   .search-icon {
     color: #0066cc;
     font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   @media (prefers-color-scheme: light) {
@@ -348,9 +371,19 @@
       background: #ffffff;
       color: #111;
     }
-    .item, .search { background: #fff; color: #222; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; }
-    .icon { color: #111; background: linear-gradient(180deg,#0066cc,#2077cd); }
-    .value { color: #666; }
+    .item, .search { 
+      background: #fff; 
+      color: #222; 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+      border: 1px solid #e0e0e0; 
+    }
+    .icon { 
+      color: #fff; /* Iconos blancos en modo claro también */
+      background: linear-gradient(180deg,#0066cc,#2077cd); 
+    }
+    .value { 
+      color: #666; 
+    }
   }
 
   /* Estilos para modales */

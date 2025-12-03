@@ -82,7 +82,8 @@
   },
   "navigation": {
     "settings": "Settings",
-    "metrics": "Metrics",
+    "stats": "Statistics",
+    "meals": "Meals",
     "profile": "Profile",
     "goals": "Goals"
   },
