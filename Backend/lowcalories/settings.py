@@ -41,7 +41,7 @@ LOGGING = {
 }
 
 ALLOWED_HOSTS = [
-    '*.vercel.app',
+    'http://low-calories-db2.vercel.app'
 ]
 
 
@@ -169,7 +169,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5174',  # Puerto alternativo para desarrollo
     'http://127.0.0.1:5173',
     'http://127.0.0.1:5174',
-    '*.vercel.app',
+    'https://low-calories-db2.vercel.app'
 ]
 
 # ==========================================
