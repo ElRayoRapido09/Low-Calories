@@ -41,8 +41,7 @@ LOGGING = {
 }
 
 ALLOWED_HOSTS = [
-    '.vercel.app',
-    'lowcalories-opbpy4f43-elrayorapido09s-projects.vercel.app'
+    '*'
 ]
 
 
