@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-dnckoiw0gh0_)mrc8!19s6l=6wmw8(z5#0txr@15hqdmp25(2#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 LOGGING = {
     'version': 1,
@@ -91,7 +91,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'lowcalories.wsgi.app'
+WSGI_APPLICATION = 'lowcalories.wsgi.application'
 
 
 # Database
