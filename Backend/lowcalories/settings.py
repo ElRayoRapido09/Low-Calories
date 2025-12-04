@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-dnckoiw0gh0_)mrc8!19s6l=6wmw8(z5#0txr@15hqdmp25(2#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = False
 
 LOGGING = {
     'version': 1,
@@ -170,7 +170,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5174',  # Puerto alternativo para desarrollo
     'http://127.0.0.1:5173',
     'http://127.0.0.1:5174',
-    'https://lowcaloriesdb.vercel.app'
+    'https://*.vercel.app',
+    'https://lowcalories-opbpy4f43-elrayorapido09s-projects.vercel.app'
 ]
 
 # ==========================================

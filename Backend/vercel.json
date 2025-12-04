@@ -10,5 +10,8 @@
             "src": "/(.*)",
             "dest": "lowcalories/wsgi.py"
         }
-    ]
+    ],
+    "env": {
+    "DJANGO_SETTINGS_MODULE": "lowcalories.settings"
+  }
 }
