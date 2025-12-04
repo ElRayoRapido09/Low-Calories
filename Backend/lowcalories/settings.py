@@ -91,7 +91,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'lowcalories.wsgi.application'
+WSGI_APPLICATION = 'lowcalories.wsgi.app'
 
 
 # Database
