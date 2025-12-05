@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import traceback
 from django.conf import settings
 from typing import List, Dict
 from accounts.models import Account
@@ -12,7 +13,7 @@ class GeminiService:
     
     def __init__(self):
         # 🔑 Tu API Key de Gemini
-        self.api_key = settings.GEMINI_API_KEY
+        self.api_key = 'AIzaSyD5pvAcMBdrYD8E9xaV7I9dnywuIawudIw'
         
         # URL de la API de Gemini
         self.api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
@@ -142,36 +143,61 @@ class GeminiService:
             if response.status_code == 200:
                 result = response.json()
                 
+                # Debug: imprimir respuesta completa
+                print(f"DEBUG - Respuesta de Gemini API: {json.dumps(result, indent=2)}")
+                
                 # Extraer el texto de la respuesta
                 if 'candidates' in result and len(result['candidates']) > 0:
                     candidate = result['candidates'][0]
                     if 'content' in candidate and 'parts' in candidate['content']:
-                        text = candidate['content']['parts'][0].get('text', '')
-                        if text:
-                            return text.strip()
+                        parts = candidate['content']['parts']
+                        if len(parts) > 0:
+                            text = parts[0].get('text', '')
+                            if text:
+                                print(f"DEBUG - Texto extraído exitosamente: {text[:100]}...")
+                                return text.strip()
+                            else:
+                                print("DEBUG - El campo 'text' está vacío")
+                        else:
+                            print("DEBUG - No hay partes en la respuesta")
+                    else:
+                        print(f"DEBUG - Estructura inesperada en candidate: {candidate}")
+                else:
+                    print(f"DEBUG - No hay candidatos válidos en la respuesta")
                 
-                return "⚠️ No pude generar una respuesta adecuada. ¿Podrías reformular tu pregunta?"
+                # Usar respuesta de respaldo si Gemini no devuelve texto
+                print("DEBUG - Usando respuesta de respaldo")
+                return self._get_fallback_nutrition_response(user_message, user_data, user_context)
             
             elif response.status_code == 400:
-                return "⚠️ Tu consulta fue bloqueada por medidas de seguridad. Por favor reformula tu pregunta."
+                print(f"DEBUG - Error 400 de Gemini API: {response.text}")
+                return self._get_fallback_nutrition_response(user_message, user_data, user_context)
             
             elif response.status_code == 403:
-                return "⚠️ Error de autenticación con la API. Por favor contacta al administrador."
+                print("DEBUG - Error 403 de autenticación con Gemini API")
+                return self._get_fallback_nutrition_response(user_message, user_data, user_context)
             
             elif response.status_code == 429:
+                print("DEBUG - Rate limit alcanzado en Gemini API")
                 return "⚠️ He alcanzado el límite de uso por hoy. Intenta nuevamente más tarde."
             
             else:
-                return f"⚠️ Error del servidor (código {response.status_code}). Intenta nuevamente en unos momentos."
+                print(f"DEBUG - Error {response.status_code} de Gemini API: {response.text}")
+                return self._get_fallback_nutrition_response(user_message, user_data, user_context)
             
         except requests.exceptions.Timeout:
-            return "⚠️ La consulta tardó demasiado tiempo. Intenta con una pregunta más simple."
+            print("DEBUG - Timeout en petición a Gemini API")
+            return self._get_fallback_nutrition_response(user_message, user_data, user_context)
         
         except requests.exceptions.ConnectionError:
-            return "⚠️ No pude conectar con el servidor de IA. Verifica tu conexión a internet."
+            print("DEBUG - Error de conexión con Gemini API")
+            return self._get_fallback_nutrition_response(user_message, user_data, user_context)
         
         except Exception as e:
-            return f"⚠️ Error inesperado: {str(e)}. Intenta nuevamente."
+            print(f"DEBUG - Error inesperado: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return self._get_fallback_nutrition_response(user_message, user_data, user_context)
     
     def calculate_daily_calories(self, peso: float, altura: float, edad: int, 
                                sexo: str, nivel_actividad: str) -> int:
