@@ -45,7 +45,10 @@ LOGGING = {
 }
 
 ALLOWED_HOSTS = [
-    '*'
+    'localhost',
+    '127.0.0.1',
+    'low-calories-db1.vercel.app',
+    '.vercel.app',
 ]
 
 
@@ -198,9 +201,13 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = False  # No permitas todos los orígenes
+CORS_ALLOW_ALL_ORIGINS = False
+
 # Si usas CSRF
 CSRF_TRUSTED_ORIGINS = [
     'https://low-calories-frontend.vercel.app',
+    'https://low-calories-db1.vercel.app',
 ]
 
 # ==========================================
