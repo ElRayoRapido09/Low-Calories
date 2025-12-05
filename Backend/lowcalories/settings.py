@@ -171,38 +171,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5173',
     'http://127.0.0.1:5174',
     'https://*.vercel.app',
-    'https://lowcalories-opbpy4f43-elrayorapido09s-projects.vercel.app',
-    'https://low-calories-frontend.vercel.app'
-]
-
-CORS_ALLOW_CREDENTIALS = True
-
-# Permite todos los métodos
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-
-# Permite todos los headers necesarios
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
-
-# Si usas CSRF
-CSRF_TRUSTED_ORIGINS = [
-    'https://low-calories-frontend.vercel.app',
+    'https://lowcalories-opbpy4f43-elrayorapido09s-projects.vercel.app'
 ]
 
 # ==========================================
