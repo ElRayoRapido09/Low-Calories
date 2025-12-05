@@ -48,7 +48,6 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'low-calories-db1.vercel.app',
-    '.vercel.app',
 ]
 
 
