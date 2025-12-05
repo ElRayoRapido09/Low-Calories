@@ -346,9 +346,9 @@
         headers['Authorization'] = `Bearer ${token}`;
       }
       
-      console.log('Enviando imagen a:', 'http://localhost:8000/api/scan-food/');
       
-      const response = await fetch('http://localhost:8000/api/scan-food/', {
+      
+      const response = await fetch('http://low-colories-cdb.vercel.app/api/scan-food/', {
         method: 'POST',
         headers: headers,
         body: formData
