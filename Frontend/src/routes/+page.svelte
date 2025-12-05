@@ -348,7 +348,7 @@
       
       
       
-      const response = await fetch('http://low-colories-cdb.vercel.app/api/scan-food/', {
+      const response = await fetch('https://low-colories-cdb.vercel.app/api/scan-food/', {
         method: 'POST',
         headers: headers,
         body: formData
