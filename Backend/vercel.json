@@ -8,10 +8,15 @@
     "routes":[
         {
             "src": "/(.*)",
-            "dest": "lowcalories/wsgi.py"
+            "dest": "lowcalories/wsgi.py",
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Authorization"
+            }
         }
     ],
     "env": {
-    "DJANGO_SETTINGS_MODULE": "lowcalories.settings"
-  }
+        "DJANGO_SETTINGS_MODULE": "lowcalories.settings"
+    }
 }

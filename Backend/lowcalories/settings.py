@@ -167,17 +167,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',
-    'http://localhost:5174',  # Puerto alternativo para desarrollo
-    'http://127.0.0.1:5173',
-    'http://127.0.0.1:5174',
-    'https://low-calories-frontend.vercel.app'
-]
-
+# Configuración CORS
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-# Permite todos los métodos
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -187,7 +180,6 @@ CORS_ALLOW_METHODS = [
     'PUT',
 ]
 
-# Permite todos los headers necesarios
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -200,8 +192,6 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = False  # No permitas todos los orígenes
-CORS_ALLOW_ALL_ORIGINS = False
 
 # Si usas CSRF
 CSRF_TRUSTED_ORIGINS = [
