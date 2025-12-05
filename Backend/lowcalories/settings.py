@@ -170,8 +170,6 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5174',  # Puerto alternativo para desarrollo
     'http://127.0.0.1:5173',
     'http://127.0.0.1:5174',
-    'https://*.vercel.app',
-    'https://lowcalories-opbpy4f43-elrayorapido09s-projects.vercel.app',
     'https://low-calories-frontend.vercel.app'
 ]
 
