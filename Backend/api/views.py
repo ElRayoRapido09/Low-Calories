@@ -12,11 +12,25 @@ import os
 User = get_user_model()
 
 
+def add_cors_headers(response):
+    """Agrega headers CORS a la respuesta"""
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    response["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response["Access-Control-Max-Age"] = "3600"
+    return response
+
+
 class ScanFoodView(APIView):
     """
     Vista para escanear comida usando CalorieMama que ya incluye información nutricional
     """
     permission_classes = [AllowAny]
+
+    def options(self, request, *args, **kwargs):
+        """Maneja las peticiones OPTIONS para CORS preflight"""
+        response = Response()
+        return add_cors_headers(response)
 
     def post(self, request, *args, **kwargs):
         print("📸 Solicitud recibida en ScanFoodView")
@@ -25,10 +39,11 @@ class ScanFoodView(APIView):
         
         if not image_file:
             print("❌ No se proporcionó imagen")
-            return Response({
+            response = Response({
                 "success": False,
                 "error": "No se proporcionó ninguna imagen."
             }, status=status.HTTP_400_BAD_REQUEST)
+            return add_cors_headers(response)
 
         print(f"✅ Imagen recibida: {image_file.name}, tamaño: {image_file.size} bytes")
 
@@ -39,10 +54,11 @@ class ScanFoodView(APIView):
             print(f"💾 Imagen guardada en: {file_path}")
         except Exception as e:
             print(f"❌ Error guardando imagen: {str(e)}")
-            return Response({
+            response = Response({
                 "success": False,
                 "error": f"Error al guardar la imagen: {str(e)}"
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return add_cors_headers(response)
 
         try:
             # 2. Llamar a CalorieMama para reconocer la comida
@@ -55,11 +71,12 @@ class ScanFoodView(APIView):
                 # Si CalorieMama falla, eliminar la imagen y devolver error
                 default_storage.delete(file_name)
                 print(f"❌ Error en CalorieMama: {recognition_result['error']}")
-                return Response({
+                response = Response({
                     "success": False,
                     "error": recognition_result["error"],
                     "manual_capture": True
                 }, status=status.HTTP_404_NOT_FOUND)
+                return add_cors_headers(response)
             
             # 3. Extraer datos nutricionales de CalorieMama
             recognized_food_name = recognition_result.get('food_name')
@@ -136,7 +153,7 @@ class ScanFoodView(APIView):
             print(f"   - Grasas: {historial_entry.grasas}")
             
             # 6. Preparar respuesta
-            return Response({
+            response = Response({
                 "success": True,
                 "historial_id": historial_entry.id,
                 "message": "Comida reconocida exitosamente",
@@ -152,6 +169,7 @@ class ScanFoodView(APIView):
                     "serving_options": serving_sizes[:5]  # Primeras 5 opciones de porción
                 }
             }, status=status.HTTP_201_CREATED)
+            return add_cors_headers(response)
         
         except Exception as e:
             print(f"❌ Error inesperado: {str(e)}")
@@ -162,10 +180,11 @@ class ScanFoodView(APIView):
             if default_storage.exists(file_name):
                 default_storage.delete(file_name)
             
-            return Response({
+            response = Response({
                 "success": False,
                 "error": f"Error procesando la imagen: {str(e)}"
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return add_cors_headers(response)
 
 
 class FoodHistoryView(APIView):
@@ -173,6 +192,11 @@ class FoodHistoryView(APIView):
     Vista para obtener el historial de comidas escaneadas
     """
     permission_classes = [AllowAny]
+    
+    def options(self, request, *args, **kwargs):
+        """Maneja las peticiones OPTIONS para CORS preflight"""
+        response = Response()
+        return add_cors_headers(response)
 
     def get(self, request, *args, **kwargs):
         try:
@@ -199,10 +223,12 @@ class FoodHistoryView(APIView):
                     'image_url': request.build_absolute_uri(settings.MEDIA_URL + item.img.name) if item.img else None
                 })
             
-            return Response(data, status=status.HTTP_200_OK)
+            response = Response(data, status=status.HTTP_200_OK)
+            return add_cors_headers(response)
             
         except Exception as e:
             print(f"Error obteniendo historial: {str(e)}")
-            return Response({
+            response = Response({
                 "error": f"Error obteniendo historial: {str(e)}"
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return add_cors_headers(response)
